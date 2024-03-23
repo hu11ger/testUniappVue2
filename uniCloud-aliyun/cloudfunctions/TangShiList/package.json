@@ -1,0 +1,7 @@
+{
+  "name": "TangShiList",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}
