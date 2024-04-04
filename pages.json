@@ -749,6 +749,14 @@
 						"navigationBarTitleText" : "",
 						"enablePullDownRefresh" : false
 					}
+				},
+				{
+					"path" : "requestPolar/requestPolar",
+					"style" : 
+					{
+						"navigationBarTitleText" : "",
+						"enablePullDownRefresh" : false
+					}
 				}
 			]
 		},

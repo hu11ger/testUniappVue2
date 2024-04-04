@@ -118,7 +118,7 @@
 				this.loading = true
 				uni.request({
 					// url:this.baseUrl+this.resultID
-					url: this.baseUrl + '/018e6c7f-7352-759b-8302-9dc94dab864b',
+					url: this.baseUrl + '/018e8e76-9fb0-7f66-8e94-ee2b52be85d8',
 					method: 'GET',
 					header: {
 						'Authorization': "Bearer msy_ar8y9bKmstdLwmebSabtqBqnxbiZvsYLyIcX",
@@ -178,6 +178,7 @@
 					this.res = '请求结果 : ' + res[1].data;
 					this.loading = false;
 					// result: "018e6c7f-7352-759b-8302-9dc94dab864b"
+					// 018e8e76-9fb0-7f66-8e94-ee2b52be85d8
 
 				}).catch(err => {
 					console.log('request fail', err);

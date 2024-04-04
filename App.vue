@@ -8,6 +8,34 @@
 	import checkUpdate from '@/uni_modules/uni-upgrade-center-app/utils/check-update';
 
 	export default {
+		created() {
+			//清空accessCode
+			this.globalData.accessCode = ''
+		},
+		mounted() {
+			// this.code = this.$route.query.code;
+			// this.state = this.$route.query.state;
+			console.log(window.location.href)
+			if (window.location.href.indexOf("code") !== -1) {
+				// uni.showToast({
+				// 	title: '您已登录至Polar',
+				// 	icon: 'success',
+				// 	mask: false,
+				// 	duration: 2000
+				// })
+				let accessCodeArr = window.location.href.split("code=")
+				let accessCode = accessCodeArr[1]
+				this.globalData.accessCode = accessCode
+				uni.navigateTo({
+					url: '/pages/API/requestPolar/requestPolar'
+				})
+
+			}
+			// this.getToken();
+			// let cache = caches.open("URL");
+			// let reqCacheData = cache.match();
+			// console.log(reqCacheData)
+		},
 		onLaunch: function() {
 			// #ifdef H5
 			console.log(
@@ -49,7 +77,8 @@
 			console.log('App Hide')
 		},
 		globalData: {
-			test: ''
+			test: '',
+			accessCode: ''
 		},
 		methods: {
 			...mapMutations(['setUniverifyErrorMsg', 'setUniverifyLogin'])
@@ -63,6 +92,7 @@
 	/* uni.css - 通用组件、模板样式库，可以当作一套ui库应用 */
 	@import './common/uni.css';
 	@import '@/static/customicons.css';
+
 	/* H5 兼容 pc 所需 */
 	/* #ifdef H5 */
 	@media screen and (min-width: 768px) {

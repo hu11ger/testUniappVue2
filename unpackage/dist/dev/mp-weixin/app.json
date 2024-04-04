@@ -90,7 +90,8 @@
         "vibrate/vibrate",
         "websocket-socketTask/websocket-socketTask",
         "websocket-global/websocket-global",
-        "requestMeshy/requestMeshy"
+        "requestMeshy/requestMeshy",
+        "requestPolar/requestPolar"
       ]
     },
     {

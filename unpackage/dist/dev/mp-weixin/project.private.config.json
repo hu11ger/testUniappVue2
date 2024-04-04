@@ -8,6 +8,13 @@
     "miniprogram": {
       "list": [
         {
+          "name": "pages/API/requestPolar/requestPolar",
+          "pathName": "pages/API/requestPolar/requestPolar",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
           "name": "pages/API/requestMeshy/requestMeshy",
           "pathName": "pages/API/requestMeshy/requestMeshy",
           "query": "",
