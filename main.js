@@ -1,10 +1,10 @@
 import App from './App'
 import store from './store'
-import axios from './utils/request/request.js'
+// import axios from './utils/request/request.js'
 // #ifndef VUE3
 import Vue from 'vue'
 Vue.config.productionTip = false
-Vue.prototype.$axios = axios
+// Vue.prototype.$axios = axios
 Vue.prototype.$store = store
 Vue.prototype.$adpid = "1111111111"
 Vue.prototype.$backgroundAudioData = {

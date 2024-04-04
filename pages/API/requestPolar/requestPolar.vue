@@ -13,10 +13,10 @@
 				<button type="primary" @click="locationHref" :loading="loading">发起Polar账号登陆请求</button>
 				<button type="primary" @click="getToken" :loading="loading">获取token令牌</button>
 				<button type="primary" @click="getUserBasicInfo" :loading="loading">获取用户基础信息</button>
-				<button type="primary" @click="createTransaction()" :loading="loading">创建transaction</button>
-				<button type="primary" @click="listActivity()()" :loading="loading">listActivity</button>
+				<button type="primary" @click="createTransaction" :loading="loading">创建transaction</button>
+				<button type="primary" @click="listActivity" :loading="loading">listActivity</button>
 				<!-- <button type="primary" @click="location()" :loading="loading">location</button> -->
-				<button type="primary" @click="listActivitySummary()" :loading="loading">listActivitySummary</button>
+				<button type="primary" @click="listActivitySummary" :loading="loading">listActivitySummary</button>
 			</view>
 		</view>
 	</view>
@@ -24,7 +24,7 @@
 <script>
 	import Base64 from 'base-64'
 	// 引用qs
-	import qs from 'qs'
+	// import qs from 'qs'
 	const requestUrl = 'https://unidemo.dcloud.net.cn/ajax/echo/text?name=uni-app'
 	const duration = 2000
 	export default {
@@ -192,26 +192,26 @@
 				// })
 
 			},
-			registerUser() {
-				let data = qs.stringify({
-					"member-id": "user1"
-				})
-				uni.request({
-					url: '/getinfo/users',
-					method: 'POST',
-					data: {
-						"member-id": "user1"
-					},
-					withCredentials: true,
-					header: {
-						// 'Host': 'www.polaraccesslink.com',
-						'Content-Type': 'application/xml',
-						'Accept': 'application/json',
-						// 'Authorization': 'Bearer ' + this.accessToken
-						'Authorization': this.encodeClientStr,
-					},
-				})
-			},
+			// registerUser() {
+			// 	let data = qs.stringify({
+			// 		"member-id": "user1"
+			// 	})
+			// 	uni.request({
+			// 		url: '/getinfo/users',
+			// 		method: 'POST',
+			// 		data: {
+			// 			"member-id": "user1"
+			// 		},
+			// 		withCredentials: true,
+			// 		header: {
+			// 			// 'Host': 'www.polaraccesslink.com',
+			// 			'Content-Type': 'application/xml',
+			// 			'Accept': 'application/json',
+			// 			// 'Authorization': 'Bearer ' + this.accessToken
+			// 			'Authorization': this.encodeClientStr,
+			// 		},
+			// 	})
+			// },
 			getUserBasicInfo() {
 				uni.request({
 					url: '/getinfo/users/61291757',
