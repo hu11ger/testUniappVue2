@@ -10,27 +10,27 @@
 	export default {
 		created() {
 			//清空accessCode
-			this.globalData.accessCode = ''
+			// this.globalData.accessCode = ''
 		},
 		mounted() {
-			// this.code = this.$route.query.code;
-			// this.state = this.$route.query.state;
-			console.log(window.location.href)
-			if (window.location.href.indexOf("code") !== -1) {
-				// uni.showToast({
-				// 	title: '您已登录至Polar',
-				// 	icon: 'success',
-				// 	mask: false,
-				// 	duration: 2000
-				// })
-				let accessCodeArr = window.location.href.split("code=")
-				let accessCode = accessCodeArr[1]
-				this.globalData.accessCode = accessCode
-				uni.navigateTo({
-					url: '/pages/API/requestPolar/requestPolar'
-				})
+			//暂时注释，polar数据接入、oAuth2自动登录
+			// console.log(window.location.href)
+			// if (window.location.href.indexOf("code") !== -1) {
+			// 	// uni.showToast({
+			// 	// 	title: '您已登录至Polar',
+			// 	// 	icon: 'success',
+			// 	// 	mask: false,
+			// 	// 	duration: 2000
+			// 	// })
+			// 	let accessCodeArr = window.location.href.split("code=")
+			// 	let accessCode = accessCodeArr[1]
+			// 	this.globalData.accessCode = accessCode
+			// 	uni.navigateTo({
+			// 		url: '/pages/API/requestPolar/requestPolar'
+			// 	})
 
-			}
+			// }
+
 			// this.getToken();
 			// let cache = caches.open("URL");
 			// let reqCacheData = cache.match();
