@@ -1,5 +1,13 @@
 {
-  "navigationBarTitleText": "心理量表测量",
+  "navigationBarTitleText": "",
   "enablePullDownRefresh": false,
-  "usingComponents": {}
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "u-navbar": "/uview-ui/components/u-navbar/u-navbar",
+    "u-search": "/uview-ui/components/u-search/u-search",
+    "u-icon": "/uview-ui/components/u-icon/u-icon",
+    "u-badge": "/uview-ui/components/u-badge/u-badge",
+    "u-toast": "/uview-ui/components/u-toast/u-toast",
+    "u-subsection": "/uview-ui/components/u-subsection/u-subsection"
+  }
 }

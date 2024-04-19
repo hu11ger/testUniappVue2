@@ -8,6 +8,20 @@
     "miniprogram": {
       "list": [
         {
+          "name": "pages/healthApp/SelfRatingSelect/SelfRatingSelect",
+          "pathName": "pages/healthApp/SelfRatingSelect/SelfRatingSelect",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "pages/API/image/image",
+          "pathName": "pages/API/image/image",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
           "name": "pages/API/requestPolar/requestPolar",
           "pathName": "pages/API/requestPolar/requestPolar",
           "query": "",

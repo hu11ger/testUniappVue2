@@ -1,4 +1,11 @@
 {
+	"easycom": {
+		// 下载安装的方式需要前面的"@/"，npm安装的方式无需"@/"
+		// 下载安装方式
+		"^u-(.*)": "@/uview-ui/components/u-$1/u-$1.vue"
+		// npm安装方式
+		// "^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
+	},
 	"leftWindow": {
 		"path": "windows/left-window.vue",
 		"style": {
@@ -358,6 +365,15 @@
 			"style": {
 				"navigationBarTitleText": "测试云服务器数据",
 				"enablePullDownRefresh": false
+			}
+		},
+
+		{
+			"path": "pages/healthApp/SelfRatingSelect/SelfRatingSelect",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
 			}
 		}
 	],
@@ -743,19 +759,17 @@
 					}
 				},
 				{
-					"path" : "requestMeshy/requestMeshy",
-					"style" : 
-					{
-						"navigationBarTitleText" : "",
-						"enablePullDownRefresh" : false
+					"path": "requestMeshy/requestMeshy",
+					"style": {
+						"navigationBarTitleText": "",
+						"enablePullDownRefresh": false
 					}
 				},
 				{
-					"path" : "requestPolar/requestPolar",
-					"style" : 
-					{
-						"navigationBarTitleText" : "",
-						"enablePullDownRefresh" : false
+					"path": "requestPolar/requestPolar",
+					"style": {
+						"navigationBarTitleText": "",
+						"enablePullDownRefresh": false
 					}
 				}
 			]
