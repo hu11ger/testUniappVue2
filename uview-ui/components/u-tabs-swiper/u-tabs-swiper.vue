@@ -3,10 +3,11 @@
 			zIndex: zIndex,
 			background: bgColor
 		}">
-		<scroll-view scroll-x class="u-scroll-view" :scroll-left="scrollLeft" scroll-with-animation :style="{ zIndex: zIndex + 1 }">
+		<scroll-view scroll-x class="u-scroll-view" :scroll-left="scrollLeft" scroll-with-animation
+			:style="{ zIndex: zIndex + 1 }">
 			<view class="u-tabs-scroll-box" :class="{'u-tabs-scorll-flex': !isScroll}">
-				<view class="u-tabs-item" :style="[tabItemStyle(index)]"
-				 v-for="(item, index) in getTabs" :key="index" :class="[preId + index]" @tap="emit(index)">
+				<view class="u-tabs-item" :style="[tabItemStyle(index)]" v-for="(item, index) in getTabs" :key="index"
+					:class="[preId + index]" @tap="emit(index)">
 					<u-badge :count="item[count] || item['count'] || 0" :offset="offset" size="mini"></u-badge>
 					{{ item[name] || item['name']}}
 				</view>
@@ -19,7 +20,9 @@
 <script>
 	import colorGradient from '../../libs/function/colorGradient';
 	let color = colorGradient;
-	const { windowWidth } = uni.getSystemInfoSync();
+	const {
+		windowWidth
+	} = uni.getSystemInfoSync();
 	const preId = 'UEl_';
 
 	/**
@@ -153,7 +156,7 @@
 			// 当前活动tab item的样式
 			activeItemStyle: {
 				type: Object,
-				default() {
+				default () {
 					return {}
 				}
 			},
@@ -165,7 +168,7 @@
 			// 底部滑块的自定义样式
 			barStyle: {
 				type: Object,
-				default() {
+				default () {
 					return {}
 				}
 			}
@@ -216,12 +219,13 @@
 						height: this.height + 'rpx',
 						lineHeight: this.height + 'rpx',
 						padding: `0 ${this.gutter / 2}rpx`,
-						color: this.tabsInfo.length > 0 ? (this.tabsInfo[index] ? this.tabsInfo[index].color : this.activeColor) : this.inactiveColor,
+						color: this.tabsInfo.length > 0 ? (this.tabsInfo[index] ? this.tabsInfo[index].color : this
+							.activeColor) : this.inactiveColor,
 						fontSize: this.fontSize + 'rpx',
 						zIndex: this.zIndex + 2,
 						fontWeight: (index == this.getCurrent && this.bold) ? 'bold' : 'normal'
 					};
-					if(index == this.getCurrent) {
+					if (index == this.getCurrent) {
 						// 给选中的tab item添加外部自定义的样式
 						style = Object.assign(style, this.activeItemStyle);
 					}
@@ -392,6 +396,8 @@
 	.u-tabs {
 		width: 100%;
 		transition-property: background-color, color;
+		border-radius: 20rpx;
+		border: 2rpx solid #F0F1FA;
 	}
 
 	/* #ifndef APP-NVUE */
@@ -404,6 +410,7 @@
 		-webkit-appearance: none;
 		background: transparent;
 	}
+
 	/* #endif */
 
 	/* #ifdef H5 */

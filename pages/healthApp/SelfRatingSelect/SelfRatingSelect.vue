@@ -20,7 +20,7 @@
 					<view class="text">横向布局-自动宽度</view>
 					<view class="text">横向布局-自动宽度</view>
 				</view> -->
-				<view class="uni-flex uni-row" v-for="(item,index) in ratingObjArr"
+				<view class="uni-flex uni-row" v-for="(item,index) in ratingObjArr" @click="selectRatingQues(item)"
 					style="background: white; border-radius: 24rpx;padding: 15rpx; justify-content: center; align-items: center;box-shadow: 0px 10px 32px rgba(110, 113, 145, 0.12);margin: 40rpx 0;">
 					<view class="uni-flex"
 						style="width: 160rpx;height: 160rpx;-webkit-justify-content: center;justify-content: center;-webkit-align-items: center;align-items: center;">
@@ -105,6 +105,9 @@
 			}
 		},
 		methods: {
+			selectRatingQues(item) {
+				console.log(item.name)
+			},
 			titleChange(index) {
 				this.useSlot = false;
 				this.title = index == 0 ? '心理量表测量' : index == 1 ? '新闻列表' : '雨打梨花深闭门，忘了青春，误了青春';
