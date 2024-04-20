@@ -376,6 +376,14 @@
 				"navigationStyle": "custom"
 
 			}
+		},
+		{
+			"path": "pages/healthApp/SelfCareCourse/SelfCareCourse",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
 		}
 	],
 	"subPackages": [{

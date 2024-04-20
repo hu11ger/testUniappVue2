@@ -34,7 +34,8 @@
     "pages/component/web-view/web-view",
     "uni_modules/uni-upgrade-center-app/pages/upgrade-popup",
     "pages/component/test0317/test0317",
-    "pages/healthApp/SelfRatingSelect/SelfRatingSelect"
+    "pages/healthApp/SelfRatingSelect/SelfRatingSelect",
+    "pages/healthApp/SelfCareCourse/SelfCareCourse"
   ],
   "subPackages": [
     {

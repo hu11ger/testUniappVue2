@@ -1,5 +1,6 @@
 <template>
-	<view class="bg">
+	<view class="">
+		<view class="bg"></view>
 		<u-navbar title-color="#000" back-icon-color="#000" :is-fixed="isFixed" :is-back="isBack"
 			:background="background" :back-text-style="{color: '#000'}" :title="title" :back-icon-name="backIconName"
 			:back-text="backText">

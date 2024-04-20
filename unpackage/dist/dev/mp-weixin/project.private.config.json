@@ -8,6 +8,13 @@
     "miniprogram": {
       "list": [
         {
+          "name": "pages/healthApp/SelfCareCourse/SelfCareCourse",
+          "pathName": "pages/healthApp/SelfCareCourse/SelfCareCourse",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
           "name": "pages/healthApp/SelfRatingSelect/SelfRatingSelect",
           "pathName": "pages/healthApp/SelfRatingSelect/SelfRatingSelect",
           "query": "",
