@@ -1,84 +1,54 @@
 <template>
-	<view class="">
-		<u-navbar title-color="#fff" back-icon-color="#ffffff" :is-fixed="isFixed" :is-back="isBack"
-			:background="background" :back-text-style="{color: '#fff'}" :title="title" :back-icon-name="backIconName"
+	<view class="bg">
+		<u-navbar title-color="#000" back-icon-color="#000" :is-fixed="isFixed" :is-back="isBack"
+			:background="background" :back-text-style="{color: '#000'}" :title="title" :back-icon-name="backIconName"
 			:back-text="backText">
-			<view class="slot-wrap" v-if="useSlot">
-				<view class="search-wrap" v-if="search">
-					<!-- 如果使用u-search组件，必须要给v-model绑定一个变量 -->
-					<u-search v-model="keyword" :show-action="showAction" height="56"
-						:action-style="{color: '#fff'}"></u-search>
-				</view>
-				<view class="navbar-right" v-if="rightSlot">
-					<view class="message-box right-item">
-						<u-icon name="chat" size="38"></u-icon>
-						<u-badge count="18" size="mini" :offset="[-15, -15]"></u-badge>
-					</view>
-					<view class="dot-box right-item">
-						<u-icon name="calendar-fill" size="38"></u-icon>
-						<u-badge size="mini" :is-dot="true" :offset="[-6, -6]"></u-badge>
-					</view>
-				</view>
-				<view class="map-wrap" v-if="custom">
-					<u-icon name="map" color="#ffffff" size="24"></u-icon>
-					<text class="map-wrap-text">轻舟已过万重山</text>
-					<u-icon name="arrow-down-fill" color="#ffffff" size="22"></u-icon>
-				</view>
-			</view>
-			<view class="navbar-right" slot="right" v-if="slotRight">
-				<view class="message-box right-item">
-					<u-icon name="chat" size="38"></u-icon>
-					<u-badge count="18" size="mini" :offset="[-15, -15]"></u-badge>
-				</view>
-				<view class="dot-box right-item">
-					<u-icon name="calendar-fill" size="38"></u-icon>
-					<u-badge size="mini" :is-dot="true" :offset="[-6, -6]"></u-badge>
-				</view>
-			</view>
 		</u-navbar>
-		<view class="u-demo">
-			<view class="u-demo-wrap">
-				<view class="u-demo-title">演示效果</view>
-				<view class="u-demo-area">
-					<u-toast ref="uToast"></u-toast>
-					<view class="u-no-demo-here">查看顶部导航栏效果</view>
+		<template>
+			<view class="uni-padding-wrap uni-common-mt" style="">
+				<!-- <view class="uni-title uni-common-mt">
+					flex-direction: row
+					<text>\n横向布局</text>
+				</view>
+				<view class="uni-flex uni-row">
+					<view class="flex-item uni-bg-red">A</view>
+					<view class="flex-item uni-bg-green">B</view>
+					<view class="flex-item uni-bg-blue">C</view>
+				</view> -->
+				<!-- 				<view class="uni-flex uni-row">
+					<view class="text">横向布局-自动宽度</view>
+					<view class="text">横向布局-自动宽度</view>
+				</view> -->
+				<view class="uni-flex uni-row" v-for="(item,index) in ratingObjArr"
+					style="background: white; border-radius: 24rpx;padding: 15rpx; justify-content: center; align-items: center;box-shadow: 0px 10px 32px rgba(110, 113, 145, 0.12);margin: 40rpx 0;">
+					<view class="uni-flex"
+						style="width: 160rpx;height: 160rpx;-webkit-justify-content: center;justify-content: center;-webkit-align-items: center;align-items: center;">
+						<image src="../../../static/image/selfRating.png" style="width: 120rpx;height: 120rpx;"></image>
+					</view>
+					<view class="uni-flex uni-column"
+						style="padd-webkit-flex: 1;flex: 1;-webkit-justify-content: space-between;justify-content: space-around;padding: 15rpx 0rpx;">
+						<view class="text"
+							style="height: 46rpx;text-align: left;padding-left: 15rpx;padding-top: 0rpx;font-size: 32rpx;color: black;margin: 0rpx 5rpx; font-weight: 600;">
+							<!-- 工作紧张测量问卷 -->
+							{{item.name}}
+						</view>
+						<view class="text"
+							style="height: 40rpx;text-align: left;padding-left: 15rpx;padding-top: 0rpx;font-size:26rpx;color: #999;margin: 10rpx 5rpx;">
+							<!-- Job Stress Survey, JSS -->
+							{{item.des}}
+						</view>
+						<view class="text"
+							style="height: 40rpx;text-align: left;padding-left: 15rpx;padding-top: 0rpx;font-size: 26rpx;color: #6E7191;margin: 10rpx 5rpx;">
+							<!-- 约10分钟 -->
+							{{item.duration}}
+						</view>
+
+					</view>
 				</view>
 			</view>
-			<view class="u-config-wrap">
-				<view class="u-config-title u-border-bottom">
-					参数配置
-				</view>
-				<view class="u-config-item">
-					<view class="u-item-title">标题长度</view>
-					<u-subsection :list="['短', '中', '长']" @change="titleChange"></u-subsection>
-				</view>
-				<view class="u-config-item">
-					<view class="u-item-title">隐藏左侧返回区域</view>
-					<u-subsection current="1" :list="['是', '否']" @change="backChange"></u-subsection>
-				</view>
-				<view class="u-config-item">
-					<view class="u-item-title">自定义左侧内容</view>
-					<u-subsection current="1" :list="['是', '否']" @change="leftChange"></u-subsection>
-				</view>
-				<view class="u-config-item">
-					<view class="u-item-title">自定义右侧内容</view>
-					<u-subsection :current="slotRightCurrent" :list="['是', '否']" @change="rightChange"></u-subsection>
-				</view>
-				<view class="u-config-item">
-					<view class="u-item-title">传入整体slot</view>
-					<u-subsection :list="['无', '搜索框', '搜索+按钮', '搜索+图标']" @change="searchChange"></u-subsection>
-				</view>
-				<view class="u-config-item">
-					<view class="u-item-title">完全自定义传入内容</view>
-					<u-subsection current="1" :list="['是', '否']" @change="customChange"></u-subsection>
-				</view>
-				<view class="u-config-item">
-					<view class="u-item-title">背景色</view>
-					<u-subsection :list="['渐变', '#39CCCC', '#B471CC', '#001f3f']"
-						@change="bgColorChange"></u-subsection>
-				</view>
-			</view>
-		</view>
+
+		</template>
+
 	</view>
 </template>
 
@@ -86,15 +56,34 @@
 	export default {
 		data() {
 			return {
-				title: '新闻',
-				backText: '返回',
-				backIconName: 'nav-back',
+				ratingObjArr: [{
+					name: "工作紧张测量问卷",
+					des: "Job Stress Survey, JSS",
+					duration: '约10分钟',
+				}, {
+					name: "马氏工作倦怠量表",
+					des: "Maslach Burnout Inventory MBI",
+					duration: '约4分钟',
+				}, {
+					name: "焦虑自评量表",
+					des: "Self-Rating Anxiety Scale,SAS",
+					duration: '约5分钟',
+				}, {
+					name: "抑郁体验问卷",
+					des: "Depressive ExpQuestionnaire.DEO)",
+					duration: '约15分钟',
+				}],
+
+				title: '心理量表测量',
+				backText: '',
+				backIconName: 'arrow-leftward',
 				right: false,
 				showAction: false,
 				rightSlot: false,
 				useSlot: false,
 				background: {
-					'background-image': 'linear-gradient(45deg, rgb(28, 187, 180), rgb(141, 198, 63))'
+					// 'background-image': 'linear-gradient(45deg, rgb(28, 187, 180), rgb(141, 198, 63))',
+					'background-image': 'rgba(0,0,0,0)'
 				},
 				isBack: true,
 				search: false,
@@ -117,12 +106,13 @@
 		methods: {
 			titleChange(index) {
 				this.useSlot = false;
-				this.title = index == 0 ? '新闻' : index == 1 ? '新闻列表' : '雨打梨花深闭门，忘了青春，误了青春';
+				this.title = index == 0 ? '心理量表测量' : index == 1 ? '新闻列表' : '雨打梨花深闭门，忘了青春，误了青春';
 			},
 			leftChange(index) {
 				if (index == 0) {
 					this.backText = '';
 					this.backIconName = 'arrow-leftward';
+
 				} else {
 					this.backText = '返回';
 					this.backIconName = 'arrow-left';
@@ -164,6 +154,7 @@
 				this.background = {};
 				if (index == 0) {
 					this.background = {
+						// 'background-image': 'linear-gradient(45deg, rgb(28, 187, 180), rgb(141, 198, 63))',
 						'background-image': 'linear-gradient(45deg, rgb(28, 187, 180), rgb(141, 198, 63))'
 					}
 				} else {
@@ -201,6 +192,74 @@
 </script>
 
 <style lang="scss" scoped>
+	.flex-item {
+		width: 33.3%;
+		height: 200rpx;
+		text-align: center;
+		line-height: 200rpx;
+	}
+
+	.flex-item-V {
+		width: 100%;
+		height: 150rpx;
+		text-align: center;
+		line-height: 150rpx;
+	}
+
+	.text {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+
+		// padding: 0 20rpx;
+		// background-color: #ebebeb;
+		height: 40rpx;
+		line-height: 40rpx;
+		text-align: center;
+		// color: #777;
+		// font-size: 26rpx;
+	}
+
+	.desc {
+		/* text-indent: 40rpx; */
+	}
+
+	.flex-pc {
+		display: flex;
+		justify-content: center;
+	}
+
+	.wrap {
+		padding: 12px;
+	}
+
+	.demo-layout {
+		height: 25px;
+		border-radius: 4px;
+	}
+
+	.bg-purple {
+		background: #CED7E1;
+	}
+
+	.bg-purple-light {
+		background: #e5e9f2;
+	}
+
+	.bg-purple-dark {
+		background: #99a9bf;
+	}
+
+	.bg {
+		top: 0;
+		left: 0;
+		position: fixed;
+		z-index: -1;
+		width: 100vw;
+		height: 100vh;
+		background-image: linear-gradient((140deg, rgb(255, 255, 255) 9.160126000642776%, rgb(253.93750101327896, 231.45345389842987, 217.96302258968353) 57.31121301651001%));
+	}
+
 	.u-demo {
 		//height: 200vh;
 		height: calc(100% - 44px);
@@ -241,7 +300,7 @@
 		display: flex;
 		align-items: center;
 		padding: 4px 6px;
-		background-color: rgba(240, 240, 240, 0.35);
+		background-color: rgba(255, 255, 255, 0);
 		color: #fff;
 		font-size: 22rpx;
 		border-radius: 100rpx;

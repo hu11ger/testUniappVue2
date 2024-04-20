@@ -24,6 +24,58 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
+.flex-item.data-v-665cd0fc {
+  width: 33.3%;
+  height: 200rpx;
+  text-align: center;
+  line-height: 200rpx;
+}
+.flex-item-V.data-v-665cd0fc {
+  width: 100%;
+  height: 150rpx;
+  text-align: center;
+  line-height: 150rpx;
+}
+.text.data-v-665cd0fc {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 40rpx;
+  line-height: 40rpx;
+  text-align: center;
+}
+.desc.data-v-665cd0fc {
+  /* text-indent: 40rpx; */
+}
+.flex-pc.data-v-665cd0fc {
+  display: flex;
+  justify-content: center;
+}
+.wrap.data-v-665cd0fc {
+  padding: 12px;
+}
+.demo-layout.data-v-665cd0fc {
+  height: 25px;
+  border-radius: 4px;
+}
+.bg-purple.data-v-665cd0fc {
+  background: #CED7E1;
+}
+.bg-purple-light.data-v-665cd0fc {
+  background: #e5e9f2;
+}
+.bg-purple-dark.data-v-665cd0fc {
+  background: #99a9bf;
+}
+.bg.data-v-665cd0fc {
+  top: 0;
+  left: 0;
+  position: fixed;
+  z-index: -1;
+  width: 100vw;
+  height: 100vh;
+  background-image: linear-gradient(140deg, white 9.16013%, #fee7da 57.31121%);
+}
 .u-demo.data-v-665cd0fc {
   height: calc(100% - 44px);
   height: calc(100% - 44px - constant(safe-area-inset-top));
@@ -55,7 +107,7 @@
   display: flex;
   align-items: center;
   padding: 4px 6px;
-  background-color: rgba(240, 240, 240, 0.35);
+  background-color: rgba(255, 255, 255, 0);
   color: #fff;
   font-size: 22rpx;
   border-radius: 100rpx;

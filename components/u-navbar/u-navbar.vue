@@ -1,18 +1,18 @@
 <template>
 	<view class="">
-		<view class="u-navbar" :style="[navbarStyle]" :class="{ 'u-navbar-fixed': isFixed, 'u-border-bottom': borderBottom }">
+		<view class="u-navbar" :style="[navbarStyle]"
+			:class="{ 'u-navbar-fixed': isFixed, 'u-border-bottom': borderBottom }">
 			<view class="u-status-bar" :style="{ height: statusBarHeight + 'px' }"></view>
 			<view class="u-navbar-inner" :style="[navbarInnerStyle]">
 				<view class="u-back-wrap" v-if="isBack" @tap="goBack">
 					<view class="u-icon-wrap">
 						<u-icon :name="backIconName" :color="backIconColor" :size="backIconSize"></u-icon>
 					</view>
-					<view class="u-icon-wrap u-back-text u-line-1" v-if="backText" :style="[backTextStyle]">{{ backText }}</view>
+					<view class="u-icon-wrap u-back-text u-line-1" v-if="backText" :style="[backTextStyle]">
+						{{ backText }}</view>
 				</view>
 				<view class="u-navbar-content-title" v-if="title" :style="[titleStyle]">
-					<view
-					    class="u-title u-line-1"
-					    :style="{
+					<view class="u-title u-line-1" :style="{
 							color: titleColor,
 							fontSize: titleSize + 'rpx',
 							fontWeight: titleBold ? 'bold' : 'normal'
@@ -29,7 +29,8 @@
 			</view>
 		</view>
 		<!-- 解决fixed定位后导航栏塌陷的问题 -->
-		<view class="u-navbar-placeholder" v-if="isFixed && !immersive" :style="{ width: '100%', height: Number(navbarHeight) + statusBarHeight + 'px' }"></view>
+		<view class="u-navbar-placeholder" v-if="isFixed && !immersive"
+			:style="{ width: '100%', height: Number(navbarHeight) + statusBarHeight + 'px' }"></view>
 	</view>
 </template>
 
@@ -202,7 +203,8 @@
 				// 此处是为了让标题显示区域即使在小程序有右侧胶囊的情况下也能处于屏幕的中间，是通过绝对定位实现的
 				let rightButtonWidth = systemInfo.windowWidth - menuButtonInfo.left;
 				style.left = (systemInfo.windowWidth - uni.upx2px(this.titleWidth)) / 2 + 'px';
-				style.right = rightButtonWidth - (systemInfo.windowWidth - uni.upx2px(this.titleWidth)) / 2 + rightButtonWidth +
+				style.right = rightButtonWidth - (systemInfo.windowWidth - uni.upx2px(this.titleWidth)) / 2 +
+					rightButtonWidth +
 					'px';
 				// #endif
 				style.width = uni.upx2px(this.titleWidth) + 'px';
