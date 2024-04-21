@@ -1,7 +1,5 @@
 {
-  "navigationBarTitleText": "",
-  "enablePullDownRefresh": false,
-  "navigationStyle": "custom",
+  "component": true,
   "usingComponents": {
     "SelfCareCourse-u-waterfall-left": "/pages/healthApp/SelfCareCourse/SelfCareCourse-u-waterfall-left",
     "SelfCareCourse-u-waterfall-right": "/pages/healthApp/SelfCareCourse/SelfCareCourse-u-waterfall-right",

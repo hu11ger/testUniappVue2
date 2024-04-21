@@ -6981,20 +6981,20 @@ text {
 }
 .u-item-title {
   position: relative;
-  font-size: 15px;
-  padding-left: 8px;
+  font-size: 16px;
+  padding-left: 9px;
   line-height: 1;
   margin-bottom: 11px;
 }
 .u-item-title:after {
   position: absolute;
-  width: 4px;
+  width: 5px;
   top: -1px;
   height: 16px;
   content: '';
   left: 0;
   border-radius: 10px;
-  background-color: #606266;
+  background-color: #FE8787;
 }
 /* end--演示页面使用的统一样式--end */
 /* H5 兼容 pc 所需 */
