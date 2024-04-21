@@ -2,7 +2,7 @@
 	<view class="">
 		<view class="bg"></view>
 		<u-navbar title-color="#000" back-icon-color="#000" :is-fixed="isFixed" :is-back="isBack"
-			:background="background" :back-text-style="{color: '#000'}" :title="title" :back-icon-name="backIconName"
+			:background="background" :back-text-style="{ color: '#000' }" :title="title" :back-icon-name="backIconName"
 			:back-text="backText">
 		</u-navbar>
 		<template>
@@ -20,7 +20,8 @@
 					<view class="text">横向布局-自动宽度</view>
 					<view class="text">横向布局-自动宽度</view>
 				</view> -->
-				<view class="uni-flex uni-row" v-for="(item,index) in ratingObjArr" @click="selectRatingQues(item)"
+				<view class="uni-flex uni-row" v-for="(item, index) in ratingObjArr" @click="selectRatingQues(item)"
+					:style="{ 'border': selectedIndex==item.id ? '2px solid #48647A' : '2px solid transparent' }"
 					style="background: white; border-radius: 24rpx;padding: 15rpx; justify-content: center; align-items: center;box-shadow: 0px 10px 32px rgba(110, 113, 145, 0.12);margin: 40rpx 0;">
 					<view class="uni-flex"
 						style="width: 160rpx;height: 160rpx;-webkit-justify-content: center;justify-content: center;-webkit-align-items: center;align-items: center;">
@@ -31,22 +32,24 @@
 						<view class="text"
 							style="height: 46rpx;text-align: left;padding-left: 15rpx;padding-top: 0rpx;font-size: 32rpx;color: black;margin: 0rpx 5rpx; font-weight: 600;">
 							<!-- 工作紧张测量问卷 -->
-							{{item.name}}
+							{{ item.name }}
 						</view>
 						<view class="text"
 							style="height: 40rpx;text-align: left;padding-left: 15rpx;padding-top: 0rpx;font-size:26rpx;color: #999;margin: 10rpx 5rpx;">
 							<!-- Job Stress Survey, JSS -->
-							{{item.des}}
+							{{ item.des }}
 						</view>
 						<view class="text"
 							style="height: 40rpx;text-align: left;padding-left: 15rpx;padding-top: 0rpx;font-size: 26rpx;color: #6E7191;margin: 10rpx 5rpx;">
 							<!-- 约10分钟 -->
-							{{item.duration}}
+							{{ item.duration }}
 						</view>
 					</view>
 				</view>
-				<view class="u-demo-area" style="margin-top: 20px;">
-					<u-button @click="" data-name="3333" :loading="btnLoading" :plain="btnPlain" :shape="btnShape" :size="btnSize" ripple=true :hairLine="hairLine" :type="btnType">山川异域，风月同天</u-button>
+				<view class="u-demo-area" style="margin-top: 60px; padding:0 20px">
+					<u-button @click="btnClick" data-name="3333" :loading="btnLoading" :plain="btnPlain" :shape="btnShape"
+						:size="btnSize" ripple=true :hairLine="hairLine" :type="btnType"
+						:disabled="btnDisabled">开始自测</u-button>
 				</view>
 			</view>
 
@@ -56,271 +59,292 @@
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-				//底部按钮的样式
-				hairLine:true,
-				btnType:'primary',
-				btnSize:'default', 
-				btnShape:'circle',
-				btnPlain:false,
-				btnLoading:false,
-				ratingObjArr: [{
-					name: "工作紧张测量问卷",
-					des: "Job Stress Survey, JSS",
-					duration: '约10分钟',
-				}, {
-					name: "马氏工作倦怠量表",
-					des: "Maslach Burnout Inventory MBI",
-					duration: '约4分钟',
-				}, {
-					name: "焦虑自评量表",
-					des: "Self-Rating Anxiety Scale,SAS",
-					duration: '约5分钟',
-				}, {
-					name: "抑郁体验问卷",
-					des: "Depressive ExpQuestionnaire.DEO)",
-					duration: '约15分钟',
-				}],
+export default {
+	data() {
+		return {
+			selectedIndex: null,
+			//底部按钮的样式
+			hairLine: true,
+			btnType: 'primary',
+			btnSize: 'default',
+			btnShape: 'circle',
+			btnPlain: false,
+			btnLoading: false,
+			btnDisabled: true,
+			ratingObjArr: [{
+				id:0,
+				name: "工作紧张测量问卷",
+				des: "Job Stress Survey, JSS",
+				duration: '约10分钟',
+				selected: false,
+			}, {
+				id:1,
+				name: "马氏工作倦怠量表",
+				des: "Maslach Burnout Inventory MBI",
+				duration: '约4分钟',
+				selected: false,
+			}, {
+				id:2,
+				name: "焦虑自评量表",
+				des: "Self-Rating Anxiety Scale,SAS",
+				duration: '约5分钟',
+				selected: false,
+			}, {
+				id:3,
+				name: "抑郁体验问卷",
+				des: "Depressive ExpQuestionnaire.DEO)",
+				duration: '约15分钟',
+				selected: false,
+			}],
 
-				title: '心理量表测量',
-				backText: '',
-				backIconName: 'arrow-leftward',
-				right: false,
-				showAction: false,
-				rightSlot: false,
-				useSlot: false,
-				background: {
-					// 'background-image': 'linear-gradient(45deg, rgb(28, 187, 180), rgb(141, 198, 63))',
-					'background-image': 'rgba(0,0,0,0)'
-				},
-				isBack: true,
-				search: false,
-				custom: false,
-				isFixed: true,
-				keyword: '',
-				// #ifdef MP
-				slotRight: false,
-				// #endif
-				// #ifndef MP
-				slotRight: true
-				// #endif
-			}
-		},
-		computed: {
-			slotRightCurrent() {
-				return this.slotRight ? 0 : 1;
-			}
-		},
-		methods: {
-			selectRatingQues(item) {
-				console.log(item.name)
+			title: '心理量表测量',
+			backText: '',
+			backIconName: 'arrow-leftward',
+			right: false,
+			showAction: false,
+			rightSlot: false,
+			useSlot: false,
+			background: {
+				// 'background-image': 'linear-gradient(45deg, rgb(28, 187, 180), rgb(141, 198, 63))',
+				'background-image': 'rgba(0,0,0,0)'
 			},
-			titleChange(index) {
+			isBack: true,
+			search: false,
+			custom: false,
+			isFixed: true,
+			keyword: '',
+			// #ifdef MP
+			slotRight: false,
+			// #endif
+			// #ifndef MP
+			slotRight: true
+			// #endif
+		}
+	},
+	computed: {
+		slotRightCurrent() {
+			return this.slotRight ? 0 : 1;
+		}
+	},
+	methods: {
+		btnClick(){
+			console.log("点击按钮",this.selectedIndex)
+		},
+		selectRatingQues(item) {
+			console.log(item.name)
+			if (this.selectedIndex == item.id
+			) {
+				this.selectedIndex = null
+				this.btnDisabled=true
+			} else if (this.selectedIndex != item.id) {
+				this.selectedIndex = item.id
+				this.btnDisabled=false
+			}
+		},
+		titleChange(index) {
+			this.useSlot = false;
+			this.title = index == 0 ? '心理量表测量' : index == 1 ? '新闻列表' : '雨打梨花深闭门，忘了青春，误了青春';
+		},
+		leftChange(index) {
+			if (index == 0) {
+				this.backText = '';
+				this.backIconName = 'arrow-leftward';
+
+			} else {
+				this.backText = '返回';
+				this.backIconName = 'arrow-left';
+			}
+		},
+		searchChange(index) {
+			this.title = null;
+			this.useSlot = true;
+			this.search = false;
+			this.custom = false;
+			if (index == 0) {
+				this.title = '新闻';
 				this.useSlot = false;
-				this.title = index == 0 ? '心理量表测量' : index == 1 ? '新闻列表' : '雨打梨花深闭门，忘了青春，误了青春';
-			},
-			leftChange(index) {
-				if (index == 0) {
-					this.backText = '';
-					this.backIconName = 'arrow-leftward';
-
-				} else {
-					this.backText = '返回';
-					this.backIconName = 'arrow-left';
-				}
-			},
-			searchChange(index) {
-				this.title = null;
-				this.useSlot = true;
-				this.search = false;
-				this.custom = false;
-				if (index == 0) {
-					this.title = '新闻';
-					this.useSlot = false;
-					this.rightSlot = false;
-				} else if (index == 1) {
-					this.showAction = false;
-					this.useSlot = true;
-					this.rightSlot = false;
-					this.search = true;
-					this.slotRight = false;
-				} else if (index == 2) {
-					this.useSlot = true;
-					this.showAction = true;
-					this.rightSlot = false;
-					this.search = true;
-					this.slotRight = false;
-				} else {
-					this.useSlot = true;
-					this.search = true;
-					this.showAction = false;
-					this.rightSlot = true;
-					this.slotRight = false;
-				}
-			},
-			backChange(index) {
-				this.isBack = !!index;
-			},
-			bgColorChange(index) {
-				this.background = {};
-				if (index == 0) {
-					this.background = {
-						// 'background-image': 'linear-gradient(45deg, rgb(28, 187, 180), rgb(141, 198, 63))',
-						'background-image': 'linear-gradient(45deg, rgb(28, 187, 180), rgb(141, 198, 63))'
-					}
-				} else {
-					let color = index == 1 ? '#39CCCC' : index == 2 ? '#B471CC' : '#001f3f';
-					this.background = {
-						background: color
-					}
-				}
-
-			},
-			rightChange(index) {
-				if (index == 0) {
-					this.slotRight = true;
-					this.useSlot = false;
-				} else {
-					this.slotRight = false;
-				}
-			},
-			customChange(index) {
-				this.search = false;
 				this.rightSlot = false;
-				if (index == 0) {
-					this.custom = true;
-					this.title = null;
-					this.isBack = false;
-					this.useSlot = true;
-				} else {
-					this.useSlot = false;
-					this.title = '新闻';
-					this.isBack = true;
+			} else if (index == 1) {
+				this.showAction = false;
+				this.useSlot = true;
+				this.rightSlot = false;
+				this.search = true;
+				this.slotRight = false;
+			} else if (index == 2) {
+				this.useSlot = true;
+				this.showAction = true;
+				this.rightSlot = false;
+				this.search = true;
+				this.slotRight = false;
+			} else {
+				this.useSlot = true;
+				this.search = true;
+				this.showAction = false;
+				this.rightSlot = true;
+				this.slotRight = false;
+			}
+		},
+		backChange(index) {
+			this.isBack = !!index;
+		},
+		bgColorChange(index) {
+			this.background = {};
+			if (index == 0) {
+				this.background = {
+					// 'background-image': 'linear-gradient(45deg, rgb(28, 187, 180), rgb(141, 198, 63))',
+					'background-image': 'linear-gradient(45deg, rgb(28, 187, 180), rgb(141, 198, 63))'
 				}
+			} else {
+				let color = index == 1 ? '#39CCCC' : index == 2 ? '#B471CC' : '#001f3f';
+				this.background = {
+					background: color
+				}
+			}
+
+		},
+		rightChange(index) {
+			if (index == 0) {
+				this.slotRight = true;
+				this.useSlot = false;
+			} else {
+				this.slotRight = false;
+			}
+		},
+		customChange(index) {
+			this.search = false;
+			this.rightSlot = false;
+			if (index == 0) {
+				this.custom = true;
+				this.title = null;
+				this.isBack = false;
+				this.useSlot = true;
+			} else {
+				this.useSlot = false;
+				this.title = '新闻';
+				this.isBack = true;
 			}
 		}
 	}
+}
 </script>
 
 <style lang="scss" scoped>
-	.flex-item {
-		width: 33.3%;
-		height: 200rpx;
-		text-align: center;
-		line-height: 200rpx;
-	}
+.flex-item {
+	width: 33.3%;
+	height: 200rpx;
+	text-align: center;
+	line-height: 200rpx;
+}
 
-	.flex-item-V {
-		width: 100%;
-		height: 150rpx;
-		text-align: center;
-		line-height: 150rpx;
-	}
+.flex-item-V {
+	width: 100%;
+	height: 150rpx;
+	text-align: center;
+	line-height: 150rpx;
+}
 
-	.text {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
+.text {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 
-		// padding: 0 20rpx;
-		// background-color: #ebebeb;
-		height: 40rpx;
-		line-height: 40rpx;
-		text-align: center;
-		// color: #777;
-		// font-size: 26rpx;
-	}
+	// padding: 0 20rpx;
+	// background-color: #ebebeb;
+	height: 40rpx;
+	line-height: 40rpx;
+	text-align: center;
+	// color: #777;
+	// font-size: 26rpx;
+}
 
-	.desc {
-		/* text-indent: 40rpx; */
-	}
+.desc {
+	/* text-indent: 40rpx; */
+}
 
-	.flex-pc {
-		display: flex;
-		justify-content: center;
-	}
+.flex-pc {
+	display: flex;
+	justify-content: center;
+}
 
-	.wrap {
-		padding: 12px;
-	}
+.wrap {
+	padding: 12px;
+}
 
-	.demo-layout {
-		height: 25px;
-		border-radius: 4px;
-	}
+.demo-layout {
+	height: 25px;
+	border-radius: 4px;
+}
 
-	.bg-purple {
-		background: #CED7E1;
-	}
+.bg-purple {
+	background: #CED7E1;
+}
 
-	.bg-purple-light {
-		background: #e5e9f2;
-	}
+.bg-purple-light {
+	background: #e5e9f2;
+}
 
-	.bg-purple-dark {
-		background: #99a9bf;
-	}
+.bg-purple-dark {
+	background: #99a9bf;
+}
 
-	.bg {
-		top: 0;
-		left: 0;
-		position: fixed;
-		z-index: -1;
-		width: 100vw;
-		height: 100vh;
-		background-image: linear-gradient((140deg, rgb(255, 255, 255) 9.160126000642776%, rgb(253.93750101327896, 231.45345389842987, 217.96302258968353) 57.31121301651001%));
-	}
+.bg {
+	top: 0;
+	left: 0;
+	position: fixed;
+	z-index: -1;
+	width: 100vw;
+	height: 100vh;
+	background-image: linear-gradient((140deg, rgb(255, 255, 255) 9.160126000642776%, rgb(253.93750101327896, 231.45345389842987, 217.96302258968353) 57.31121301651001%));
+}
 
-	.u-demo {
-		//height: 200vh;
-		height: calc(100% - 44px);
-		height: calc(100% - 44px - constant(safe-area-inset-top));
-		height: calc(100% - 44px - env(safe-area-inset-top));
-	}
+.u-demo {
+	//height: 200vh;
+	height: calc(100% - 44px);
+	height: calc(100% - 44px - constant(safe-area-inset-top));
+	height: calc(100% - 44px - env(safe-area-inset-top));
+}
 
-	.wrap {
-		padding: 24rpx;
-	}
+.wrap {
+	padding: 24rpx;
+}
 
-	.navbar-right {
-		margin-right: 24rpx;
-		display: flex;
-	}
+.navbar-right {
+	margin-right: 24rpx;
+	display: flex;
+}
 
-	.search-wrap {
-		margin: 0 20rpx;
-		flex: 1;
-	}
+.search-wrap {
+	margin: 0 20rpx;
+	flex: 1;
+}
 
-	.right-item {
-		margin: 0 12rpx;
-		position: relative;
-		color: #ffffff;
-		display: flex;
-	}
+.right-item {
+	margin: 0 12rpx;
+	position: relative;
+	color: #ffffff;
+	display: flex;
+}
 
-	.message-box {}
+.message-box {}
 
-	.slot-wrap {
-		display: flex;
-		align-items: center;
-		flex: 1;
-	}
+.slot-wrap {
+	display: flex;
+	align-items: center;
+	flex: 1;
+}
 
-	.map-wrap {
-		display: flex;
-		align-items: center;
-		padding: 4px 6px;
-		background-color: rgba(255, 255, 255, 0);
-		color: #fff;
-		font-size: 22rpx;
-		border-radius: 100rpx;
-		margin-left: 30rpx;
-	}
+.map-wrap {
+	display: flex;
+	align-items: center;
+	padding: 4px 6px;
+	background-color: rgba(255, 255, 255, 0);
+	color: #fff;
+	font-size: 22rpx;
+	border-radius: 100rpx;
+	margin-left: 30rpx;
+}
 
-	.map-wrap-text {
-		padding: 0 6rpx;
-	}
+.map-wrap-text {
+	padding: 0 6rpx;
+}
 </style>

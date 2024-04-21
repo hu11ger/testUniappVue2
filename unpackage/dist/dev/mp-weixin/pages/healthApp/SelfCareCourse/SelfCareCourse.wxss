@@ -69,8 +69,8 @@ page {
   line-height: 1;
 }
 .demo-tag-text.data-v-7dd6059c {
-  border: 1px solid #2979ff;
-  color: #2979ff;
+  border: 1px solid #FE8787;
+  color: #FE8787;
   margin-left: 10px;
   border-radius: 50rpx;
   line-height: 1;

@@ -365,6 +365,7 @@ export default {
 	z-index: 1;
 	box-sizing: border-box;
 	transition: all 0.15s;
+	box-shadow: 0px 10px 32px rgba(110, 113, 145, 0.12);
 	
 	&--bold-border {
 		border: 1px solid #ffffff;
@@ -505,7 +506,7 @@ export default {
 }
 
 .u-size-default {
-	font-size: 30rpx;
+	font-size: 32rpx;
 	height: 80rpx;
 	line-height: 80rpx;
 }

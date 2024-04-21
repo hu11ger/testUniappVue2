@@ -34,13 +34,13 @@
   z-index: 9;
 }
 .u-badge--bg--primary.data-v-2b1712d8 {
-  background-color: #2979ff;
+  background-color: #FE8787;
 }
 .u-badge--bg--error.data-v-2b1712d8 {
   background-color: #fa3534;
 }
 .u-badge--bg--success.data-v-2b1712d8 {
-  background-color: #19be6b;
+  background-color: #68B9C0;
 }
 .u-badge--bg--info.data-v-2b1712d8 {
   background-color: #909399;
