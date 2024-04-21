@@ -6,7 +6,7 @@
 			:back-text="backText">
 		</u-navbar>
 		<template>
-			<view class="uni-padding-wrap uni-common-mt" style="">
+			<view class="uni-padding-wrap uni-common-mt">
 				<!-- <view class="uni-title uni-common-mt">
 					flex-direction: row
 					<text>\n横向布局</text>
@@ -43,8 +43,10 @@
 							<!-- 约10分钟 -->
 							{{item.duration}}
 						</view>
-
 					</view>
+				</view>
+				<view class="u-demo-area" style="margin-top: 20px;">
+					<u-button @click="" data-name="3333" :loading="btnLoading" :plain="btnPlain" :shape="btnShape" :size="btnSize" ripple=true :hairLine="hairLine" :type="btnType">山川异域，风月同天</u-button>
 				</view>
 			</view>
 
@@ -57,6 +59,13 @@
 	export default {
 		data() {
 			return {
+				//底部按钮的样式
+				hairLine:true,
+				btnType:'primary',
+				btnSize:'default', 
+				btnShape:'circle',
+				btnPlain:false,
+				btnLoading:false,
 				ratingObjArr: [{
 					name: "工作紧张测量问卷",
 					des: "Job Stress Survey, JSS",
