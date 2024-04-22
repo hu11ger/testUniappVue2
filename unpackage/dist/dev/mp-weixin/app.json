@@ -36,7 +36,9 @@
     "pages/component/test0317/test0317",
     "pages/healthApp/SelfRatingSelect/SelfRatingSelect",
     "pages/healthApp/SelfCareCourse/SelfCareCourse",
-    "pages/test/testMultipleBtn/testMultipleBtn"
+    "pages/test/testMultipleBtn/testMultipleBtn",
+    "pages/healthApp/healthRating/healthRating",
+    "pages/test/testEcharts/testEcharts"
   ],
   "subPackages": [
     {

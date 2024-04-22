@@ -15,10 +15,11 @@
       "ignore": [],
       "disablePlugins": [],
       "outputPath": ""
-    }
+    },
+    "ignoreUploadUnusedFiles": true
   },
   "compileType": "miniprogram",
-  "libVersion": "3.3.4",
+  "libVersion": "",
   "appid": "wx743551ca06cbe0ac",
   "projectname": "testUniappVue2",
   "condition": {

@@ -8,6 +8,20 @@
     "miniprogram": {
       "list": [
         {
+          "name": "pages/test/testEcharts/testEcharts",
+          "pathName": "pages/test/testEcharts/testEcharts",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "pages/healthApp/healthRating/healthRating",
+          "pathName": "pages/healthApp/healthRating/healthRating",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
           "name": "pages/healthApp/SelfCareCourse/SelfCareCourse",
           "pathName": "pages/healthApp/SelfCareCourse/SelfCareCourse",
           "query": "",
@@ -58,5 +72,6 @@
         }
       ]
     }
-  }
+  },
+  "libVersion": "3.4.1"
 }
