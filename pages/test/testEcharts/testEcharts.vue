@@ -1,51 +1,192 @@
 <template>
-	
-	<view style="width: 100%; height:400px">
-		echarts测试
-		<uni-ec-canvas class="uni-ec-canvas" id="line-chart" canvas-id="line-chart" :ec="ec" ref="canvas" />
+	<view class="charts-box">
+	  <qiun-data-charts 
+		type="line"
+		:opts="opts"
+		:chartData="chartData"
+		:inScrollView="true"
+		:disableScroll="true"
+		background="rgba(255,255,255,1)"
+		:ontouch="true"
+	  />
 	</view>
-</template>
-
-
-<script>
-// 此处将路径替换为你放置该组件的路径  
-import uniEcCanvas from '../../../components/uni-ec-canvas/uni-ec-canvas.vue'
-import * as echarts from "../../../components/uni-ec-canvas/echarts.js"
-
-export default {
-	components: {
-		uniEcCanvas
-	},
+  </template>
+  
+  <script>
+  export default {
 	data() {
-		return {
-			ec: {
-				tooltip: {
-					trigger: "item",
-					position: "top",
-				},
-				lazyLoad: false,
-				options: {
-					xAxis: {
-						type: 'category',
-						data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-					},
-					yAxis: {
-						type: 'value',
-					},
-					series: [
-						{
-							data: [820, 932, 901, 934, 1290, 1330, 1320],
-							type: 'line',
-							smooth: true
-						},
-					],
-				} //echart 配置项
+	  return {
+		chartData: {},
+		//这里的 opts 是图表类型 type="line" 的全部配置参数，您可以将此配置复制到 config-ucharts.js 文件中下标为 ['line'] 的节点中来覆盖全局默认参数。实际应用过程中 opts 只需传入与全局默认参数中不一致的【某一个属性】即可实现同类型的图表显示不同的样式，达到页面简洁的需求。
+		opts: {
+		  timing: "easeOut",
+		  duration: 1000,
+		  rotate: false,
+		  rotateLock: false,
+		  color: ["#48647A","#91CB74","#FAC858","#EE6666","#73C0DE","#3CA272","#FC8452","#9A60B4","#ea7ccc"],
+		  padding: [15,0,0,5],
+		  fontSize: 12,
+		  fontColor: "#999",
+		  dataLabel: false,
+		  dataPointShape: true,
+		  dataPointShapeType: "solid",
+		  touchMoveLimit: 60,
+		  enableScroll: true,
+		  enableMarkLine: false,
+		  legend: {
+			show: false,
+			position: "bottom",
+			float: "center",
+			padding: 5,
+			margin: 10,
+			backgroundColor: "rgba(0,0,0,0)",
+			borderColor: "rgba(0,0,0,0)",
+			borderWidth: 0,
+			fontSize: 13,
+			fontColor: "#666666",
+			lineHeight: 11,
+			hiddenColor: "#CECECE",
+			itemGap: 10
+		  },
+		  xAxis: {
+			disableGrid: true,
+			disabled: false,
+			axisLine: true,
+			axisLineColor: "#CCCCCC",
+			calibration: false,
+			fontColor: "#999",
+			fontSize: 10,
+			lineHeight: 20,
+			marginTop: 0,
+			rotateLabel: false,
+			rotateAngle: 45,
+			itemCount: 4,
+			boundaryGap: "center",
+			splitNumber: 5,
+			gridColor: "#999",
+			gridType: "dash",
+			dashLength: 4,
+			gridEval: 1,
+			scrollShow: true,
+			scrollAlign: "left",
+			scrollColor: "#d4eaed",
+			scrollBackgroundColor: "#EFEBEF",
+			min: 0,
+			max: 100,
+			title: "",
+			titleFontSize: 13,
+			titleOffsetY: 0,
+			titleOffsetX: 0,
+			titleFontColor: "#999",
+			format: ""
+		  },
+		  yAxis: {
+			gridType: "dash",
+			dashLength: 2,
+			disabled: false,
+			disableGrid: false,
+			splitNumber: 4,
+			gridColor: "#CCCCCC",
+			padding: 10,
+			showTitle: false,
+			data: [
+			  {
+				type: "value",
+				position: "left",
+				disabled: false,
+				axisLine: true,
+				axisLineColor: "#CCCCCC",
+				calibration: false,
+				fontColor: "#999",
+				fontSize: 10,
+				textAlign: "right",
+				title: "1",
+				titleFontSize: 0,
+				titleOffsetY: 0,
+				titleOffsetX: 0,
+				titleFontColor: "#66666600",
+				min: 60,
+				max: 100,
+				tofix: null,
+				unit: "%",
+				format: ""
+			  }
+			]
+		  },
+		  extra: {
+			line: {
+			  type: "curve",
+			  width: 3,
+			  activeType: "solid",
+			  linearType: "custom",
+			  onShadow: false,
+			  animation: "vertical"
+			},
+			tooltip: {
+			  showBox: false,
+			  showArrow: true,
+			  showCategory: false,
+			  borderWidth: 0,
+			  borderRadius: 0,
+			  borderColor: "#000000",
+			  borderOpacity: 0.7,
+			  bgColor: "#000000",
+			  bgOpacity: 0.7,
+			  gridType: "solid",
+			  dashLength: 4,
+			  gridColor: "#CCCCCC",
+			  boxPadding: 3,
+			  fontSize: 13,
+			  lineHeight: 20,
+			  fontColor: "#FFFFFF",
+			  legendShow: true,
+			  legendShape: "auto",
+			  splitLine: false,
+			  horizentalLine: false,
+			  xAxisLabel: false,
+			  yAxisLabel: false,
+			  labelBgColor: "#FFFFFF",
+			  labelBgOpacity: 0.7,
+			  labelFontColor: "#666666"
+			},
+			markLine: {
+			  type: "solid",
+			  dashLength: 4,
+			  data: []
 			}
+		  }
 		}
+	  };
 	},
-
-}
-
-</script>
-
-<style lang="scss" scoped></style>
+	onReady() {
+	  this.getServerData();
+	},
+	methods: {
+	  getServerData() {
+		//模拟从服务器获取数据时的延时
+		setTimeout(() => {
+		  //模拟服务器返回数据，如果数据格式和标准格式不同，需自行按下面的格式拼接
+		  let res = {
+			  categories: ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"],
+			  series: [
+				{
+				  name: "健康追踪",
+				  data: [88,80,65,77,78,87,88,76,88,93,76,65]
+				}
+			  ]
+			};
+		  this.chartData = JSON.parse(JSON.stringify(res));
+		}, 500);
+	  },
+	}
+  };
+  </script>
+  
+  <style scoped>
+	/* 请根据实际需求修改父元素尺寸，组件自动识别宽高 */
+	.charts-box {
+	  width: 100%;
+	  height: 300px;
+	  padding: 40rpx 50rpx;
+	}
+  </style>

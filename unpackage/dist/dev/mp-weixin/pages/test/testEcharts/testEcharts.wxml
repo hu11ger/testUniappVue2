@@ -1,1 +1,1 @@
-<view style="width:100%;height:400px;" class="data-v-1b8e6afd">echarts测试<uni-ec-canvas class="uni-ec-canvas data-v-1b8e6afd vue-ref" vue-id="563f75a9-1" id="line-chart" canvas-id="line-chart" ec="{{ec}}" data-ref="canvas" bind:__l="__l"></uni-ec-canvas></view>
+<view class="charts-box data-v-1b8e6afd"><qiun-data-charts vue-id="563f75a9-1" type="line" opts="{{opts}}" chartData="{{chartData}}" inScrollView="{{true}}" disableScroll="{{true}}" background="rgba(255,255,255,1)" ontouch="{{true}}" class="data-v-1b8e6afd" bind:__l="__l"></qiun-data-charts></view>

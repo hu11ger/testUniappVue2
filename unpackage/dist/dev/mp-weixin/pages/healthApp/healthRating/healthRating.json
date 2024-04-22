@@ -6,7 +6,7 @@
     "u-navbar": "/uview-ui/components/u-navbar/u-navbar",
     "u-tabs-swiper": "/uview-ui/components/u-tabs-swiper/u-tabs-swiper",
     "u-line-progress": "/uview-ui/components/u-line-progress/u-line-progress",
-    "uni-ec-canvas": "/components/uni-ec-canvas/uni-ec-canvas",
+    "qiun-data-charts": "/uni_modules/qiun-data-charts/components/qiun-data-charts/qiun-data-charts",
     "u-icon": "/uview-ui/components/u-icon/u-icon"
   }
 }

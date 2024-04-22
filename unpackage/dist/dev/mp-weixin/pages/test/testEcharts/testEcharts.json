@@ -2,6 +2,6 @@
   "navigationBarTitleText": "",
   "enablePullDownRefresh": false,
   "usingComponents": {
-    "uni-ec-canvas": "/components/uni-ec-canvas/uni-ec-canvas"
+    "qiun-data-charts": "/uni_modules/qiun-data-charts/components/qiun-data-charts/qiun-data-charts"
   }
 }
