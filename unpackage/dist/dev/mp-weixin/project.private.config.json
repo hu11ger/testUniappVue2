@@ -8,8 +8,8 @@
     "miniprogram": {
       "list": [
         {
-          "name": "pages/test/testEcharts/testEcharts",
-          "pathName": "pages/test/testEcharts/testEcharts",
+          "name": "pages/healthApp/home/home",
+          "pathName": "pages/healthApp/home/home",
           "query": "",
           "launchMode": "default",
           "scene": null

@@ -1,5 +1,9 @@
 {
   "pages": [
+    "pages/healthApp/home/home",
+    "pages/healthApp/healthRating/healthRating",
+    "pages/healthApp/SelfRatingSelect/SelfRatingSelect",
+    "pages/healthApp/SelfCareCourse/SelfCareCourse",
     "pages/tabBar/component/component",
     "pages/tabBar/API/API",
     "pages/tabBar/template/template",
@@ -34,10 +38,7 @@
     "pages/component/web-view/web-view",
     "uni_modules/uni-upgrade-center-app/pages/upgrade-popup",
     "pages/component/test0317/test0317",
-    "pages/healthApp/SelfRatingSelect/SelfRatingSelect",
-    "pages/healthApp/SelfCareCourse/SelfCareCourse",
     "pages/test/testMultipleBtn/testMultipleBtn",
-    "pages/healthApp/healthRating/healthRating",
     "pages/test/testEcharts/testEcharts"
   ],
   "subPackages": [
@@ -188,28 +189,12 @@
     "backgroundColor": "#F8F8F8",
     "list": [
       {
-        "pagePath": "pages/tabBar/component/component",
-        "iconPath": "static/component.png",
-        "selectedIconPath": "static/componentHL.png",
-        "text": "内置组件"
+        "pagePath": "pages/healthApp/home/home",
+        "text": ""
       },
       {
-        "pagePath": "pages/tabBar/API/API",
-        "iconPath": "static/api.png",
-        "selectedIconPath": "static/apiHL.png",
-        "text": "接口"
-      },
-      {
-        "pagePath": "pages/tabBar/extUI/extUI",
-        "iconPath": "static/extui.png",
-        "selectedIconPath": "static/extuiHL.png",
-        "text": "扩展组件"
-      },
-      {
-        "pagePath": "pages/tabBar/template/template",
-        "iconPath": "static/template.png",
-        "selectedIconPath": "static/templateHL.png",
-        "text": "模板"
+        "pagePath": "pages/healthApp/SelfRatingSelect/SelfRatingSelect",
+        "text": ""
       }
     ]
   },

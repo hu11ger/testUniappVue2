@@ -1,10 +1,12 @@
 <template>
 	<view class="">
 		<view class="bg"></view>
-		<u-navbar title-color="#000" back-icon-color="#000" :is-fixed="isFixed" :is-back="isBack"
-			:background="background" :back-text-style="{ color: '#000' }" :title="title" :back-icon-name="backIconName"
-			:back-text="backText">
-		</u-navbar>
+		<view>
+			<!-- 底部导航栏 -->
+			<u-tabbar v-model="current" :show="show" :bg-color="bgColor" :border-top="borderTop" :list="list"
+				:mid-button="midButton" :inactive-color="inactiveColor" :activeColor="activeColor"
+				@change="ChangBar"></u-tabbar>
+		</view>
 		<template>
 			<view class="uni-padding-wrap uni-common-mt">
 				<!-- <view class="uni-title uni-common-mt">
@@ -21,7 +23,7 @@
 					<view class="text">横向布局-自动宽度</view>
 				</view> -->
 				<view class="uni-flex uni-row" v-for="(item, index) in ratingObjArr" @click="selectRatingQues(item)"
-					:style="{ 'border': selectedIndex==item.id ? '2px solid #48647A' : '2px solid transparent' }"
+					:style="{ 'border': selectedIndex == item.id ? '2px solid #48647A' : '2px solid transparent' }"
 					style="background: white; border-radius: 24rpx;padding: 15rpx; justify-content: center; align-items: center;box-shadow: 0px 10px 32px rgba(110, 113, 145, 0.12);margin: 40rpx 0;">
 					<view class="uni-flex"
 						style="width: 160rpx;height: 160rpx;-webkit-justify-content: center;justify-content: center;-webkit-align-items: center;align-items: center;">
@@ -46,13 +48,17 @@
 						</view>
 					</view>
 				</view>
-				<view class="u-demo-area" style="margin-top: 60px; padding:0 20px">
-					<u-button @click="btnClick" data-name="3333" :loading="btnLoading" :plain="btnPlain" :shape="btnShape"
-						:size="btnSize" ripple=true :hairLine="hairLine" :type="btnType"
+				<view class="u-demo-area" style="margin-top: 40px; padding:0 20px">
+					<u-button @click="btnClick" data-name="3333" :loading="btnLoading" :plain="btnPlain"
+						:shape="btnShape" :size="btnSize" ripple=true :hairLine="hairLine" :type="btnType"
 						:disabled="btnDisabled">开始自测</u-button>
 				</view>
 			</view>
-
+			<!-- 顶部导航栏 -->
+			<u-navbar title-color="#000" back-icon-color="#000" :is-fixed="isFixed" :is-back="isBack"
+				:background="background" :back-text-style="{ color: '#000' }" :title="title"
+				:back-icon-name="backIconName" :back-text="backText">
+			</u-navbar>
 		</template>
 
 	</view>
@@ -62,6 +68,54 @@
 export default {
 	data() {
 		return {
+			//底部导航栏
+
+			current: 2,
+			show: true,
+			bgColor: '#ffffff',
+			borderTop: true,
+			list: [{
+				iconPath: "../../../static/image/navBar/ques.png",
+				selectedIconPath: "../../../static/image/navBar/ques-active.png",
+				text: 'SelfRate',
+				"pagePath": "pages/healthApp/SelfRatingSelect/SelfRatingSelect",
+				// count: 2,
+				// isDot: true,
+				customIcon: false,
+			},
+			{
+				iconPath: "../../../static/image/navBar/bodyData.png",
+				selectedIconPath: "../../../static/image/navBar/bodyData-active.png",
+				text: 'Insights',
+				customIcon: false,
+			},
+			{
+				iconPath: "../../../static/image/navBar/home.png",
+				selectedIconPath: "../../../static/image/navBar/home-active.png",
+				"pagePath": 'pages/healthApp/home/home',
+				text: 'Daily',
+				midButton: true,
+				customIcon: false,
+			},
+			{
+				iconPath: "../../../static/image/navBar/healthBehave.png",
+				selectedIconPath: "../../../static/image/navBar/healthBehave-active.png",
+				text: 'SelfCare',
+				customIcon: false,
+			},
+			{
+				iconPath: "../../../static/image/navBar/vrCare.png",
+				selectedIconPath: "../../../static/image/navBar/vrCare-active.png",
+				text: 'VRCure',
+				// count: 23,
+				// isDot: false,
+				customIcon: false,
+			},
+			],
+			midButton: true,
+			inactiveColor: '#9C9EB9',
+			activeColor: '#FE8787',
+
 			selectedIndex: null,
 			//底部按钮的样式
 			hairLine: true,
@@ -72,25 +126,25 @@ export default {
 			btnLoading: false,
 			btnDisabled: true,
 			ratingObjArr: [{
-				id:0,
+				id: 0,
 				name: "工作紧张测量问卷",
 				des: "Job Stress Survey, JSS",
 				duration: '约10分钟',
 				selected: false,
 			}, {
-				id:1,
+				id: 1,
 				name: "马氏工作倦怠量表",
 				des: "Maslach Burnout Inventory MBI",
 				duration: '约4分钟',
 				selected: false,
 			}, {
-				id:2,
+				id: 2,
 				name: "焦虑自评量表",
 				des: "Self-Rating Anxiety Scale,SAS",
 				duration: '约5分钟',
 				selected: false,
 			}, {
-				id:3,
+				id: 3,
 				name: "抑郁体验问卷",
 				des: "Depressive ExpQuestionnaire.DEO)",
 				duration: '约15分钟',
@@ -99,7 +153,7 @@ export default {
 
 			title: '心理量表测量',
 			backText: '',
-			backIconName: 'arrow-leftward',
+			backIconName: '',
 			right: false,
 			showAction: false,
 			rightSlot: false,
@@ -127,18 +181,23 @@ export default {
 		}
 	},
 	methods: {
-		btnClick(){
-			console.log("点击按钮",this.selectedIndex)
+		ChangBar(e) {
+			uni.switchTab({
+				url: '/' + this.list[e].pagePath
+			})
+		},
+		btnClick() {
+			console.log("点击按钮", this.selectedIndex)
 		},
 		selectRatingQues(item) {
 			console.log(item.name)
 			if (this.selectedIndex == item.id
 			) {
 				this.selectedIndex = null
-				this.btnDisabled=true
+				this.btnDisabled = true
 			} else if (this.selectedIndex != item.id) {
 				this.selectedIndex = item.id
-				this.btnDisabled=false
+				this.btnDisabled = false
 			}
 		},
 		titleChange(index) {
