@@ -289,10 +289,10 @@
 
 				&__text {
 					color: $u-content-color;
-					font-size: 22rpx;
+					font-size: 18rpx;
 					line-height: 28rpx;
 					position: absolute;
-					bottom: 10rpx;
+					bottom: 8rpx;
 					left: 50%;
 					transform: translateX(-50%);
 					width: 100%;

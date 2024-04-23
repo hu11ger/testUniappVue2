@@ -74,10 +74,10 @@
 }
 .u-tabbar__content__item__text.data-v-180fb800 {
   color: #606266;
-  font-size: 22rpx;
+  font-size: 18rpx;
   line-height: 28rpx;
   position: absolute;
-  bottom: 10rpx;
+  bottom: 8rpx;
   left: 50%;
   -webkit-transform: translateX(-50%);
           transform: translateX(-50%);

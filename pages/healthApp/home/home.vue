@@ -1,8 +1,95 @@
 <template>
 	<view>
+		<view class="bg"></view>
+		<!-- 底部导航栏 -->
 		<u-tabbar v-model="current" :show="show" :bg-color="bgColor" :border-top="borderTop" :list="list"
 			:mid-button="midButton" :inactive-color="inactiveColor" :activeColor="activeColor"
-			@change="ChangBar"></u-tabbar>
+			@change="ChangeTabBar"></u-tabbar>
+		<view class="wrap">
+			<view style="padding: 10rpx 24rpx 0 24rpx;">
+				<view class="u-tabs-box">
+					<!-- 顶部导航栏 -->
+					<u-tabs-swiper-calendar activeColor="#FE8787" ref="tabs" :list="tabList" :current="tabsCurrent"
+						@change="change" :is-scroll="true"></u-tabs-swiper-calendar>
+				</view>
+			</view>
+			<swiper class="swiper-box" :current="swiperCurrent" @transition="transition"
+				@animationfinish="animationfinish">
+				<swiper-item class="swiper-item">
+					<scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="">
+						<view class="page-box">
+							<view class="u-config-wrap" style="padding: 0 40rpx;">
+								<view class="u-config-item">
+									<view class="u-item-title">今日状态~</view>
+								</view>
+							</view>
+						</view>
+					</scroll-view>
+				</swiper-item>
+				<swiper-item class="swiper-item">
+					<scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="">
+						<view class="page-box">
+							<view class="u-config-wrap" style="padding: 0 40rpx;">
+								<view class="u-config-item">
+									<view class="u-item-title">2</view>
+								</view>
+							</view>
+						</view>
+					</scroll-view>
+				</swiper-item><swiper-item class="swiper-item">
+					<scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="">
+						<view class="page-box">
+							<view class="u-config-wrap" style="padding: 0 40rpx;">
+								<view class="u-config-item">
+									<view class="u-item-title">3</view>
+								</view>
+							</view>
+						</view>
+					</scroll-view>
+				</swiper-item><swiper-item class="swiper-item">
+					<scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="">
+						<view class="page-box">
+							<view class="u-config-wrap" style="padding: 0 40rpx;">
+								<view class="u-config-item">
+									<view class="u-item-title">4</view>
+								</view>
+							</view>
+						</view>
+					</scroll-view>
+				</swiper-item><swiper-item class="swiper-item">
+					<scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="">
+						<view class="page-box">
+							<view class="u-config-wrap" style="padding: 0 40rpx;">
+								<view class="u-config-item">
+									<view class="u-item-title">5</view>
+								</view>
+							</view>
+						</view>
+					</scroll-view>
+				</swiper-item><swiper-item class="swiper-item">
+					<scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="">
+						<view class="page-box">
+							<view class="u-config-wrap" style="padding: 0 40rpx;">
+								<view class="u-config-item">
+									<view class="u-item-title">6</view>
+								</view>
+							</view>
+						</view>
+					</scroll-view>
+				</swiper-item><swiper-item class="swiper-item">
+					<scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="">
+						<view class="page-box">
+							<view class="u-config-wrap" style="padding: 0 40rpx;">
+								<view class="u-config-item">
+									<view class="u-item-title">7</view>
+								</view>
+							</view>
+						</view>
+					</scroll-view>
+				</swiper-item>
+			</swiper>
+			<!-- </view> -->
+		</view>
 	</view>
 </template>
 
@@ -10,6 +97,88 @@
 export default {
 	data() {
 		return {
+			//各项维度得分
+			ratingsArr: [
+				{
+					id: 0,
+					iconUrl: '',
+					name: 'Calmness',
+					progress: 67,
+				},
+				{
+					id: 1,
+					iconUrl: '',
+					name: 'Happiness',
+					progress: 76,
+				},
+				{
+					id: 2,
+					iconUrl: '',
+					name: 'Coping',
+					progress: 60,
+				}, {
+					id: 3,
+					iconUrl: '',
+					name: 'Sleep',
+					progress: 67,
+				}, {
+					id: 4,
+					iconUrl: '',
+					name: 'Health',
+					progress: 87,
+				}, {
+					id: 5,
+					iconUrl: '',
+					name: 'Connection',
+					progress: 75,
+				}, {
+					id: 6,
+					iconUrl: '',
+					name: 'Fulfilment',
+					progress: 68,
+				},
+			],
+
+			//进度条
+			progressPercent: 71,
+			
+			//顶部导航栏
+			tabList: [{
+				name: 'Mon',
+				date:11
+			},
+			{
+				name: 'Tue',
+				date:12
+			},
+			{
+				name: 'Wed',
+				date:13
+			},
+			{
+				name: 'Thu',
+				date:14
+			},
+			{
+				name: 'Fri',
+				date:15
+			},
+			{
+				name: 'Sat',
+				date:16
+			},
+			{
+				name: 'Sun',
+				date:17
+			}
+			],
+			tabsCurrent: 0,
+			swiperCurrent: 0,
+			tabsHeight: 0,
+			dx: 0,
+			loadStatus: ['loadmore', 'loadmore', 'loadmore', 'loadmore'],
+
+			//底部导航栏
 			current: 2,
 			show: true,
 			bgColor: '#ffffff',
@@ -55,17 +224,340 @@ export default {
 			midButton: true,
 			inactiveColor: '#9C9EB9',
 			activeColor: '#FE8787'
-
 		}
 	},
+	onReady() {
+	},
 	methods: {
-		ChangBar(e) {
+		ChangeTabBar(e) {
 			uni.switchTab({
 				url: '/' + this.list[e].pagePath
 			})
-		}
+		},	
+		
+		// tab栏切换
+		change(index) {
+			this.swiperCurrent = index;
+			// this.getOrderList(index);
+		},
+		transition({
+			detail: {
+				dx
+			}
+		}) {
+			this.$refs.tabs.setDx(dx);
+		},
+		animationfinish({
+			detail: {
+				current
+			}
+		}) {
+			this.$refs.tabs.setFinishCurrent(current);
+			this.swiperCurrent = current;
+			this.tabsCurrent = current;
+		},
 	}
 }
 </script>
 
-<style></style>
+
+<style lang="scss" scoped>
+/* 请根据实际需求修改父元素尺寸，组件自动识别宽高 */
+.charts-box {
+	width: 100%;
+	height: 300px;
+	padding: 20rpx 0;
+}
+
+.uni-ec-canvas {
+	width: 100%;
+	height: 100%;
+	display: block;
+}
+
+.bg {
+	top: 0;
+	left: 0;
+	position: fixed;
+	z-index: -1;
+	width: 100vw;
+	height: 100vh;
+	background-color: white;
+}
+
+.demo-warter {
+	border-radius: 8px;
+	margin: 5px 5px 10px 5px;
+	background-color: #ffffff;
+	padding: 8px;
+	position: relative;
+	box-shadow: 0px 10px 32px rgba(110, 113, 145, 0.12);
+}
+
+.u-close {
+	position: absolute;
+	top: 32rpx;
+	right: 32rpx;
+}
+
+.demo-image {
+	width: 100%;
+	border-radius: 4px;
+}
+
+.demo-title {
+	font-size: 32rpx;
+	font-weight: 600;
+	margin-top: 5px;
+	color: $u-main-color;
+}
+
+.demo-tag {
+	display: flex;
+	margin-top: 5px;
+}
+
+.demo-tag-owner {
+	background-color: $u-type-error;
+	color: #FFFFFF;
+	display: flex;
+	align-items: center;
+	padding: 4rpx 14rpx;
+	border-radius: 50rpx;
+	font-size: 20rpx;
+	line-height: 1;
+}
+
+.demo-tag-text {
+	border: 1px solid $u-type-primary;
+	color: $u-type-primary;
+	margin-left: 10px;
+	border-radius: 50rpx;
+	line-height: 1;
+	padding: 4rpx 14rpx;
+	display: flex;
+	align-items: center;
+	border-radius: 50rpx;
+	font-size: 20rpx;
+}
+
+.demo-price {
+	font-size: 28rpx;
+	color: grey;
+	margin-top: 5px;
+}
+
+.demo-shop {
+	font-size: 28rpx;
+	color: #68B9C0;
+	margin-top: 5px;
+}
+
+.order {
+	width: 710rpx;
+	background-color: #ffffff;
+	margin: 20rpx auto;
+	border-radius: 20rpx;
+	box-sizing: border-box;
+	padding: 20rpx;
+	font-size: 28rpx;
+
+	.top {
+		display: flex;
+		justify-content: space-between;
+
+		.left {
+			display: flex;
+			align-items: center;
+
+			.store {
+				margin: 0 10rpx;
+				font-size: 32rpx;
+				font-weight: bold;
+			}
+		}
+
+		.right {
+			color: $u-type-warning-dark;
+		}
+	}
+
+	.item {
+		display: flex;
+		margin: 20rpx 0 0;
+
+		.left {
+			margin-right: 20rpx;
+
+			image {
+				width: 200rpx;
+				height: 200rpx;
+				border-radius: 10rpx;
+			}
+		}
+
+		.content {
+			.title {
+				font-size: 28rpx;
+				line-height: 50rpx;
+			}
+
+			.type {
+				margin: 10rpx 0;
+				font-size: 24rpx;
+				color: $u-tips-color;
+			}
+
+			.delivery-time {
+				color: #e5d001;
+				font-size: 24rpx;
+			}
+		}
+
+		.right {
+			margin-left: 10rpx;
+			padding-top: 20rpx;
+			text-align: right;
+
+			.decimal {
+				font-size: 24rpx;
+				margin-top: 4rpx;
+			}
+
+			.number {
+				color: $u-tips-color;
+				font-size: 24rpx;
+			}
+		}
+	}
+
+	.total {
+		margin-top: 20rpx;
+		text-align: right;
+		font-size: 24rpx;
+
+		.total-price {
+			font-size: 32rpx;
+		}
+	}
+
+	.bottom {
+		display: flex;
+		margin-top: 40rpx;
+		padding: 0 10rpx;
+		justify-content: space-between;
+		align-items: center;
+
+		.btn {
+			line-height: 52rpx;
+			width: 160rpx;
+			border-radius: 26rpx;
+			border: 2rpx solid $u-border-color;
+			font-size: 26rpx;
+			text-align: center;
+			color: $u-type-info-dark;
+		}
+
+		.evaluate {
+			color: $u-type-warning-dark;
+			border-color: $u-type-warning-dark;
+		}
+	}
+}
+
+.centre {
+	text-align: center;
+	margin: 200rpx auto;
+	font-size: 32rpx;
+
+	image {
+		width: 164rpx;
+		height: 164rpx;
+		border-radius: 50%;
+		margin-bottom: 20rpx;
+	}
+
+	.tips {
+		font-size: 24rpx;
+		color: #999999;
+		margin-top: 20rpx;
+	}
+
+	.btn {
+		margin: 80rpx auto;
+		width: 200rpx;
+		border-radius: 32rpx;
+		line-height: 64rpx;
+		color: #ffffff;
+		font-size: 26rpx;
+		background: linear-gradient(270deg, rgba(249, 116, 90, 1) 0%, rgba(255, 158, 1, 1) 100%);
+	}
+}
+
+.wrap {
+	display: flex;
+	flex-direction: column;
+	height: calc(100vh - var(--window-top));
+	width: 100%;
+}
+
+.swiper-box {
+	flex: 1;
+}
+
+.swiper-item {
+	height: 100%;
+}
+
+
+.u-demo {
+	//height: 200vh;
+	height: calc(100% - 44px);
+	height: calc(100% - 44px - constant(safe-area-inset-top));
+	height: calc(100% - 44px - env(safe-area-inset-top));
+}
+
+.wrap {
+	// padding: 24rpx;
+}
+
+.navbar-right {
+	margin-right: 24rpx;
+	display: flex;
+}
+
+.search-wrap {
+	margin: 0 20rpx;
+	flex: 1;
+}
+
+.right-item {
+	margin: 0 12rpx;
+	position: relative;
+	color: #ffffff;
+	display: flex;
+}
+
+.message-box {}
+
+.slot-wrap {
+	display: flex;
+	align-items: center;
+	flex: 1;
+}
+
+.map-wrap {
+	display: flex;
+	align-items: center;
+	padding: 4px 6px;
+	background-color: rgba(240, 240, 240, 0.35);
+	color: #fff;
+	font-size: 22rpx;
+	border-radius: 100rpx;
+	margin-left: 30rpx;
+}
+
+.map-wrap-text {
+	padding: 0 6rpx;
+}
+</style>

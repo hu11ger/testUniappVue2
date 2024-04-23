@@ -24,7 +24,8 @@
 			"path": "pages/healthApp/home/home",
 			"style": {
 				"navigationBarTitleText": "日记",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
 			}
 		},
 		{

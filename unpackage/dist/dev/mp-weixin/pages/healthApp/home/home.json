@@ -1,7 +1,9 @@
 {
   "navigationBarTitleText": "日记",
   "enablePullDownRefresh": false,
+  "navigationStyle": "custom",
   "usingComponents": {
-    "u-tabbar": "/uview-ui/components/u-tabbar/u-tabbar"
+    "u-tabbar": "/uview-ui/components/u-tabbar/u-tabbar",
+    "u-tabs-swiper-calendar": "/uview-ui/components/u-tabs-swiper-calendar/u-tabs-swiper-calendar"
   }
 }
