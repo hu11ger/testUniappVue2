@@ -170,8 +170,7 @@ export default {
 				return {
 					background: '#FE8787',
 					color: '#fff',
-					boxShadow: '0px 10px 32px rgba(110, 113, 145, 0.12)'
-
+					// boxShadow: '5px 10px 50px rgba(95, 64, 147, 0.5)'
 				}
 			}
 		},

@@ -6,7 +6,31 @@
 			:mid-button="midButton" :inactive-color="inactiveColor" :activeColor="activeColor"
 			@change="ChangeTabBar"></u-tabbar>
 		<view class="wrap">
-			<view style="padding: 10rpx 24rpx 0 24rpx;">
+			<view class="uni-flex uni-row"
+				style="
+				width:100%;
+				position: fixed;
+				left: 0;
+				right: 0;
+				top: 50rpx;
+				z-index: 991; border-radius: 24rpx;padding: 15rpx; justify-content: center; align-items: center;">
+				<view class="uni-flex"
+					style="width: 160rpx;height: 160rpx;-webkit-justify-content: center;justify-content: center;-webkit-align-items: center;align-items: center;">
+					<image src="../../../static/image/Avatar.png" style="width: 100rpx;height: 100rpx;"></image>
+				</view>
+				<view class="uni-flex uni-column"
+					style="padd-webkit-flex: 1;flex: 1;-webkit-justify-content: space-between;justify-content: space-around;padding: 15rpx 0rpx;">
+					<view class="text"
+						style="height: 40rpx;text-align: left;padding-left: 15rpx;padding-top: 0rpx;font-size:24rpx;color: #999;margin: 10rpx 0;">
+						Hello Panther!
+					</view>
+					<view class="text"
+						style="height: 46rpx;text-align: left;padding-left: 15rpx;padding-top: 0rpx;font-size: 28rpx;color: black;margin: 0rpx 0; font-weight: 600;">
+						Wednesday,13 July
+					</view>
+				</view>
+			</view>
+			<view style="padding: 10rpx 24rpx 0 24rpx; margin-top:40rpx">
 				<view class="u-tabs-box">
 					<!-- 顶部导航栏 -->
 					<u-tabs-swiper-calendar activeColor="#FE8787" ref="tabs" :list="tabList" :current="tabsCurrent"
@@ -23,6 +47,8 @@
 									<view class="u-item-title">今日状态~</view>
 								</view>
 							</view>
+
+
 						</view>
 					</scroll-view>
 				</swiper-item>
@@ -141,38 +167,38 @@ export default {
 
 			//进度条
 			progressPercent: 71,
-			
+
 			//顶部导航栏
 			tabList: [{
 				name: 'Mon',
-				date:11
+				date: 11
 			},
 			{
 				name: 'Tue',
-				date:12
+				date: 12
 			},
 			{
 				name: 'Wed',
-				date:13
+				date: 13
 			},
 			{
 				name: 'Thu',
-				date:14
+				date: 14
 			},
 			{
 				name: 'Fri',
-				date:15
+				date: 15
 			},
 			{
 				name: 'Sat',
-				date:16
+				date: 16
 			},
 			{
 				name: 'Sun',
-				date:17
+				date: 17
 			}
 			],
-			tabsCurrent: 0,
+			tabsCurrent: 2,
 			swiperCurrent: 0,
 			tabsHeight: 0,
 			dx: 0,
@@ -233,8 +259,8 @@ export default {
 			uni.switchTab({
 				url: '/' + this.list[e].pagePath
 			})
-		},	
-		
+		},
+
 		// tab栏切换
 		change(index) {
 			this.swiperCurrent = index;

@@ -246,7 +246,7 @@ export default {
 		animationType(type) {
 			return {
 				fade: type ? 1 : 0,
-				'slide-top': `translateY(${type ? '0' : '-100%'})`,
+				'slide-top': `translateY(${type ? '0' : '-10%'})`,
 				'slide-right': `translateX(${type ? '0' : '100%'})`,
 				'slide-bottom': `translateY(${type ? '0' : '100%'})`,
 				'slide-left': `translateX(${type ? '0' : '-100%'})`,

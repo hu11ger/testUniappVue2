@@ -22,38 +22,49 @@
 					<view class="text">横向布局-自动宽度</view>
 					<view class="text">横向布局-自动宽度</view>
 				</view> -->
-				<view class="uni-flex uni-row" v-for="(item, index) in ratingObjArr" @click="selectRatingQues(item)"
-					:style="{ 'border': selectedIndex == item.id ? '2px solid #48647A' : '2px solid transparent' }"
-					style="background: white; border-radius: 24rpx;padding: 15rpx; justify-content: center; align-items: center;box-shadow: 0px 10px 32px rgba(110, 113, 145, 0.12);margin: 40rpx 0;">
-					<view class="uni-flex"
-						style="width: 160rpx;height: 160rpx;-webkit-justify-content: center;justify-content: center;-webkit-align-items: center;align-items: center;">
-						<image src="../../../static/image/selfRating.png" style="width: 120rpx;height: 120rpx;"></image>
+				<uni-transition ref="ani" custom-class="transition" :mode-class="animModeClass" :show="animShow">
+
+					<view class="uni-flex uni-row" v-for="(item, index) in ratingObjArr" @click="selectRatingQues(item)"
+						:style="{ 'border': selectedIndex == item.id ? '2px solid #48647A' : '2px solid transparent' }"
+						style="background: white; border-radius: 24rpx;padding: 15rpx; justify-content: center; align-items: center;box-shadow: 0px 10px 32px rgba(110, 113, 145, 0.12);margin: 40rpx 0;">
+
+						<view class="uni-flex"
+							style="width: 160rpx;height: 160rpx;-webkit-justify-content: center;justify-content: center;-webkit-align-items: center;align-items: center;">
+							<image src="../../../static/image/selfRating.png" style="width: 120rpx;height: 120rpx;">
+							</image>
+						</view>
+						<view class="uni-flex uni-column"
+							style="padd-webkit-flex: 1;flex: 1;-webkit-justify-content: space-between;justify-content: space-around;padding: 15rpx 0rpx;">
+							<view class="text"
+								style="height: 46rpx;text-align: left;padding-left: 15rpx;padding-top: 0rpx;font-size: 32rpx;color: black;margin: 0rpx 5rpx; font-weight: 600;">
+								<!-- 工作紧张测量问卷 -->
+								{{ item.name }}
+							</view>
+							<view class="text"
+								style="height: 40rpx;text-align: left;padding-left: 15rpx;padding-top: 0rpx;font-size:26rpx;color: #999;margin: 10rpx 5rpx;">
+								<!-- Job Stress Survey, JSS -->
+								{{ item.des }}
+							</view>
+							<view class="text"
+								style="height: 40rpx;text-align: left;padding-left: 15rpx;padding-top: 0rpx;font-size: 26rpx;color: #6E7191;margin: 10rpx 5rpx;">
+								<!-- 约10分钟 -->
+								{{ item.duration }}
+							</view>
+						</view>
 					</view>
-					<view class="uni-flex uni-column"
-						style="padd-webkit-flex: 1;flex: 1;-webkit-justify-content: space-between;justify-content: space-around;padding: 15rpx 0rpx;">
-						<view class="text"
-							style="height: 46rpx;text-align: left;padding-left: 15rpx;padding-top: 0rpx;font-size: 32rpx;color: black;margin: 0rpx 5rpx; font-weight: 600;">
-							<!-- 工作紧张测量问卷 -->
-							{{ item.name }}
-						</view>
-						<view class="text"
-							style="height: 40rpx;text-align: left;padding-left: 15rpx;padding-top: 0rpx;font-size:26rpx;color: #999;margin: 10rpx 5rpx;">
-							<!-- Job Stress Survey, JSS -->
-							{{ item.des }}
-						</view>
-						<view class="text"
-							style="height: 40rpx;text-align: left;padding-left: 15rpx;padding-top: 0rpx;font-size: 26rpx;color: #6E7191;margin: 10rpx 5rpx;">
-							<!-- 约10分钟 -->
-							{{ item.duration }}
-						</view>
+
+					<view class="u-demo-area" style="margin-top: 40px; padding:0 20px">
+						<uni-transition duration=600 ref="ani" custom-class="transition" :mode-class="animModeClass"
+							:show="animShow">
+							<u-button @click="btnClick" data-name="3333" :loading="btnLoading" :plain="btnPlain"
+								:shape="btnShape" :size="btnSize" ripple=true :hairLine="hairLine" :type="btnType"
+								:disabled="btnDisabled">开始自测</u-button>
+						</uni-transition>
 					</view>
-				</view>
-				<view class="u-demo-area" style="margin-top: 40px; padding:0 20px">
-					<u-button @click="btnClick" data-name="3333" :loading="btnLoading" :plain="btnPlain"
-						:shape="btnShape" :size="btnSize" ripple=true :hairLine="hairLine" :type="btnType"
-						:disabled="btnDisabled">开始自测</u-button>
-				</view>
+				</uni-transition>
+
 			</view>
+
 			<!-- 顶部导航栏 -->
 			<u-navbar title-color="#000" back-icon-color="#000" :is-fixed="isFixed" :is-back="isBack"
 				:background="background" :back-text-style="{ color: '#000' }" :title="title"
@@ -66,10 +77,20 @@
 
 <script>
 export default {
+	onShow() {
+		this.animShow = true
+	},
+	onHide() {
+		this.animShow = false
+	},
 	data() {
 		return {
-			//底部导航栏
+			//渐入动画相关
+			animModeClass: ['fade', 'slide-top']
+			, animShow: false
+			,
 
+			//底部导航栏
 			current: 2,
 			show: true,
 			bgColor: '#ffffff',
