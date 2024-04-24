@@ -247,9 +247,9 @@ export default {
 			return {
 				fade: type ? 1 : 0,
 				'slide-top': `translateY(${type ? '0' : '-10%'})`,
-				'slide-right': `translateX(${type ? '0' : '100%'})`,
-				'slide-bottom': `translateY(${type ? '0' : '100%'})`,
-				'slide-left': `translateX(${type ? '0' : '-100%'})`,
+				'slide-right': `translateX(${type ? '0' : '10%'})`,
+				'slide-bottom': `translateY(${type ? '0' : '10%'})`,
+				'slide-left': `translateX(${type ? '0' : '-10%'})`,
 				'zoom-in': `scaleX(${type ? 1 : 0.8}) scaleY(${type ? 1 : 0.8})`,
 				'zoom-out': `scaleX(${type ? 1 : 1.2}) scaleY(${type ? 1 : 1.2})`
 			}

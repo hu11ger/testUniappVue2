@@ -6,8 +6,7 @@
 			:mid-button="midButton" :inactive-color="inactiveColor" :activeColor="activeColor"
 			@change="ChangeTabBar"></u-tabbar>
 		<view class="wrap">
-			<view class="uni-flex uni-row"
-				style="
+			<view class="uni-flex uni-row" style="
 				width:100%;
 				position: fixed;
 				left: 0;
@@ -26,15 +25,18 @@
 					</view>
 					<view class="text"
 						style="height: 46rpx;text-align: left;padding-left: 15rpx;padding-top: 0rpx;font-size: 28rpx;color: black;margin: 0rpx 0; font-weight: 600;">
-						Wednesday,13 July
+						Monday,11 July
 					</view>
 				</view>
 			</view>
 			<view style="padding: 10rpx 24rpx 0 24rpx; margin-top:40rpx">
 				<view class="u-tabs-box">
 					<!-- 顶部导航栏 -->
-					<u-tabs-swiper-calendar activeColor="#FE8787" ref="tabs" :list="tabList" :current="tabsCurrent"
-						@change="change" :is-scroll="true"></u-tabs-swiper-calendar>
+					<uni-transition ref="ani" custom-class="transition" :mode-class="animModeClass1" :show="animShow">
+						<u-tabs-swiper-calendar activeColor="#FE8787" ref="tabs" :list="tabList" :current="tabsCurrent"
+							@change="change" :is-scroll="true"></u-tabs-swiper-calendar>
+					</uni-transition>
+
 				</view>
 			</view>
 			<swiper class="swiper-box" :current="swiperCurrent" @transition="transition"
@@ -42,10 +44,52 @@
 				<swiper-item class="swiper-item">
 					<scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="">
 						<view class="page-box">
-							<view class="u-config-wrap" style="padding: 0 40rpx;">
+
+							<view class="uni-colunm" style="padding: 0 40rpx; justify-content:left;align-items:center;">
 								<view class="u-config-item">
 									<view class="u-item-title">今日状态~</view>
 								</view>
+								<uni-transition ref="ani" custom-class="transition" :mode-class="animModeClass1"
+									:show="animShow">
+									<view class="uni-flex"
+										style="height:135rpx;width:fit-content;border-radius:16rpx;overflow:hidden;margin:10rpx 0">
+										<view class="uni-flex uni-column"
+											style="width: 135rpx; background:#BBD0DD;justify-content:center;align-items:center">
+											<text
+												style="color:#4E4E4E;font-size:22rpx;font-weight:500;line-height:22rpx;margin-bottom:0">8h19min</text>
+											<image src="../../../static/image/home/sleep.png"
+												style="width: 75rpx;height: 75rpx;margin-top:10rpx"></image>
+										</view>
+										<view class="uni-flex uni-column"
+											style="width: 135rpx; background:#E9FFFF;justify-content:center;align-items:center">
+											<text
+												style="color:#4E4E4E;font-size:22rpx;font-weight:500;line-height:22rpx;margin-bottom:0">2h29min</text>
+											<image src="../../../static/image/home/sit.png"
+												style="width: 75rpx;height: 75rpx;margin-top:10rpx"></image>
+										</view>
+										<view class="uni-flex uni-column"
+											style="width: 135rpx; background:#C3F2F2;justify-content:center;align-items:center">
+											<text
+												style="color:#334F5C;font-size:22rpx;font-weight:500;line-height:22rpx;margin-bottom:0">2h4min</text>
+											<image src="../../../static/image/home/stand.png"
+												style="width: 75rpx;height: 75rpx;margin-top:10rpx"></image>
+										</view>
+										<view class="uni-flex uni-column"
+											style="width: 135rpx; background:#8CC6D3;justify-content:center;align-items:center">
+											<text
+												style="color:#fff;font-size:22rpx;font-weight:500;line-height:22rpx;margin-bottom:0">2h24min</text>
+											<image src="../../../static/image/home/walk.png"
+												style="width: 75rpx;height: 75rpx;margin-top:10rpx"></image>
+										</view>
+										<view class="uni-flex uni-column"
+											style="width: 135rpx; background:#60ACCA;justify-content:center;align-items:center">
+											<text
+												style="color:#fff;font-size:22rpx;font-weight:500;line-height:22rpx;margin-bottom:0">0h52min</text>
+											<image src="../../../static/image/home/run.png"
+												style="width: 75rpx;height: 75rpx;margin-top:10rpx"></image>
+										</view>
+									</view>
+								</uni-transition>
 							</view>
 
 
@@ -67,8 +111,9 @@
 						<view class="page-box">
 							<view class="u-config-wrap" style="padding: 0 40rpx;">
 								<view class="u-config-item">
-									<view class="u-item-title">3</view>
+									<view class="u-item-title">今日状态~</view>
 								</view>
+
 							</view>
 						</view>
 					</scroll-view>
@@ -121,8 +166,21 @@
 
 <script>
 export default {
+	onShow() {
+		this.animShow = true
+	},
+	onHide() {
+		this.animShow = false
+	},
 	data() {
 		return {
+			//控件动画相关
+			animModeClass2: ['fade', 'slide-top']
+			,
+			animModeClass1: ['fade', 'slide-left']
+			, animShow: false
+			,
+
 			//各项维度得分
 			ratingsArr: [
 				{
@@ -198,7 +256,7 @@ export default {
 				date: 17
 			}
 			],
-			tabsCurrent: 2,
+			tabsCurrent: 0,
 			swiperCurrent: 0,
 			tabsHeight: 0,
 			dx: 0,
