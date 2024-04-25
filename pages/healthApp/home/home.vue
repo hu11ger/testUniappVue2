@@ -49,8 +49,8 @@
 								<view class="u-config-item">
 									<view class="u-item-title">今日状态~</view>
 								</view>
-								<uni-transition ref="ani" custom-class="transition" :mode-class="animModeClass1"
-									:show="animShow">
+								<uni-transition ref="ani" duration=700 custom-class="transition"
+									:mode-class="animModeClass1" :show="animShow">
 									<view class="uni-flex"
 										style="height:135rpx;width:fit-content;border-radius:16rpx;overflow:hidden;margin:10rpx 0">
 										<view class="uni-flex uni-column"
@@ -93,43 +93,65 @@
 								<!-- 父级宽度  实机386px 12/13pro虚拟机350px-->
 								<!-- canvas图表宽度  实机250px  12/13pro虚拟机250px -->
 								<!-- 虚拟机版本 -->
-								<view class="charts-box" style="position:relative;
+								<uni-transition ref="ani" duration=800 custom-class="transition"
+									:mode-class="animModeClass1" :show="animShow">
+									<view class="charts-box" style="position:relative;
 								left:-10px; margin:30rpx 0 0 0">
-									<!-- ip15plus实机版本 -->
-									<!-- <view class="charts-box" style="position:relative; margin:30rpx 0"> -->
-									<qiun-data-charts type="ring" :opts="opts" :chartData="chartData" :canvas2d="false"
-										canvasId="rUfZIfxLQirsZHTYweOVUtNUOfGIWUbz"
-										style="top:0;left:0;position:absolute;z-index:0"
-										background="rgba(255,255,255,1)" />
-									<!-- ip15plus版本 -->
-									<!-- <image src="../../../static/image/home/clock.png"
+										<!-- ip15plus实机版本 -->
+										<!-- <view class="charts-box" style="position:relative; margin:30rpx 0"> -->
+										<qiun-data-charts type="ring" :opts="opts"
+											:chartData="chartData" :canvas2d="false"
+											canvasId="rUfZIfxLQirsZHTYweOVUtNUOfGIWUbz"
+											style="top:0;left:0;position:absolute;z-index:0"
+											background="rgba(255,255,255,1)" />
+										<!-- ip15plus版本 -->
+										<!-- <image src="../../../static/image/home/clock.png"
 										style="width: 135px;height: 135px;top:19%;left:31%;position:absolute;z-index:99"> -->
-									<!-- 虚拟机版本 -->
-									<image src="../../../static/image/home/clock.png"
-										style="width: 135px;height: 135px;top:19%;left:34%;position:absolute;z-index:99">
-									</image>
-								</view>
-
-								<view class="uni-flex"
-									style="width:100%;height:fit-content;justify-content:space-between;padding:0 20rpx;align-items:start;margin-top:-60rpx;">
-									<view class="uni-column" style="width:150px;height:165px;box-shadow: 0px 10px 32px rgba(110, 113, 145, 0.12);
-										justify-content:space-around;padding:35rpx 0;align-items:start;
+										<!-- 虚拟机版本 -->
+										<image src="../../../static/image/home/clock.png"
+											style="width: 135px;height: 135px;top:19%;left:34%;position:absolute;z-index:99">
+										</image>
+									</view>
+								</uni-transition>
+								<uni-transition ref="ani" duration=1200 custom-class="transition"
+									:mode-class="animModeClass1" :show="animShow">
+									<view class="uni-flex"
+										style="width:100%;height:fit-content;justify-content:space-between;padding:0 20rpx;align-items:start;margin-top:-60rpx;">
+										<!-- 心率图表 -->
+										<view class="uni-column" style="width:150px;height:165px;box-shadow: 0px 10px 32px rgba(110, 113, 145, 0.12);
+										justify-content:space-around;padding:35rpx 0;align-items:center;
 										border-radius:40rpx;">
-										<view class="uni-flex"
-											style="justify-content:left;align-items:start;padding:0 30rpx">
-											<image src="../../../static/image/home/heart.png"
-												style="width: 36rpx;height: 36rpx; margin-right:20rpx"></image>
-											<view style="font-weight:500;font-size:30rpx;color:black;">心率数据</view>
+											<view class="uni-flex"
+												style="justify-content:left;align-items:start;padding:0 30rpx">
+												<image src="../../../static/image/home/heart.png"
+													style="width: 36rpx;height: 36rpx; margin-right:20rpx"></image>
+												<view style="font-weight:500;font-size:30rpx;color:black;">心率数据</view>
+											</view>
+											<view style="width:100%;height:130px;">
+												<qiun-data-charts type="line" :opts="heartRateOpts"
+													:chartData="heartRateChartData" />
+											</view>
 										</view>
-										<view style="width:100%;height:130px;">
-											<qiun-data-charts type="line" :opts="heartRateOpts"
-												:chartData="heartRateChartData" />
+										<!-- 睡眠数据图表 -->
+										<view class="uni-column" style="width:150px;height:165px;box-shadow: 0px 10px 32px rgba(110, 113, 145, 0.12);
+										justify-content:space-around;padding:35rpx 0;align-items:center;
+										border-radius:40rpx;">
+											<view class="uni-flex"
+												style="justify-content:left;align-items:start;padding:0 30rpx">
+												<image src="../../../static/image/home/sleepData.png"
+													style="width: 36rpx;height: 36rpx; margin-right:20rpx"></image>
+												<view style="font-weight:500;font-size:30rpx;color:black;">睡眠数据</view>
+											</view>
+											<view style="width:100%;height:130px;text-align:center;">
+												<!-- <qiun-data-charts type="line" :opts="heartRateOpts"
+												:chartData="heartRateChartData" /> -->
+												<!-- mock数据 -->
+												<image src="../../../static/image/home/sleepMockData.png"
+													style="height: 100px;width:90px;margin-top:10px"></image>
+											</view>
 										</view>
 									</view>
-									<view class="uni-column" style="background:black;width:150px;height:80px">
-
-									</view>
-								</view>
+								</uni-transition>
 							</view>
 						</view>
 					</scroll-view>
@@ -217,15 +239,20 @@ export default {
 	},
 	data() {
 		return {
+			//睡眠数据
+			sleepChartData: {},
+			sleepOpts: {},
 
 			//心率数据
-			heartRateChartData: {}
-			, heartRateOpts: {
+			heartRateChartData: {},
+			heartRateOpts: {
 				timing: "easeOut",
 				duration: 1000,
 				rotate: false,
 				rotateLock: false,
-				color: ["#1890FF", "#91CB74", "#FAC858", "#EE6666", "#73C0DE", "#3CA272", "#FC8452", "#9A60B4", "#ea7ccc"],
+				color: ["#1890FF", "#91CB74", "#FAC858", "#EE6666", "#73C0DE", "#3CA272", "#FC8452", "#9A60B4",
+					"#ea7ccc"
+				],
 				padding: [15, 0, 0, 0],
 				fontSize: 13,
 				fontColor: "#666666",
@@ -344,7 +371,9 @@ export default {
 				duration: 1000,
 				rotate: false,
 				rotateLock: false,
-				color: ["#FFFFFF", "#E2ECEC", "#8CF0FB", "#59CDDC", "#3F92A2", "#3CA272", "#FC8452", "#9A60B4", "#ea7ccc"],
+				color: ["#FFFFFF", "#E2ECEC", "#8CF0FB", "#59CDDC", "#3F92A2", "#3CA272", "#FC8452", "#9A60B4",
+					"#ea7ccc"
+				],
 				padding: [5, 5, 5, 5],
 				fontSize: 13,
 				fontColor: "#666666",
@@ -428,11 +457,9 @@ export default {
 			},
 
 			//控件动画相关
-			animModeClass2: ['fade', 'slide-top']
-			,
-			animModeClass1: ['fade', 'slide-left']
-			, animShow: false
-			,
+			animModeClass2: ['fade', 'slide-top'],
+			animModeClass1: ['fade', 'slide-left'],
+			animShow: false,
 
 
 			//进度条
@@ -522,6 +549,8 @@ export default {
 			activeColor: '#FE8787'
 		}
 	},
+	computed: {
+	},
 	methods: {
 		drawClockBg() {
 			uni.getImageInfo({
@@ -529,9 +558,9 @@ export default {
 				success(res) {
 					console.log(res.path)
 					var ctx = uni.createCanvasContext("firstCanvas") // 使用画布创建上下文 图片
-					ctx.drawImage(res.path, x, y, 100, 100)// 设置图片坐标及大小，括号里面的分别是（图片路径，x坐标，y坐标，width，height）
-					ctx.save();//保存
-					ctx.draw()//绘制
+					ctx.drawImage(res.path, x, y, 100, 100) // 设置图片坐标及大小，括号里面的分别是（图片路径，x坐标，y坐标，width，height）
+					ctx.save(); //保存
+					ctx.draw() //绘制
 				}
 			})
 
@@ -542,15 +571,13 @@ export default {
 				//模拟服务器返回数据，如果数据格式和标准格式不同，需自行按下面的格式拼接
 				let res = {
 					// categories: ["2018", "2019", "2020", "2021", "2022", "2023"],
-					series: [
-						{
-							name: "成交量A",
-							data: [35, 25, 37, 20, 35, 25, 37, 20, 35, 25, 37, 4, 20],
-							color: '#f78786',
-							setShadow: [0, 10, 20, '#FFB2B2']
-							// linearColor:[[0,'#FF4F4F'],[0.1,'#fde0e0'],[0.64,'#fde0e0'],[1,'#ffffff']]
-						}
-					]
+					series: [{
+						name: "成交量A",
+						data: [35, 25, 37, 20, 35, 25, 37, 20, 35, 25, 37, 4, 20],
+						color: '#f78786',
+						setShadow: [0, 10, 20, '#FFB2B2']
+						// linearColor:[[0,'#FF4F4F'],[0.1,'#fde0e0'],[0.64,'#fde0e0'],[1,'#ffffff']]
+					}]
 				};
 				this.heartRateChartData = JSON.parse(JSON.stringify(res));
 			}, 500);
@@ -559,26 +586,119 @@ export default {
 		getServerData() {
 			//模拟从服务器获取数据时的延时
 			setTimeout(() => {
-				//计算空白值=(24-其余的总和)，并将其加入data的最后一项，color:white
-
-
+				//计算空白值=(24-其余的总和)，并将其加入data的最后一项，name:blank; color:white
 				//模拟服务器返回数据，如果数据格式和标准格式不同，需自行按下面的格式拼接
 				let res = {
-					series: [
+					series: [{
+						data: [{
+							"name": "sleep",
+							"value": 8.3,
+							"color": "#BBD0DD"
+						},
 						{
-							data: [
-								{ "name": "sleep", "value": 8.3, "color": "#BBD0DD" },
-								{ "name": "sit", "value": 0.2, "color": "#E9FFFF" },
-								{ "name": "stand", "value": 0.2, "color": "#C3F2F2" },
-								{ "name": "walk", "value": 0.6, "color": "#8CC6D3" },
-								{ "name": "stand", "value": 0.05, "color": "#C3F2F2" },
-								{ "name": "sit", "value": 1.2, "color": "#E9FFFF" },
-								{ "name": "stand", "value": 0.1, "color": "#C3F2F2" },
-								{ "name": "run", "value": 1.1, "color": "#60ACCA" }
-							]
-						}
-					]
+							"name": "sit",
+							"value": 0.2,
+							"color": "#E9FFFF"
+						},
+						{
+							"name": "stand",
+							"value": 0.2,
+							"color": "#C3F2F2"
+						},
+						{
+							"name": "walk",
+							"value": 0.6,
+							"color": "#8CC6D3"
+						},
+						{
+							"name": "stand",
+							"value": 0.05,
+							"color": "#C3F2F2"
+						},
+						{
+							"name": "sit",
+							"value": 1.2,
+							"color": "#E9FFFF"
+						},
+						{
+							"name": "stand",
+							"value": 0.1,
+							"color": "#C3F2F2"
+						},
+						{
+							"name": "run",
+							"value": 1.5,
+							"color": "#60ACCA"
+						}, {
+							"name": "sit",
+							"value": 1.2,
+							"color": "#E9FFFF"
+						},
+						{
+							"name": "stand",
+							"value": 0.2,
+							"color": "#C3F2F2"
+						},
+						{
+							"name": "walk",
+							"value": 0.3,
+							"color": "#8CC6D3"
+						},
+						{
+							"name": "stand",
+							"value": 0.2,
+							"color": "#C3F2F2"
+						}, {
+							"name": "sit",
+							"value": 2.1,
+							"color": "#E9FFFF"
+						},
+						{
+							"name": "run",
+							"value": 0.5,
+							"color": "#60ACCA"
+						}, {
+							"name": "sit",
+							"value": 1.5,
+							"color": "#E9FFFF"
+						},
+						{
+							"name": "stand",
+							"value": 1,
+							"color": "#C3F2F2"
+						},
+						{
+							"name": "walk",
+							"value": 1.3,
+							"color": "#8CC6D3"
+						}, {
+							"name": "sit",
+							"value": 1.9,
+							"color": "#E9FFFF"
+						}, {
+							"name": "sleep",
+							"value": 1.8,
+							"color": "#BBD0DD"
+						},
+						]
+					}]
 				};
+				let sumData = 0;
+				for (let i = 0; i < res.series[0].data.length; i++) {
+					sumData += res.series[0].data[i].value
+					console.log(res.series[0].data[i].value)
+					// console.log(i)
+				}
+				console.log(sumData)
+				let blankValue = (24.0 - sumData)
+				if (blankValue > 0) {
+					let newObj = {
+						"name": "blank",
+						"value": blankValue,
+						"color": "#fff"
+					}
+					res.series[0].data.push(newObj)
+				}
 				this.chartData = JSON.parse(JSON.stringify(res));
 			}, 500);
 		},
@@ -616,10 +736,7 @@ export default {
 
 <style lang="scss" scoped>
 /* 请根据实际需求修改父元素尺寸，组件自动识别宽高 */
-.heart-rate-box {
-	width: 100%;
-	height: 130px;
-}
+
 
 .charts-box {
 	width: 100%;
