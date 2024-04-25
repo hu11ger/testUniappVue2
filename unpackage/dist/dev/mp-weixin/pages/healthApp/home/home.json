@@ -5,6 +5,7 @@
   "usingComponents": {
     "u-tabbar": "/uview-ui/components/u-tabbar/u-tabbar",
     "uni-transition": "/uni_modules/uni-transition/components/uni-transition/uni-transition",
-    "u-tabs-swiper-calendar": "/uview-ui/components/u-tabs-swiper-calendar/u-tabs-swiper-calendar"
+    "u-tabs-swiper-calendar": "/uview-ui/components/u-tabs-swiper-calendar/u-tabs-swiper-calendar",
+    "qiun-data-charts": "/uni_modules/qiun-data-charts/components/qiun-data-charts/qiun-data-charts"
   }
 }

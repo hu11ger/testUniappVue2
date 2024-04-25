@@ -1,1 +1,1 @@
-<view class="charts-box data-v-1b8e6afd"><qiun-data-charts vue-id="563f75a9-1" type="line" opts="{{opts}}" chartData="{{chartData}}" inScrollView="{{true}}" disableScroll="{{true}}" background="rgba(255,255,255,1)" ontouch="{{true}}" class="data-v-1b8e6afd" bind:__l="__l"></qiun-data-charts></view>
+<view class="charts-box data-v-1b8e6afd"><qiun-data-charts vue-id="563f75a9-1" type="ring" opts="{{opts}}" chartData="{{chartData}}" background="rgba(198,198,198,1)" class="data-v-1b8e6afd" bind:__l="__l"></qiun-data-charts></view>

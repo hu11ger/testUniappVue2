@@ -109,13 +109,6 @@
 				"navigationBarTitleText": "movable-view"
 			}
 		},
-		// #endif
-		{
-			"path": "pages/component/text/text",
-			"style": {
-				"navigationBarTitleText": "text"
-			}
-		},
 		{
 			"path": "pages/component/rich-text/rich-text",
 			"style": {

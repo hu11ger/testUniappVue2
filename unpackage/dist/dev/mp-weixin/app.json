@@ -13,7 +13,6 @@
     "pages/component/swiper/swiper",
     "pages/component/cover-view/cover-view",
     "pages/component/movable-view/movable-view",
-    "pages/component/text/text",
     "pages/component/rich-text/rich-text",
     "pages/component/progress/progress",
     "pages/component/button/button",

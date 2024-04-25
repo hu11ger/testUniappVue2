@@ -1,13 +1,10 @@
 <template>
 	<view class="charts-box">
 	  <qiun-data-charts 
-		type="line"
+		type="ring"
 		:opts="opts"
 		:chartData="chartData"
-		:inScrollView="true"
-		:disableScroll="true"
-		background="rgba(255,255,255,1)"
-		:ontouch="true"
+		background="rgba(198,198,198,1)"
 	  />
 	</view>
   </template>
@@ -17,110 +14,64 @@
 	data() {
 	  return {
 		chartData: {},
-		//这里的 opts 是图表类型 type="line" 的全部配置参数，您可以将此配置复制到 config-ucharts.js 文件中下标为 ['line'] 的节点中来覆盖全局默认参数。实际应用过程中 opts 只需传入与全局默认参数中不一致的【某一个属性】即可实现同类型的图表显示不同的样式，达到页面简洁的需求。
+		//这里的 opts 是图表类型 type="ring" 的全部配置参数，您可以将此配置复制到 config-ucharts.js 文件中下标为 ['ring'] 的节点中来覆盖全局默认参数。实际应用过程中 opts 只需传入与全局默认参数中不一致的【某一个属性】即可实现同类型的图表显示不同的样式，达到页面简洁的需求。
 		opts: {
 		  timing: "easeOut",
 		  duration: 1000,
 		  rotate: false,
 		  rotateLock: false,
-		  color: ["#48647A","#91CB74","#FAC858","#EE6666","#73C0DE","#3CA272","#FC8452","#9A60B4","#ea7ccc"],
-		  padding: [15,0,0,5],
-		  fontSize: 12,
-		  fontColor: "#999",
+		  color: ["#FFFFFF","#E2ECEC","#8CF0FB","#59CDDC","#3F92A2","#3CA272","#FC8452","#9A60B4","#ea7ccc"],
+		  padding: [5,5,5,5],
+		  fontSize: 13,
+		  fontColor: "#666666",
 		  dataLabel: false,
 		  dataPointShape: true,
 		  dataPointShapeType: "solid",
 		  touchMoveLimit: 60,
-		  enableScroll: true,
+		  enableScroll: false,
 		  enableMarkLine: false,
 		  legend: {
 			show: false,
-			position: "bottom",
+			position: "right",
+			lineHeight: 25,
 			float: "center",
 			padding: 5,
-			margin: 10,
+			margin: 5,
 			backgroundColor: "rgba(0,0,0,0)",
 			borderColor: "rgba(0,0,0,0)",
 			borderWidth: 0,
 			fontSize: 13,
 			fontColor: "#666666",
-			lineHeight: 11,
 			hiddenColor: "#CECECE",
-			itemGap: 10
+			itemGap: 0
 		  },
-		  xAxis: {
-			disableGrid: true,
-			disabled: false,
-			axisLine: true,
-			axisLineColor: "#CCCCCC",
-			calibration: false,
-			fontColor: "#999",
-			fontSize: 10,
-			lineHeight: 20,
-			marginTop: 0,
-			rotateLabel: false,
-			rotateAngle: 45,
-			itemCount: 4,
-			boundaryGap: "center",
-			splitNumber: 5,
-			gridColor: "#999",
-			gridType: "dash",
-			dashLength: 4,
-			gridEval: 1,
-			scrollShow: true,
-			scrollAlign: "left",
-			scrollColor: "#d4eaed",
-			scrollBackgroundColor: "#EFEBEF",
-			min: 0,
-			max: 100,
-			title: "",
-			titleFontSize: 13,
-			titleOffsetY: 0,
-			titleOffsetX: 0,
-			titleFontColor: "#999",
-			format: ""
+		  title: {
+			name: "",
+			fontSize: 15,
+			color: "#666666",
+			offsetX: 0,
+			offsetY: 0
 		  },
-		  yAxis: {
-			gridType: "dash",
-			dashLength: 2,
-			disabled: false,
-			disableGrid: false,
-			splitNumber: 4,
-			gridColor: "#CCCCCC",
-			padding: 10,
-			showTitle: false,
-			data: [
-			  {
-				type: "value",
-				position: "left",
-				disabled: false,
-				axisLine: true,
-				axisLineColor: "#CCCCCC",
-				calibration: false,
-				fontColor: "#999",
-				fontSize: 10,
-				textAlign: "right",
-				title: "1",
-				titleFontSize: 0,
-				titleOffsetY: 0,
-				titleOffsetX: 0,
-				titleFontColor: "#66666600",
-				min: 60,
-				max: 100,
-				tofix: null,
-				unit: "%",
-				format: ""
-			  }
-			]
+		  subtitle: {
+			name: "",
+			fontSize: 25,
+			color: "#7cb5ec",
+			offsetX: 0,
+			offsetY: 0
 		  },
 		  extra: {
-			line: {
-			  type: "curve",
-			  width: 3,
-			  activeType: "solid",
-			  linearType: "custom",
-			  onShadow: false,
-			  animation: "vertical"
+			ring: {
+			  ringWidth: 44,
+			  activeOpacity: 0.5,
+			  activeRadius: 10,
+			  offsetAngle: -90,
+			  labelWidth: 15,
+			  border: false,
+			  borderWidth: 3,
+			  borderColor: "#FFFFFF",
+			  centerColor: "#c6c6c6",
+			  customRadius: 0,
+			  linearType: "none"
 			},
 			tooltip: {
 			  showBox: false,
@@ -141,18 +92,13 @@
 			  fontColor: "#FFFFFF",
 			  legendShow: true,
 			  legendShape: "auto",
-			  splitLine: false,
+			  splitLine: true,
 			  horizentalLine: false,
 			  xAxisLabel: false,
 			  yAxisLabel: false,
 			  labelBgColor: "#FFFFFF",
 			  labelBgOpacity: 0.7,
 			  labelFontColor: "#666666"
-			},
-			markLine: {
-			  type: "solid",
-			  dashLength: 4,
-			  data: []
 			}
 		  }
 		}
@@ -167,11 +113,9 @@
 		setTimeout(() => {
 		  //模拟服务器返回数据，如果数据格式和标准格式不同，需自行按下面的格式拼接
 		  let res = {
-			  categories: ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"],
 			  series: [
 				{
-				  name: "健康追踪",
-				  data: [88,80,65,77,78,87,88,76,88,93,76,65]
+				  data: [{"name":"一班","value":50},{"name":"二班","value":30},{"name":"三班","value":20},{"name":"四班","value":18},{"name":"五班","value":8},{"name":"五班","value":8},{"name":"五班","value":8,"color":"#e2ecec"}]
 				}
 			  ]
 			};
@@ -187,6 +131,5 @@
 	.charts-box {
 	  width: 100%;
 	  height: 300px;
-	  padding: 40rpx 50rpx;
 	}
   </style>

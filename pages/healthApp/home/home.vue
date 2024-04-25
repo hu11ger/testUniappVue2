@@ -90,9 +90,47 @@
 										</view>
 									</view>
 								</uni-transition>
+								<!-- 父级宽度  实机386px 12/13pro虚拟机350px-->
+								<!-- canvas图表宽度  实机250px  12/13pro虚拟机250px -->
+								<!-- 虚拟机版本 -->
+								<view class="charts-box" style="position:relative;
+								left:-10px; margin:30rpx 0 0 0">
+									<!-- ip15plus实机版本 -->
+									<!-- <view class="charts-box" style="position:relative; margin:30rpx 0"> -->
+									<qiun-data-charts type="ring" :opts="opts" :chartData="chartData" :canvas2d="false"
+										canvasId="rUfZIfxLQirsZHTYweOVUtNUOfGIWUbz"
+										style="top:0;left:0;position:absolute;z-index:0"
+										background="rgba(255,255,255,1)" />
+									<!-- ip15plus版本 -->
+									<!-- <image src="../../../static/image/home/clock.png"
+										style="width: 135px;height: 135px;top:19%;left:31%;position:absolute;z-index:99"> -->
+									<!-- 虚拟机版本 -->
+									<image src="../../../static/image/home/clock.png"
+										style="width: 135px;height: 135px;top:19%;left:34%;position:absolute;z-index:99">
+									</image>
+								</view>
+
+								<view class="uni-flex"
+									style="width:100%;height:fit-content;justify-content:space-between;padding:0 20rpx;align-items:start;margin-top:-60rpx;">
+									<view class="uni-column" style="width:150px;height:165px;box-shadow: 0px 10px 32px rgba(110, 113, 145, 0.12);
+										justify-content:space-around;padding:35rpx 0;align-items:start;
+										border-radius:40rpx;">
+										<view class="uni-flex"
+											style="justify-content:left;align-items:start;padding:0 30rpx">
+											<image src="../../../static/image/home/heart.png"
+												style="width: 36rpx;height: 36rpx; margin-right:20rpx"></image>
+											<view style="font-weight:500;font-size:30rpx;color:black;">心率数据</view>
+										</view>
+										<view style="width:100%;height:130px;">
+											<qiun-data-charts type="line" :opts="heartRateOpts"
+												:chartData="heartRateChartData" />
+										</view>
+									</view>
+									<view class="uni-column" style="background:black;width:150px;height:80px">
+
+									</view>
+								</view>
 							</view>
-
-
 						</view>
 					</scroll-view>
 				</swiper-item>
@@ -166,6 +204,11 @@
 
 <script>
 export default {
+
+	onReady() {
+		this.getServerData(); //活动时长比例数据
+		this.getHeartRateData() //心率数据
+	},
 	onShow() {
 		this.animShow = true
 	},
@@ -174,6 +217,216 @@ export default {
 	},
 	data() {
 		return {
+
+			//心率数据
+			heartRateChartData: {}
+			, heartRateOpts: {
+				timing: "easeOut",
+				duration: 1000,
+				rotate: false,
+				rotateLock: false,
+				color: ["#1890FF", "#91CB74", "#FAC858", "#EE6666", "#73C0DE", "#3CA272", "#FC8452", "#9A60B4", "#ea7ccc"],
+				padding: [15, 0, 0, 0],
+				fontSize: 13,
+				fontColor: "#666666",
+				dataLabel: false,
+				dataPointShape: false,
+				dataPointShapeType: "hollow",
+				touchMoveLimit: 60,
+				enableScroll: false,
+				enableMarkLine: false,
+				legend: {
+					show: false,
+					position: "bottom",
+					float: "center",
+					padding: 0,
+					margin: 0,
+					backgroundColor: "rgba(0,0,0,0)",
+					borderColor: "rgba(0,0,0,0)",
+					borderWidth: 0,
+					fontSize: 13,
+					fontColor: "#666666",
+					lineHeight: 11,
+					hiddenColor: "#CECECE",
+					itemGap: 0
+				},
+				xAxis: {
+					disableGrid: true,
+					disabled: true,
+					axisLine: false,
+					axisLineColor: "#CCCCCC",
+					calibration: false,
+					fontColor: "#666666",
+					fontSize: 0,
+					lineHeight: 0,
+					marginTop: 0,
+					rotateLabel: false,
+					rotateAngle: 45,
+					itemCount: 5,
+					boundaryGap: "center",
+					splitNumber: 5,
+					gridColor: "#CCCCCC",
+					gridType: "solid",
+					dashLength: 4,
+					gridEval: 1,
+					scrollShow: false,
+					scrollAlign: "left",
+					scrollColor: "#A6A6A6",
+					scrollBackgroundColor: "#EFEBEF",
+					title: "",
+					titleFontSize: 13,
+					titleOffsetY: 0,
+					titleOffsetX: 0,
+					titleFontColor: "#666666",
+					format: ""
+				},
+				yAxis: {
+					gridType: "dash",
+					dashLength: 2,
+					disabled: true,
+					disableGrid: true,
+					splitNumber: 5,
+					gridColor: "#CCCCCC",
+					padding: 0,
+					showTitle: true,
+					data: []
+				},
+				extra: {
+					line: {
+						type: "curve",
+						width: 6,
+						activeType: "none",
+						linearType: "custom",
+						onShadow: true,
+						animation: "horizontal"
+					},
+					tooltip: {
+						showBox: false,
+						showArrow: false,
+						showCategory: false,
+						borderWidth: 0,
+						borderRadius: 0,
+						borderColor: "#000000",
+						borderOpacity: 0.7,
+						bgColor: "#000000",
+						bgOpacity: 0.7,
+						gridType: "solid",
+						dashLength: 4,
+						gridColor: "#CCCCCC",
+						boxPadding: 3,
+						fontSize: 13,
+						lineHeight: 20,
+						fontColor: "#FFFFFF",
+						legendShow: false,
+						legendShape: "auto",
+						splitLine: false,
+						horizentalLine: false,
+						xAxisLabel: false,
+						yAxisLabel: false,
+						labelBgColor: "#FFFFFF",
+						labelBgOpacity: 0.7,
+						labelFontColor: "#666666"
+					},
+					markLine: {
+						type: "solid",
+						dashLength: 4,
+						data: []
+					}
+				}
+			},
+
+
+			//charts
+			chartData: {},
+			//这里的 opts 是图表类型 type="ring" 的全部配置参数，您可以将此配置复制到 config-ucharts.js 文件中下标为 ['ring'] 的节点中来覆盖全局默认参数。实际应用过程中 opts 只需传入与全局默认参数中不一致的【某一个属性】即可实现同类型的图表显示不同的样式，达到页面简洁的需求。
+			opts: {
+				timing: "easeOut",
+				duration: 1000,
+				rotate: false,
+				rotateLock: false,
+				color: ["#FFFFFF", "#E2ECEC", "#8CF0FB", "#59CDDC", "#3F92A2", "#3CA272", "#FC8452", "#9A60B4", "#ea7ccc"],
+				padding: [5, 5, 5, 5],
+				fontSize: 13,
+				fontColor: "#666666",
+				dataLabel: false,
+				dataPointShape: true,
+				dataPointShapeType: "solid",
+				touchMoveLimit: 60,
+				enableScroll: false,
+				enableMarkLine: false,
+				legend: {
+					show: false,
+					position: "right",
+					lineHeight: 25,
+					float: "center",
+					padding: 5,
+					margin: 5,
+					backgroundColor: "rgba(0,0,0,0)",
+					borderColor: "rgba(0,0,0,0)",
+					borderWidth: 0,
+					fontSize: 13,
+					fontColor: "#666666",
+					hiddenColor: "#CECECE",
+					itemGap: 0
+				},
+				title: {
+					name: "",
+					fontSize: 15,
+					color: "#666666",
+					offsetX: 0,
+					offsetY: 0
+				},
+				subtitle: {
+					name: "",
+					fontSize: 25,
+					color: "#7cb5ec",
+					offsetX: 0,
+					offsetY: 0
+				},
+				extra: {
+					ring: {
+						ringWidth: 44,
+						activeOpacity: 0.5,
+						activeRadius: 10,
+						offsetAngle: -90,
+						labelWidth: 15,
+						border: false,
+						borderWidth: 3,
+						borderColor: "#FFFFFF",
+						centerColor: "#ffffff",
+						customRadius: 0,
+						linearType: "none"
+					},
+					tooltip: {
+						showBox: false,
+						showArrow: true,
+						showCategory: false,
+						borderWidth: 0,
+						borderRadius: 0,
+						borderColor: "#000000",
+						borderOpacity: 0.7,
+						bgColor: "#000000",
+						bgOpacity: 0.7,
+						gridType: "solid",
+						dashLength: 4,
+						gridColor: "#CCCCCC",
+						boxPadding: 3,
+						fontSize: 13,
+						lineHeight: 20,
+						fontColor: "#FFFFFF",
+						legendShow: true,
+						legendShape: "auto",
+						splitLine: true,
+						horizentalLine: false,
+						xAxisLabel: false,
+						yAxisLabel: false,
+						labelBgColor: "#FFFFFF",
+						labelBgOpacity: 0.7,
+						labelFontColor: "#666666"
+					}
+				}
+			},
+
 			//控件动画相关
 			animModeClass2: ['fade', 'slide-top']
 			,
@@ -181,47 +434,6 @@ export default {
 			, animShow: false
 			,
 
-			//各项维度得分
-			ratingsArr: [
-				{
-					id: 0,
-					iconUrl: '',
-					name: 'Calmness',
-					progress: 67,
-				},
-				{
-					id: 1,
-					iconUrl: '',
-					name: 'Happiness',
-					progress: 76,
-				},
-				{
-					id: 2,
-					iconUrl: '',
-					name: 'Coping',
-					progress: 60,
-				}, {
-					id: 3,
-					iconUrl: '',
-					name: 'Sleep',
-					progress: 67,
-				}, {
-					id: 4,
-					iconUrl: '',
-					name: 'Health',
-					progress: 87,
-				}, {
-					id: 5,
-					iconUrl: '',
-					name: 'Connection',
-					progress: 75,
-				}, {
-					id: 6,
-					iconUrl: '',
-					name: 'Fulfilment',
-					progress: 68,
-				},
-			],
 
 			//进度条
 			progressPercent: 71,
@@ -310,9 +522,66 @@ export default {
 			activeColor: '#FE8787'
 		}
 	},
-	onReady() {
-	},
 	methods: {
+		drawClockBg() {
+			uni.getImageInfo({
+				src: "https://mp-4873eed2-c888-469f-becd-e538e287ac05.cdn.bspapp.com/clock.png",
+				success(res) {
+					console.log(res.path)
+					var ctx = uni.createCanvasContext("firstCanvas") // 使用画布创建上下文 图片
+					ctx.drawImage(res.path, x, y, 100, 100)// 设置图片坐标及大小，括号里面的分别是（图片路径，x坐标，y坐标，width，height）
+					ctx.save();//保存
+					ctx.draw()//绘制
+				}
+			})
+
+		},
+		getHeartRateData() {
+			//模拟从服务器获取数据时的延时
+			setTimeout(() => {
+				//模拟服务器返回数据，如果数据格式和标准格式不同，需自行按下面的格式拼接
+				let res = {
+					// categories: ["2018", "2019", "2020", "2021", "2022", "2023"],
+					series: [
+						{
+							name: "成交量A",
+							data: [35, 25, 37, 20, 35, 25, 37, 20, 35, 25, 37, 4, 20],
+							color: '#f78786',
+							setShadow: [0, 10, 20, '#FFB2B2']
+							// linearColor:[[0,'#FF4F4F'],[0.1,'#fde0e0'],[0.64,'#fde0e0'],[1,'#ffffff']]
+						}
+					]
+				};
+				this.heartRateChartData = JSON.parse(JSON.stringify(res));
+			}, 500);
+
+		},
+		getServerData() {
+			//模拟从服务器获取数据时的延时
+			setTimeout(() => {
+				//计算空白值=(24-其余的总和)，并将其加入data的最后一项，color:white
+
+
+				//模拟服务器返回数据，如果数据格式和标准格式不同，需自行按下面的格式拼接
+				let res = {
+					series: [
+						{
+							data: [
+								{ "name": "sleep", "value": 8.3, "color": "#BBD0DD" },
+								{ "name": "sit", "value": 0.2, "color": "#E9FFFF" },
+								{ "name": "stand", "value": 0.2, "color": "#C3F2F2" },
+								{ "name": "walk", "value": 0.6, "color": "#8CC6D3" },
+								{ "name": "stand", "value": 0.05, "color": "#C3F2F2" },
+								{ "name": "sit", "value": 1.2, "color": "#E9FFFF" },
+								{ "name": "stand", "value": 0.1, "color": "#C3F2F2" },
+								{ "name": "run", "value": 1.1, "color": "#60ACCA" }
+							]
+						}
+					]
+				};
+				this.chartData = JSON.parse(JSON.stringify(res));
+			}, 500);
+		},
 		ChangeTabBar(e) {
 			uni.switchTab({
 				url: '/' + this.list[e].pagePath
@@ -347,6 +616,11 @@ export default {
 
 <style lang="scss" scoped>
 /* 请根据实际需求修改父元素尺寸，组件自动识别宽高 */
+.heart-rate-box {
+	width: 100%;
+	height: 130px;
+}
+
 .charts-box {
 	width: 100%;
 	height: 300px;
