@@ -53,6 +53,22 @@
 			}
 		},
 		{
+			"path": "pages/healthApp/selfCare/selfCare",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/healthApp/VRCure/VRCure",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+		},
+		{
 			"path": "pages/tabBar/component/component",
 			"style": {
 				"navigationBarTitleText": "内置组件",
@@ -415,6 +431,14 @@
 			"style": {
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/healthApp/healthDataInsights/healthDataInsights",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
 			}
 		}
 	],
@@ -1452,6 +1476,18 @@
 			},
 			{
 				"pagePath": "pages/healthApp/SelfRatingSelect/SelfRatingSelect",
+				"text": ""
+			},
+			{
+				"pagePath": "pages/healthApp/healthDataInsights/healthDataInsights",
+				"text": ""
+			},
+			{
+				"pagePath": "pages/healthApp/selfCare/selfCare",
+				"text": ""
+			},
+			{
+				"pagePath": "pages/healthApp/VRCure/VRCure",
 				"text": ""
 			}
 			// "pages/healthApp/home/home"

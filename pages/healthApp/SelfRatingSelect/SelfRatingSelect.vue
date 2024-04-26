@@ -65,8 +65,8 @@
 
 			</view>
 
-			<!-- 顶部导航栏 -->
-			<u-navbar title-color="#000" back-icon-color="#000" :is-fixed="isFixed" :is-back="isBack"
+			<!-- 顶部栏 -->
+			<u-navbar title-color="#FE8787" back-icon-color="#000" :is-fixed="isFixed" :is-back="isBack"
 				:background="background" :back-text-style="{ color: '#000' }" :title="title"
 				:back-icon-name="backIconName" :back-text="backText">
 			</u-navbar>
@@ -99,7 +99,7 @@ export default {
 				iconPath: "../../../static/image/navBar/ques.png",
 				selectedIconPath: "../../../static/image/navBar/ques-active.png",
 				text: 'SelfRate',
-				"pagePath": "pages/healthApp/SelfRatingSelect/SelfRatingSelect",
+				pagePath: "pages/healthApp/SelfRatingSelect/SelfRatingSelect",
 				// count: 2,
 				// isDot: true,
 				customIcon: false,
@@ -108,12 +108,14 @@ export default {
 				iconPath: "../../../static/image/navBar/bodyData.png",
 				selectedIconPath: "../../../static/image/navBar/bodyData-active.png",
 				text: 'Insights',
+				pagePath:"pages/healthApp/healthDataInsights/healthDataInsights"
+				,
 				customIcon: false,
 			},
 			{
 				iconPath: "../../../static/image/navBar/home.png",
 				selectedIconPath: "../../../static/image/navBar/home-active.png",
-				"pagePath": 'pages/healthApp/home/home',
+				pagePath: 'pages/healthApp/home/home',
 				text: 'Daily',
 				midButton: true,
 				customIcon: false,
@@ -121,13 +123,13 @@ export default {
 			{
 				iconPath: "../../../static/image/navBar/healthBehave.png",
 				selectedIconPath: "../../../static/image/navBar/healthBehave-active.png",
-				text: 'SelfCare',
+				text: 'SelfCare',pagePath: 'pages/healthApp/selfCare/selfCare',
 				customIcon: false,
 			},
 			{
 				iconPath: "../../../static/image/navBar/vrCare.png",
 				selectedIconPath: "../../../static/image/navBar/vrCare-active.png",
-				text: 'VRCure',
+				text: 'VRCure',pagePath: 'pages/healthApp/VRCure/VRCure',
 				// count: 23,
 				// isDot: false,
 				customIcon: false,

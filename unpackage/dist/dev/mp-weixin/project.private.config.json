@@ -8,6 +8,13 @@
     "miniprogram": {
       "list": [
         {
+          "name": "pages/healthApp/healthDataInsights/healthDataInsights",
+          "pathName": "pages/healthApp/healthDataInsights/healthDataInsights",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
           "name": "pages/healthApp/home/home",
           "pathName": "pages/healthApp/home/home",
           "query": "",

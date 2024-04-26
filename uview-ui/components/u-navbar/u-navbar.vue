@@ -119,12 +119,12 @@
 			// 标题字体是否加粗
 			titleBold: {
 				type: Boolean,
-				default: false
+				default: true
 			},
 			// 标题的字体大小
 			titleSize: {
 				type: [String, Number],
-				default: 32
+				default: 34
 			},
 			isBack: {
 				type: [Boolean, String],
@@ -296,7 +296,8 @@
 
 	.u-title {
 		line-height: 60rpx;
-		font-size: 32rpx;
+		font-size: 36rpx;
+		font-weight: 600;
 		flex: 1;
 	}
 

@@ -519,6 +519,8 @@ export default {
 				iconPath: "../../../static/image/navBar/bodyData.png",
 				selectedIconPath: "../../../static/image/navBar/bodyData-active.png",
 				text: 'Insights',
+				pagePath:"pages/healthApp/healthDataInsights/healthDataInsights"
+				,
 				customIcon: false,
 			},
 			{
@@ -532,13 +534,13 @@ export default {
 			{
 				iconPath: "../../../static/image/navBar/healthBehave.png",
 				selectedIconPath: "../../../static/image/navBar/healthBehave-active.png",
-				text: 'SelfCare',
+				text: 'SelfCare',pagePath: 'pages/healthApp/selfCare/selfCare',
 				customIcon: false,
 			},
 			{
 				iconPath: "../../../static/image/navBar/vrCare.png",
 				selectedIconPath: "../../../static/image/navBar/vrCare-active.png",
-				text: 'VRCure',
+				text: 'VRCure',pagePath: 'pages/healthApp/VRCure/VRCure',
 				// count: 23,
 				// isDot: false,
 				customIcon: false,

@@ -74,7 +74,8 @@
 }
 .u-title.data-v-1194bf80 {
   line-height: 60rpx;
-  font-size: 32rpx;
+  font-size: 36rpx;
+  font-weight: 600;
   flex: 1;
 }
 .u-navbar-right.data-v-1194bf80 {

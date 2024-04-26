@@ -4,6 +4,8 @@
     "pages/healthApp/healthRating/healthRating",
     "pages/healthApp/SelfRatingSelect/SelfRatingSelect",
     "pages/healthApp/SelfCareCourse/SelfCareCourse",
+    "pages/healthApp/selfCare/selfCare",
+    "pages/healthApp/VRCure/VRCure",
     "pages/tabBar/component/component",
     "pages/tabBar/API/API",
     "pages/tabBar/template/template",
@@ -38,7 +40,8 @@
     "uni_modules/uni-upgrade-center-app/pages/upgrade-popup",
     "pages/component/test0317/test0317",
     "pages/test/testMultipleBtn/testMultipleBtn",
-    "pages/test/testEcharts/testEcharts"
+    "pages/test/testEcharts/testEcharts",
+    "pages/healthApp/healthDataInsights/healthDataInsights"
   ],
   "subPackages": [
     {
@@ -193,6 +196,18 @@
       },
       {
         "pagePath": "pages/healthApp/SelfRatingSelect/SelfRatingSelect",
+        "text": ""
+      },
+      {
+        "pagePath": "pages/healthApp/healthDataInsights/healthDataInsights",
+        "text": ""
+      },
+      {
+        "pagePath": "pages/healthApp/selfCare/selfCare",
+        "text": ""
+      },
+      {
+        "pagePath": "pages/healthApp/VRCure/VRCure",
         "text": ""
       }
     ]
