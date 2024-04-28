@@ -1,6 +1,11 @@
 <template>
 	<view>
 		<view class="bg"></view>
+		<!-- 底部导航栏 -->
+		<u-tabbar v-model="bottomTabCurrent" :show="show" :bg-color="bgColor" :border-top="borderTop" :list="list"
+			:mid-button="midButton" :inactive-color="inactiveColor" :activeColor="activeColor"
+			@change="ChangBar"></u-tabbar>
+
 		<u-navbar title-color="#000" back-icon-color="#000" :is-fixed="isFixed" :is-back="isBack"
 			:background="background" :back-text-style="{ color: '#000' }" :title="title" :back-icon-name="backIconName"
 			:back-text="backText">
@@ -9,12 +14,12 @@
 			<view style="padding: 24rpx 24rpx 0 24rpx;">
 				<view class="u-tabs-box">
 					<u-tabs-swiper activeColor="#FE8787" ref="tabs" :list="tabList" :current="current" @change="change"
-						:isScroll="false" ></u-tabs-swiper>
+						:isScroll="false"></u-tabs-swiper>
 				</view>
 			</view>
 			<swiper class="swiper-box" :current="swiperCurrent" @transition="transition"
 				@animationfinish="animationfinish">
-				<swiper-item @touchmove.stop=""  class="swiper-item">
+				<swiper-item @touchmove.stop="" class="swiper-item">
 					<scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="">
 						<view class="page-box">
 							<view class="u-config-wrap" style="padding: 0 40rpx;">
@@ -113,6 +118,55 @@
 export default {
 	data() {
 		return {
+			//底部导航栏
+			bottomTabCurrent: 4,
+			show: true,
+			bgColor: '#ffffff',
+			borderTop: true,
+			list: [{
+				iconPath: "../../../static/image/navBar/ques.png",
+				selectedIconPath: "../../../static/image/navBar/ques-active.png",
+				text: 'SelfRate',
+				pagePath: "pages/healthApp/SelfRatingSelect/SelfRatingSelect",
+				// count: 2,
+				// isDot: true,
+				customIcon: false,
+			},
+			{
+				iconPath: "../../../static/image/navBar/bodyData.png",
+				selectedIconPath: "../../../static/image/navBar/bodyData-active.png",
+				text: 'Insights',
+				pagePath: "pages/healthApp/healthDataInsights/healthDataInsights"
+				,
+				customIcon: false,
+			},
+			{
+				iconPath: "../../../static/image/navBar/home.png",
+				selectedIconPath: "../../../static/image/navBar/home-active.png",
+				pagePath: 'pages/healthApp/home/home',
+				text: 'Daily',
+				midButton: true,
+				customIcon: false,
+			},
+			{
+				iconPath: "../../../static/image/navBar/healthBehave.png",
+				selectedIconPath: "../../../static/image/navBar/healthBehave-active.png",
+				text: 'SelfCare', pagePath: 'pages/healthApp/SelfCareCourse/SelfCareCourse',
+				customIcon: false,
+			},
+			{
+				iconPath: "../../../static/image/navBar/vrCare.png",
+				selectedIconPath: "../../../static/image/navBar/vrCare-active.png",
+				text: 'VRCure', pagePath: 'pages/healthApp/healthRating/healthRating',
+				// count: 23,
+				// isDot: false,
+				customIcon: false,
+			},
+			],
+			midButton: true,
+			inactiveColor: '#9C9EB9',
+			activeColor: '#FE8787',
+
 			// charts
 			chartData: {},
 			//这里的 opts 是图表类型 type="line" 的全部配置参数，您可以将此配置复制到 config-ucharts.js 文件中下标为 ['line'] 的节点中来覆盖全局默认参数。实际应用过程中 opts 只需传入与全局默认参数中不一致的【某一个属性】即可实现同类型的图表显示不同的样式，达到页面简洁的需求。
@@ -317,7 +371,8 @@ export default {
 
 			title: '健康追踪',
 			backText: '',
-			backIconName: 'arrow-leftward',
+			// backIconName: 'arrow-leftward',
+			backIconName: '',
 			right: false,
 			showAction: false,
 			rightSlot: false,
@@ -344,6 +399,12 @@ export default {
 		this.getServerData();
 	},
 	methods: {
+		ChangBar(e) {
+			uni.switchTab({
+				url: '/' + this.list[e].pagePath
+			})
+		},
+
 		// charts
 		getServerData() {
 			//模拟从服务器获取数据时的延时

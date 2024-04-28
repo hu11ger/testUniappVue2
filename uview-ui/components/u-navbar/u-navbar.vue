@@ -29,7 +29,7 @@
 			</view>
 		</view>
 		<!-- 解决fixed定位后导航栏塌陷的问题 -->
-		<view class="u-navbar-placeholder" v-if="isFixed && !immersive" :style="{ width: '100%', height: Number(navbarHeight) + statusBarHeight + 'px' }"></view>
+		<!-- <view class="u-navbar-placeholder" v-if="isFixed && !immersive" :style="{ width: '100%', height: Number(navbarHeight) + statusBarHeight + 'px' }"></view> -->
 	</view>
 </template>
 

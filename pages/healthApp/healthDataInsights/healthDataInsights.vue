@@ -7,7 +7,6 @@
 			@change="ChangeTabBar"></u-tabbar>
 
 		<view class="uni-padding-wrap uni-common-mt">
-
 			<!-- 设备格 -->
 			<uni-transition ref="ani" custom-class="transition" :mode-class="animModeClass" :show="animShow">
 				<view class="uni-flex uni-row"
@@ -240,9 +239,11 @@
 export default {
 	onShow() {
 		this.animShow = true
+		this.getServerData();
 	},
 	onHide() {
 		this.animShow = false
+		this.chartData={}
 	},
 	onReady() {
 		this.getServerData();
@@ -368,7 +369,7 @@ export default {
 			{
 				iconPath: "../../../static/image/navBar/healthBehave.png",
 				selectedIconPath: "../../../static/image/navBar/healthBehave-active.png",
-				text: 'SelfCare', pagePath: 'pages/healthApp/selfCare/selfCare',
+				text: 'SelfCare', pagePath: 'pages/healthApp/SelfCareCourse/SelfCareCourse',
 				customIcon: false,
 			},
 			{
@@ -447,8 +448,8 @@ export default {
 	position: fixed;
 	z-index: -1;
 	width: 100vw;
+	background-image: linear-gradient((140deg, rgb(255, 255, 255) 9.160126000642776%, rgb(253.93750101327896, 231.45345389842987, 217.96302258968353) 57.31121301651001%));
 	height: 100vh;
-	background-color: white;
 }
 
 .demo-warter {

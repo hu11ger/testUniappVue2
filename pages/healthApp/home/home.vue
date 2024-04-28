@@ -42,7 +42,7 @@
 			<swiper class="swiper-box" :current="swiperCurrent" @transition="transition"
 				@animationfinish="animationfinish">
 				<swiper-item class="swiper-item">
-					<scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="">
+					<scroll-view scroll-y style="height:100%;width: 100%;" @scrolltolower="">
 						<view class="page-box">
 
 							<view class="uni-colunm" style="padding: 0 40rpx; justify-content:left;align-items:center;">
@@ -93,28 +93,27 @@
 								<!-- 父级宽度  实机386px 12/13pro虚拟机350px-->
 								<!-- canvas图表宽度  实机250px  12/13pro虚拟机250px -->
 								<!-- 虚拟机版本 -->
-								<uni-transition ref="ani" duration=800 custom-class="transition"
+								<uni-transition ref="ani" duration=1000 custom-class="transition"
 									:mode-class="animModeClass1" :show="animShow">
-									<view class="charts-box" style="position:relative;
-								left:-10px; margin:30rpx 0 0 0">
+									<view class="charts-box uni-flex uni-row" style="position:relative;
+								left:0; margin:30rpx 0 0 0">
 										<!-- ip15plus实机版本 -->
 										<!-- <view class="charts-box" style="position:relative; margin:30rpx 0"> -->
-										<qiun-data-charts type="ring" :opts="opts"
-											:chartData="chartData" :canvas2d="false"
-											canvasId="rUfZIfxLQirsZHTYweOVUtNUOfGIWUbz"
+										<qiun-data-charts type="ring" :opts="opts" :chartData="chartData"
+											:canvas2d="true" canvasId="rUfZIfxLQirsZHTYweOVUtNUOfGIWUbz"
 											style="top:0;left:0;position:absolute;z-index:0"
 											background="rgba(255,255,255,1)" />
 										<!-- ip15plus版本 -->
-										<!-- <image src="../../../static/image/home/clock.png"
-										style="width: 135px;height: 135px;top:19%;left:31%;position:absolute;z-index:99"> -->
-										<!-- 虚拟机版本 -->
 										<image src="../../../static/image/home/clock.png"
-											style="width: 135px;height: 135px;top:19%;left:34%;position:absolute;z-index:99">
+											style="width: 135px;height: 135px;top:19%;left:31%;position:absolute;z-index:99">
+											<!-- 虚拟机版本 -->
+											<!-- <image src="../../../static/image/home/clock.png"
+											style="width: 135px;height: 135px;top:19%;left:34%;position:absolute;z-index:99"> -->
 										</image>
 									</view>
 								</uni-transition>
-								<uni-transition ref="ani" duration=1200 custom-class="transition"
-									:mode-class="animModeClass1" :show="animShow">
+								<!-- <uni-transition ref="ani" duration=1200 custom-class="transition"
+									:mode-class="animModeClass1" :show="animShow"> -->
 									<view class="uni-flex"
 										style="width:100%;height:fit-content;justify-content:space-between;padding:0 20rpx;align-items:start;margin-top:-60rpx;">
 										<!-- 心率图表 -->
@@ -151,7 +150,7 @@
 											</view>
 										</view>
 									</view>
-								</uni-transition>
+								<!-- </uni-transition> -->
 							</view>
 						</view>
 					</scroll-view>
@@ -233,9 +232,13 @@ export default {
 	},
 	onShow() {
 		this.animShow = true
+		this.getServerData(); //活动时长比例数据
+		this.getHeartRateData() //心率数据
 	},
 	onHide() {
 		this.animShow = false
+		this.chartData = {}
+		this.heartRateChartData = {}
 	},
 	data() {
 		return {
@@ -519,7 +522,7 @@ export default {
 				iconPath: "../../../static/image/navBar/bodyData.png",
 				selectedIconPath: "../../../static/image/navBar/bodyData-active.png",
 				text: 'Insights',
-				pagePath:"pages/healthApp/healthDataInsights/healthDataInsights"
+				pagePath: "pages/healthApp/healthDataInsights/healthDataInsights"
 				,
 				customIcon: false,
 			},
@@ -534,13 +537,13 @@ export default {
 			{
 				iconPath: "../../../static/image/navBar/healthBehave.png",
 				selectedIconPath: "../../../static/image/navBar/healthBehave-active.png",
-				text: 'SelfCare',pagePath: 'pages/healthApp/selfCare/selfCare',
+				text: 'SelfCare', pagePath: 'pages/healthApp/SelfCareCourse/SelfCareCourse',
 				customIcon: false,
 			},
 			{
 				iconPath: "../../../static/image/navBar/vrCare.png",
 				selectedIconPath: "../../../static/image/navBar/vrCare-active.png",
-				text: 'VRCure',pagePath: 'pages/healthApp/VRCure/VRCure',
+				text: 'VRCure', pagePath: 'pages/healthApp/VRCure/VRCure',
 				// count: 23,
 				// isDot: false,
 				customIcon: false,
@@ -759,7 +762,7 @@ export default {
 	z-index: -1;
 	width: 100vw;
 	height: 100vh;
-	background-color: white;
+	background: #fff;
 }
 
 .demo-warter {

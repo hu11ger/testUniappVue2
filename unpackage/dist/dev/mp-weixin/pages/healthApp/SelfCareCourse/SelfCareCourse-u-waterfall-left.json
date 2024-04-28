@@ -7,6 +7,7 @@
     "SelfCareCourse-u-waterfall-right1": "/pages/healthApp/SelfCareCourse/SelfCareCourse-u-waterfall-right1",
     "SelfCareCourse-u-waterfall-left2": "/pages/healthApp/SelfCareCourse/SelfCareCourse-u-waterfall-left2",
     "SelfCareCourse-u-waterfall-right2": "/pages/healthApp/SelfCareCourse/SelfCareCourse-u-waterfall-right2",
+    "u-tabbar": "/uview-ui/components/u-tabbar/u-tabbar",
     "u-navbar": "/uview-ui/components/u-navbar/u-navbar",
     "u-search": "/uview-ui/components/u-search/u-search",
     "u-icon": "/uview-ui/components/u-icon/u-icon",

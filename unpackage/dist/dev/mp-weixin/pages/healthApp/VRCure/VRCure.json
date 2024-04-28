@@ -2,5 +2,8 @@
   "navigationBarTitleText": "",
   "enablePullDownRefresh": false,
   "navigationStyle": "custom",
-  "usingComponents": {}
+  "usingComponents": {
+    "u-tabbar": "/uview-ui/components/u-tabbar/u-tabbar",
+    "u-navbar": "/uview-ui/components/u-navbar/u-navbar"
+  }
 }

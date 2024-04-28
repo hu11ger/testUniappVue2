@@ -1,7 +1,12 @@
 <template>
 	<view class="">
 		<view class="bg"></view>
-		<u-navbar title-color="#000" back-icon-color="#000" :is-fixed="isFixed" :is-back="isBack"
+		<!-- 底部导航栏 -->
+		<u-tabbar v-model="bottomTabCurrent" :show="show" :bg-color="bgColor" :border-top="borderTop" :list="list"
+			:mid-button="midButton" :inactive-color="inactiveColor" :activeColor="activeColor"
+			@change="ChangBar"></u-tabbar>
+
+		<u-navbar title-color="#000" back-icon-color="#000" :is-fixed="isFixed" :is-back="isBack" 
 			:background="background" :back-text-style="{ color: '#000' }" :title="title" :back-icon-name="backIconName"
 			:back-text="backText">
 			<view class="slot-wrap" v-if="useSlot">
@@ -35,9 +40,9 @@
 			<swiper class="swiper-box" :current="swiperCurrent" @transition="transition"
 				@animationfinish="animationfinish">
 				<swiper-item class="swiper-item">
-					<scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="">
-						<view class="page-box">
-							<view class="u-config-wrap" style="padding: 0 40rpx;">
+					<scroll-view scroll-y style="height:max-content;width: 100%;" @scrolltolower="">
+						<view class="page-box" style="height:max-content;width: 100%;">
+							<view class="u-config-wrap" style="padding: 0 40rpx;height:max-content;width: 100%;">
 								<view class="u-config-item">
 									<view class="u-item-title">工作前</view>
 								</view>
@@ -163,7 +168,7 @@
 										</view>
 									</template>
 								</u-waterfall>
-								
+
 							</view>
 						</view>
 					</scroll-view>
@@ -192,10 +197,11 @@
 
 <script>
 export default {
+
 	onLoad() {
-		this.getOrderList(0);
-		this.getOrderList(1);
-		this.getOrderList(3);
+		// this.getOrderList(0);
+		// this.getOrderList(1);
+		// this.getOrderList(3);
 		// this.addRandomData();
 	},
 	// onReachBottom() {
@@ -216,6 +222,55 @@ export default {
 	},
 	data() {
 		return {
+			//底部导航栏
+			bottomTabCurrent: 3,
+			show: true,
+			bgColor: '#ffffff',
+			borderTop: true,
+			list: [{
+				iconPath: "../../../static/image/navBar/ques.png",
+				selectedIconPath: "../../../static/image/navBar/ques-active.png",
+				text: 'SelfRate',
+				pagePath: "pages/healthApp/SelfRatingSelect/SelfRatingSelect",
+				// count: 2,
+				// isDot: true,
+				customIcon: false,
+			},
+			{
+				iconPath: "../../../static/image/navBar/bodyData.png",
+				selectedIconPath: "../../../static/image/navBar/bodyData-active.png",
+				text: 'Insights',
+				pagePath: "pages/healthApp/healthDataInsights/healthDataInsights"
+				,
+				customIcon: false,
+			},
+			{
+				iconPath: "../../../static/image/navBar/home.png",
+				selectedIconPath: "../../../static/image/navBar/home-active.png",
+				pagePath: 'pages/healthApp/home/home',
+				text: 'Daily',
+				midButton: true,
+				customIcon: false,
+			},
+			{
+				iconPath: "../../../static/image/navBar/healthBehave.png",
+				selectedIconPath: "../../../static/image/navBar/healthBehave-active.png",
+				text: 'SelfCare', pagePath: 'pages/healthApp/SelfCareCourse/SelfCareCourse',
+				customIcon: false,
+			},
+			{
+				iconPath: "../../../static/image/navBar/vrCare.png",
+				selectedIconPath: "../../../static/image/navBar/vrCare-active.png",
+				text: 'VRCure', pagePath: 'pages/healthApp/healthRating/healthRating',
+				// count: 23,
+				// isDot: false,
+				customIcon: false,
+			},
+			],
+			midButton: true,
+			inactiveColor: '#9C9EB9',
+			activeColor: '#FE8787',
+
 			// loadStatus: 'loadmore',
 			flowList: [{
 				price: 10,
@@ -252,111 +307,6 @@ export default {
 			}]
 			,
 
-			list: [{
-				price: 4,
-				title: '欲与天公试比高',
-				shop: '李白杜甫白居易旗舰店',
-				image: 'http://pic2.sc.chinaz.com/Files/pic/pic9/202002/zzpic23369_s.jpg',
-			}],
-			orderList: [
-				[],
-				[],
-				[],
-				[]
-			],
-			dataList: [{
-				id: 1,
-				store: '夏日流星限定贩卖',
-				deal: '交易成功',
-				goodsList: [{
-					goodsUrl: '//img13.360buyimg.com/n7/jfs/t1/103005/7/17719/314825/5e8c19faEb7eed50d/5b81ae4b2f7f3bb7.jpg',
-					title: '【冬日限定】现货 原创jk制服女2020冬装新款小清新宽松软糯毛衣外套女开衫短款百搭日系甜美风',
-					type: '灰色;M',
-					deliveryTime: '付款后30天内发货',
-					price: '348.58',
-					number: 2
-				},
-				{
-					goodsUrl: '//img12.360buyimg.com/n7/jfs/t1/102191/19/9072/330688/5e0af7cfE17698872/c91c00d713bf729a.jpg',
-					title: '【葡萄藤】现货 小清新学院风制服格裙百褶裙女短款百搭日系甜美风原创jk制服女2020新款',
-					type: '45cm;S',
-					deliveryTime: '付款后30天内发货',
-					price: '135.00',
-					number: 1
-				}
-				]
-			},
-			{
-				id: 2,
-				store: '江南皮革厂',
-				deal: '交易失败',
-				goodsList: [{
-					goodsUrl: '//img14.360buyimg.com/n7/jfs/t1/60319/15/6105/406802/5d43f68aE9f00db8c/0affb7ac46c345e2.jpg',
-					title: '【冬日限定】现货 原创jk制服女2020冬装新款小清新宽松软糯毛衣外套女开衫短款百搭日系甜美风',
-					type: '粉色;M',
-					deliveryTime: '付款后7天内发货',
-					price: '128.05',
-					number: 1
-				}]
-			},
-			{
-				id: 3,
-				store: '三星旗舰店',
-				deal: '交易失败',
-				goodsList: [{
-					goodsUrl: '//img11.360buyimg.com/n7/jfs/t1/94448/29/2734/524808/5dd4cc16E990dfb6b/59c256f85a8c3757.jpg',
-					title: '三星（SAMSUNG）京品家电 UA65RUF70AJXXZ 65英寸4K超高清 HDR 京东微联 智能语音 教育资源液晶电视机',
-					type: '4K，广色域',
-					deliveryTime: '保质5年',
-					price: '1998',
-					number: 3
-				},
-				{
-					goodsUrl: '//img14.360buyimg.com/n7/jfs/t6007/205/4099529191/294869/ae4e6d4f/595dcf19Ndce3227d.jpg!q90.jpg',
-					title: '美的(Midea)639升 对开门冰箱 19分钟急速净味 一级能效冷藏双开门杀菌智能家用双变频节能 BCD-639WKPZM(E)',
-					type: '容量大，速冻',
-					deliveryTime: '保质5年',
-					price: '2354',
-					number: 1
-				}
-				]
-			},
-			{
-				id: 4,
-				store: '三星旗舰店',
-				deal: '交易失败',
-				goodsList: [{
-					goodsUrl: '//img10.360buyimg.com/n7/jfs/t22300/31/1505958241/171936/9e201a89/5b2b12ffNe6dbb594.jpg!q90.jpg',
-					title: '法国进口红酒 拉菲（LAFITE）传奇波尔多干红葡萄酒750ml*6整箱装',
-					type: '4K，广色域',
-					deliveryTime: '珍藏10年好酒',
-					price: '1543',
-					number: 3
-				},
-				{
-					goodsUrl: '//img10.360buyimg.com/n7/jfs/t1/107598/17/3766/525060/5e143aacE9a94d43c/03573ae60b8bf0ee.jpg',
-					title: '蓝妹（BLUE GIRL）酷爽啤酒 清啤 原装进口啤酒 罐装 500ml*9听 整箱装',
-					type: '一打',
-					deliveryTime: '口感好',
-					price: '120',
-					number: 1
-				}
-				]
-			},
-			{
-				id: 5,
-				store: '三星旗舰店',
-				deal: '交易成功',
-				goodsList: [{
-					goodsUrl: '//img12.360buyimg.com/n7/jfs/t1/52408/35/3554/78293/5d12e9cfEfd118ba1/ba5995e62cbd747f.jpg!q90.jpg',
-					title: '企业微信 中控人脸指纹识别考勤机刷脸机 无线签到异地多店打卡机WX108',
-					type: '识别效率高',
-					deliveryTime: '使用方便',
-					price: '451',
-					number: 9
-				}]
-			}
-			],
 			tabList: [{
 				name: '放松'
 			},
@@ -381,7 +331,8 @@ export default {
 
 			title: '',
 			backText: '',
-			backIconName: 'arrow-leftward',
+			// backIconName: 'arrow-leftward',
+			backIconName: '',
 			right: false,
 			showAction: false,
 			rightSlot: false,
@@ -404,6 +355,7 @@ export default {
 		}
 	},
 	computed: {
+		
 		// 价格小数
 		priceDecimal() {
 			return val => {
@@ -423,17 +375,11 @@ export default {
 		}
 	},
 	methods: {
-		addRandomData() {
-			//随机加入十个数据 且可重复
-			for (let i = 0; i < 10; i++) {
-				let index = this.$u.random(0, this.list.length - 1);
-				// 先转成字符串再转成对象，避免数组对象引用导致数据混乱
-				let item = JSON.parse(JSON.stringify(this.list[index]))
-				item.id = this.$u.guid();
-				this.flowList.push(item);
-			}
-
-
+		//切换底部导航栏
+		ChangBar(e) {
+			uni.switchTab({
+				url: '/' + this.list[e].pagePath
+			})
 		},
 		remove(id) {
 			this.$refs.uWaterfall.remove(id);

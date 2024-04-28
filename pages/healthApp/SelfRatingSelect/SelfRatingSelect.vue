@@ -123,7 +123,7 @@ export default {
 			{
 				iconPath: "../../../static/image/navBar/healthBehave.png",
 				selectedIconPath: "../../../static/image/navBar/healthBehave-active.png",
-				text: 'SelfCare',pagePath: 'pages/healthApp/selfCare/selfCare',
+				text: 'SelfCare',pagePath: 'pages/healthApp/SelfCareCourse/SelfCareCourse',
 				customIcon: false,
 			},
 			{

@@ -42,7 +42,7 @@
   z-index: -1;
   width: 100vw;
   height: 100vh;
-  background-color: white;
+  background: #fff;
 }
 .demo-warter.data-v-691a673c {
   border-radius: 8px;

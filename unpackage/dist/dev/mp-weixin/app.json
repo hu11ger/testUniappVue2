@@ -203,11 +203,11 @@
         "text": ""
       },
       {
-        "pagePath": "pages/healthApp/selfCare/selfCare",
+        "pagePath": "pages/healthApp/SelfCareCourse/SelfCareCourse",
         "text": ""
       },
       {
-        "pagePath": "pages/healthApp/VRCure/VRCure",
+        "pagePath": "pages/healthApp/healthRating/healthRating",
         "text": ""
       }
     ]

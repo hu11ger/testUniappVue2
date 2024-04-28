@@ -1482,12 +1482,20 @@
 				"pagePath": "pages/healthApp/healthDataInsights/healthDataInsights",
 				"text": ""
 			},
+			// {
+			// 	"pagePath": "pages/healthApp/selfCare/selfCare",
+			// 	"text": ""
+			// },
+			// {
+			// 	"pagePath": "pages/healthApp/VRCure/VRCure",
+			// 	"text": ""
+			// },
 			{
-				"pagePath": "pages/healthApp/selfCare/selfCare",
+				"pagePath": "pages/healthApp/SelfCareCourse/SelfCareCourse",
 				"text": ""
 			},
 			{
-				"pagePath": "pages/healthApp/VRCure/VRCure",
+				"pagePath": "pages/healthApp/healthRating/healthRating",
 				"text": ""
 			}
 			// "pages/healthApp/home/home"
