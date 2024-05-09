@@ -39,13 +39,12 @@
 								<view class="u-config-item">
 									<view class="u-item-title">图片示例</view>
 								</view>
-								<view class="uni-btn-v">
-									<u-button @click="inputDialogToggle" data-name="3333" :loading="btnLoading"
-										:plain="btnPlain" :shape="btnShape" :size="btnSize" ripple=true
-										:hairLine="hairLine" v-if="!hasUserInfo" :type="btnType">请先登录认证~</u-button>
+								<view class="uni-flex uni-row" style="width:100%;height:max-content;margin:10rpx 0;justify-content: center;">
+									<image src="../../../static/image/vrPic/tangibleSample.png"
+										style="width:350px;height:134px;"></image>
 								</view>
 								<view class="u-config-item">
-									<view class="u-item-title">上传个人记忆</view>
+									<view class="u-item-title">上传物品记忆</view>
 								</view>
 								<!-- 图片上传功能 -->
 								<view class="uni-list list-pd"
@@ -72,6 +71,11 @@
 										</view>
 									</view>
 								</view>
+								<view class="uni-btn-v">
+									<u-button @click="inputDialogToggle" data-name="3333" :loading="btnLoading"
+										:plain="btnPlain" :shape="btnShape" :size="btnSize" ripple=true
+										:hairLine="hairLine" v-if="!hasUserInfo" :type="btnType">请先登录认证~</u-button>
+								</view>
 
 							</view>
 						</view>
@@ -81,45 +85,47 @@
 					<scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="">
 						<view class="page-box">
 							<view class="u-config-wrap" style="padding: 0 40rpx;">
+
 								<view class="u-config-item">
-									<view class="u-item-title">工作中</view>
+									<view class="u-item-title">图片示例</view>
 								</view>
-								<u-waterfall v-model="flowList3" ref="uWaterfall">
-									<template v-slot:left="{ leftList }">
-										<view class="demo-warter" v-for="(item, index) in leftList" :key="index">
-											<!-- 警告：微信小程序中需要hx2.8.11版本才支持在template中结合其他组件，比如下方的lazy-load组件 -->
-											<u-lazy-load threshold="-100" border-radius="10" :image="item.image"
-												:index="index"></u-lazy-load>
-											<view class="demo-title">
-												{{ item.title }}
+								<view class="uni-flex uni-row" style="width:100%;height:max-content;margin:10rpx 0;justify-content: center;">
+									<image src="../../../static/image/vrPic/envSample.png"
+										style="width:350px;height:134px;"></image>
+								</view>
+								<view class="u-config-item">
+									<view class="u-item-title">上传景色记忆</view>
+								</view>
+								<!-- 图片上传功能 -->
+								<view class="uni-list list-pd"
+									style="border-radius:24rpx;box-shadow: 0px 10px 32px rgba(110, 113, 145, 0.12); ">
+									<view class="uni-list-cell cell-pd">
+										<view class="uni-uploader">
+											<view class="uni-uploader-head">
+												<view class="uni-uploader-title">点击可预览上传的的个人记忆</view>
+												<view class="uni-uploader-info">{{ imageList2.length }}/9</view>
 											</view>
-											<view class="demo-price">
-												{{ item.price }}min
-
-											</view>
-
-											<view class="demo-shop">
-												{{ item.shop }}
-											</view>
-
-										</view>
-									</template>
-									<template v-slot:right="{ rightList }">
-										<view class="demo-warter" v-for="(item, index) in rightList" :key="index">
-											<u-lazy-load threshold="-100" border-radius="10" :image="item.image"
-												:index="index"></u-lazy-load>
-											<view class="demo-title">
-												{{ item.title }}
-											</view>
-											<view class="demo-price">
-												{{ item.price }}min
-											</view>
-											<view class="demo-shop">
-												{{ item.shop }}
+											<view class="uni-uploader-body">
+												<view class="uni-uploader__files">
+													<block v-for="(image, index) in imageList2" :key="index">
+														<view class="uni-uploader__file">
+															<image class="uni-uploader__img" :src="image"
+																:data-src="image" @tap="previewImage2"></image>
+														</view>
+													</block>
+													<view class="uni-uploader__input-box">
+														<view class="uni-uploader__input" @tap="chooseImage2"></view>
+													</view>
+												</view>
 											</view>
 										</view>
-									</template>
-								</u-waterfall>
+									</view>
+								</view>
+								<view class="uni-btn-v">
+									<u-button @click="inputDialogToggle" data-name="3333" :loading="btnLoading"
+										:plain="btnPlain" :shape="btnShape" :size="btnSize" ripple=true
+										:hairLine="hairLine" v-if="!hasUserInfo" :type="btnType">请先登录认证~</u-button>
+								</view>
 
 							</view>
 						</view>
@@ -128,12 +134,46 @@
 				<swiper-item class="swiper-item">
 					<scroll-view scroll-y style="height: 100%;width: 100%;">
 						<view class="page-box">
-						</view>
-					</scroll-view>
-				</swiper-item>
-				<swiper-item class="swiper-item">
-					<scroll-view scroll-y style="height: 100%;width: 100%;" @scrolltolower="">
-						<view class="page-box">
+							<view class="u-config-wrap" style="padding: 0 40rpx;">
+								<!-- <view class="u-config-item">
+									<view class="u-item-title">图片示例</view>
+								</view> -->
+
+								<view class="u-config-item">
+									<view class="u-item-title">上传其他记忆</view>
+								</view>
+								<!-- 图片上传功能 -->
+								<view class="uni-list list-pd"
+									style="border-radius:24rpx;box-shadow: 0px 10px 32px rgba(110, 113, 145, 0.12); ">
+									<view class="uni-list-cell cell-pd">
+										<view class="uni-uploader">
+											<view class="uni-uploader-head">
+												<view class="uni-uploader-title">点击可预览上传的的个人记忆</view>
+												<view class="uni-uploader-info">{{ imageList3.length }}/9</view>
+											</view>
+											<view class="uni-uploader-body">
+												<view class="uni-uploader__files">
+													<block v-for="(image, index) in imageList3" :key="index">
+														<view class="uni-uploader__file">
+															<image class="uni-uploader__img" :src="image"
+																:data-src="image" @tap="previewImage3"></image>
+														</view>
+													</block>
+													<view class="uni-uploader__input-box">
+														<view class="uni-uploader__input" @tap="chooseImage3"></view>
+													</view>
+												</view>
+											</view>
+										</view>
+									</view>
+								</view>
+								<view class="uni-btn-v">
+									<u-button @click="inputDialogToggle" data-name="3333" :loading="btnLoading"
+										:plain="btnPlain" :shape="btnShape" :size="btnSize" ripple=true
+										:hairLine="hairLine" v-if="!hasUserInfo" :type="btnType">请先登录认证~</u-button>
+								</view>
+
+							</view>
 						</view>
 					</scroll-view>
 				</swiper-item>
@@ -171,6 +211,8 @@ export default {
 	},
 	onUnload() {
 		this.imageList = [],
+			this.imageList2 = [],
+			this.imageList3 = [],
 			this.sourceTypeIndex = 2,
 			this.sourceType = ['拍照', '相册', '拍照或相册'],
 			this.sizeTypeIndex = 2,
@@ -198,17 +240,22 @@ export default {
 			//图片上传功能
 			userTelNum: 'your_userTelNum', // 替换为实际的用户名
 			tangiblePicsIndex: 1, // 上传文件的索引
+			envPicsIndex: 1, // 上传文件的索引
+			normalPicsIndex: 1, // 上传文件的索引
 
 
 			imageSrc: '',
 			title: 'choose/previewImage',
 			imageList: [],
+			imageList2: [],
+			imageList3: [],
 			sourceTypeIndex: 2,
 			sourceType: ['拍照', '相册', '拍照或相册'],
 			sizeTypeIndex: 2,
 			sizeType: ['压缩', '原图', '压缩或原图'],
 			countIndex: 8,
 			count: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+
 			//底部导航栏
 			bottomTabCurrent: 3,
 			show: true,
@@ -308,7 +355,6 @@ export default {
 			this.$refs.inputDialog.open()
 		},
 		dialogInputConfirm(val) {
-
 			uni.hideLoading()
 			console.log(val)
 			this.userPhoneNum = val
@@ -332,7 +378,219 @@ export default {
 		countChange: function (e) {
 			this.countIndex = e.detail.value;
 		},
-		chooseImage: async function () {
+		chooseImage3: async function () {
+			// unicloudUpLoadImage()
+			// #ifdef APP-PLUS
+			// TODO 选择相机或相册时 需要弹出actionsheet，目前无法获得是相机还是相册，在失败回调中处理
+			if (this.sourceTypeIndex !== 2) {
+				let status = await this.checkPermission();
+				if (status !== 1) {
+					return;
+				}
+			}
+			// #endif
+
+			if (this.imageList3.length === 9) {
+				uni.showToast({
+					title: '已经到达上传上限啦~',
+					icon: 'success',
+					duration: 1000
+				})
+				return;
+			}
+			uni.chooseImage({
+				sourceType: sourceType[this.sourceTypeIndex],
+				sizeType: sizeType[this.sizeTypeIndex],
+				count: this.imageList3.length + this.count[this.countIndex] > 9 ? 9 - this.imageList3
+					.length : this.count[this.countIndex],
+				success: (res) => {
+					this.imageList3 = this.imageList3.concat(res.tempFilePaths);
+					var filePath = res.tempFilePaths[0]
+					var cloudPath =
+						`${this.userPhoneNum}/normalPic/pic_${this.normalPicsIndex++}.jpg` //获取名字
+
+					console.log(cloudPath)
+					//进行上传操作
+					uniCloud.uploadFile({
+						filePath: filePath,
+						cloudPath: cloudPath,
+						cloudPathAsRealPath: true,
+
+						onUploadProgress: function (progressEvent) {
+							console.log(progressEvent);
+							var percentCompleted = Math.round(
+								(progressEvent.loaded * 100) / progressEvent.total
+							);
+						},
+						success: (res) => {
+							console.log(res.fileID)
+							uni.showToast({
+								title: '上传成功',
+								icon: 'success',
+								duration: 1000
+							})
+						},
+						fail: (err) => {
+							console.log('uploadImage fail', err);
+							uni.showModal({
+								content: err.errMsg,
+								showCancel: false
+							});
+						},
+						complete() { }
+					})
+				},
+				fail: (err) => {
+					console.log("err: ", err);
+					// #ifdef APP-PLUS
+					if (err['code'] && err.code !== 0 && this.sourceTypeIndex === 2) {
+						this.checkPermission(err.code);
+					}
+					// #endif
+					// #ifdef MP
+					if (err.errMsg.indexOf('cancel') !== '-1') {
+						return;
+					}
+					uni.getSetting({
+						success: (res) => {
+							let authStatus = false;
+							switch (this.sourceTypeIndex) {
+								case 0:
+									authStatus = res.authSetting['scope.camera'];
+									break;
+								case 1:
+									authStatus = res.authSetting['scope.album'];
+									break;
+								case 2:
+									authStatus = res.authSetting['scope.album'] && res
+										.authSetting['scope.camera'];
+									break;
+								default:
+									break;
+							}
+							if (!authStatus) {
+								uni.showModal({
+									title: '授权失败',
+									content: 'Hello uni-app需要从您的相机或相册获取图片，请在设置界面打开相关权限',
+									success: (res) => {
+										if (res.confirm) {
+											uni.openSetting()
+										}
+									}
+								})
+							}
+						}
+					})
+					// #endif
+				}
+			})
+		}, chooseImage2: async function () {
+			// unicloudUpLoadImage()
+			// #ifdef APP-PLUS
+			// TODO 选择相机或相册时 需要弹出actionsheet，目前无法获得是相机还是相册，在失败回调中处理
+			if (this.sourceTypeIndex !== 2) {
+				let status = await this.checkPermission();
+				if (status !== 1) {
+					return;
+				}
+			}
+			// #endif
+
+			if (this.imageList2.length === 9) {
+				uni.showToast({
+					title: '已经到达上传上限啦~',
+					icon: 'success',
+					duration: 1000
+				})
+				return;
+			}
+			uni.chooseImage({
+				sourceType: sourceType[this.sourceTypeIndex],
+				sizeType: sizeType[this.sizeTypeIndex],
+				count: this.imageList2.length + this.count[this.countIndex] > 9 ? 9 - this.imageList2
+					.length : this.count[this.countIndex],
+				success: (res) => {
+					this.imageList2 = this.imageList2.concat(res.tempFilePaths);
+					var filePath = res.tempFilePaths[0]
+					// var cloudPath = res.tempFiles[0].path.substring(11) //获取随机名字
+					var cloudPath =
+						`${this.userPhoneNum}/envPic/pic_${this.envPicsIndex++}.jpg` //获取名字
+					console.log(cloudPath)
+					//进行上传操作
+					uniCloud.uploadFile({
+						filePath: filePath,
+						cloudPath: cloudPath,
+						cloudPathAsRealPath: true,
+
+						onUploadProgress: function (progressEvent) {
+							console.log(progressEvent);
+							var percentCompleted = Math.round(
+								(progressEvent.loaded * 100) / progressEvent.total
+							);
+						},
+						success: (res) => {
+							console.log(res.fileID)
+							uni.showToast({
+								title: '上传成功',
+								icon: 'success',
+								duration: 1000
+							})
+						},
+						fail: (err) => {
+							console.log('uploadImage fail', err);
+							uni.showModal({
+								content: err.errMsg,
+								showCancel: false
+							});
+						},
+						complete() { }
+					})
+				},
+				fail: (err) => {
+					console.log("err: ", err);
+					// #ifdef APP-PLUS
+					if (err['code'] && err.code !== 0 && this.sourceTypeIndex === 2) {
+						this.checkPermission(err.code);
+					}
+					// #endif
+					// #ifdef MP
+					if (err.errMsg.indexOf('cancel') !== '-1') {
+						return;
+					}
+					uni.getSetting({
+						success: (res) => {
+							let authStatus = false;
+							switch (this.sourceTypeIndex) {
+								case 0:
+									authStatus = res.authSetting['scope.camera'];
+									break;
+								case 1:
+									authStatus = res.authSetting['scope.album'];
+									break;
+								case 2:
+									authStatus = res.authSetting['scope.album'] && res
+										.authSetting['scope.camera'];
+									break;
+								default:
+									break;
+							}
+							if (!authStatus) {
+								uni.showModal({
+									title: '授权失败',
+									content: 'Hello uni-app需要从您的相机或相册获取图片，请在设置界面打开相关权限',
+									success: (res) => {
+										if (res.confirm) {
+											uni.openSetting()
+										}
+									}
+								})
+							}
+						}
+					})
+					// #endif
+				}
+			})
+		}, chooseImage: async function () {
 			// unicloudUpLoadImage()
 			// #ifdef APP-PLUS
 			// TODO 选择相机或相册时 需要弹出actionsheet，目前无法获得是相机还是相册，在失败回调中处理
@@ -345,11 +603,12 @@ export default {
 			// #endif
 
 			if (this.imageList.length === 9) {
-				let isContinue = await this.isFullImg();
-				console.log("是否继续?", isContinue);
-				if (!isContinue) {
-					return;
-				}
+				uni.showToast({
+					title: '已经到达上传上限啦~',
+					icon: 'success',
+					duration: 1000
+				})
+				return;
 			}
 			uni.chooseImage({
 				sourceType: sourceType[this.sourceTypeIndex],
@@ -360,8 +619,10 @@ export default {
 					this.imageList = this.imageList.concat(res.tempFilePaths);
 					var filePath = res.tempFilePaths[0]
 					// var cloudPath = res.tempFiles[0].path.substring(11) //获取随机名字
+
 					var cloudPath =
 						`${this.userPhoneNum}/tangiblePic/pic_${this.tangiblePicsIndex++}.jpg` //获取名字
+
 					console.log(cloudPath)
 					//进行上传操作
 					uniCloud.uploadFile({
@@ -438,30 +699,27 @@ export default {
 				}
 			})
 		},
-		isFullImg: function () {
-			return new Promise((res) => {
-				uni.showModal({
-					content: "已经有9张图片了,是否清空现有图片？",
-					success: (e) => {
-						if (e.confirm) {
-							this.imageList = [];
-							res(true);
-						} else {
-							res(false)
-						}
-					},
-					fail: () => {
-						res(false)
-					}
-				})
-			})
-		},
+
 		previewImage: function (e) {
 			// unicloudUpLoadImage()
 			var current = e.target.dataset.src
 			uni.previewImage({
 				current: current,
 				urls: this.imageList
+			})
+		}, previewImage2: function (e) {
+			// unicloudUpLoadImage()
+			var current = e.target.dataset.src
+			uni.previewImage({
+				current: current,
+				urls: this.imageList2
+			})
+		}, previewImage3: function (e) {
+			// unicloudUpLoadImage()
+			var current = e.target.dataset.src
+			uni.previewImage({
+				current: current,
+				urls: this.imageList3
 			})
 		},
 		async checkPermission(code) {
@@ -500,29 +758,29 @@ export default {
 		clear() {
 			this.$refs.uWaterfall.clear();
 		},
-		reachBottom() {
-			// 此tab为空数据
-			if (this.current != 2) {
-				this.loadStatus.splice(this.current, 1, "loading")
-				setTimeout(() => {
-					this.getOrderList(this.current);
-				}, 1200);
-			}
-		},
+		// reachBottom() {
+		// 	// 此tab为空数据
+		// 	if (this.current != 2) {
+		// 		this.loadStatus.splice(this.current, 1, "loading")
+		// 		setTimeout(() => {
+		// 			this.getOrderList(this.current);
+		// 		}, 1200);
+		// 	}
+		// },
 		// 页面数据
-		getOrderList(idx) {
-			for (let i = 0; i < 5; i++) {
-				let index = this.$u.random(0, this.dataList.length - 1);
-				let data = JSON.parse(JSON.stringify(this.dataList[index]));
-				data.id = this.$u.guid();
-				this.orderList[idx].push(data);
-			}
-			this.loadStatus.splice(this.current, 1, "loadmore")
-		},
+		// getOrderList(idx) {
+		// 	for (let i = 0; i < 5; i++) {
+		// 		let index = this.$u.random(0, this.dataList.length - 1);
+		// 		let data = JSON.parse(JSON.stringify(this.dataList[index]));
+		// 		data.id = this.$u.guid();
+		// 		this.orderList[idx].push(data);
+		// 	}
+		// 	this.loadStatus.splice(this.current, 1, "loadmore")
+		// },
 		// tab栏切换
 		change(index) {
 			this.swiperCurrent = index;
-			this.getOrderList(index);
+			// this.getOrderList(index);
 		},
 		transition({
 			detail: {

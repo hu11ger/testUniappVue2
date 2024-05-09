@@ -10,8 +10,6 @@
     "u-tabbar": "/uview-ui/components/u-tabbar/u-tabbar",
     "u-navbar": "/uview-ui/components/u-navbar/u-navbar",
     "u-tabs-swiper": "/uview-ui/components/u-tabs-swiper/u-tabs-swiper",
-    "u-button": "/uview-ui/components/u-button/u-button",
-    "u-waterfall": "/uview-ui/components/u-waterfall/u-waterfall",
-    "u-lazy-load": "/uview-ui/components/u-lazy-load/u-lazy-load"
+    "u-button": "/uview-ui/components/u-button/u-button"
   }
 }
