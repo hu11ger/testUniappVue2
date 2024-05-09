@@ -112,7 +112,7 @@
 							var imageSrc = res.tempFilePaths[0]
 							var cloudPath = res.tempFiles[0].path.substring(11) //获取随机名字
 							//进行上传操作
-
+						
 							this.imageSrc = imageSrc
 							// console.log(cloudPath)
 							// callback方式，与promise方式二选一即可

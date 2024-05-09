@@ -697,13 +697,13 @@ checkbox-group label {
 }
 .uni-uploader__file {
 	margin: 10rpx;
-	width: 210rpx;
-	height: 210rpx;
+	width: 170rpx;
+	height: 170rpx;
 }
 .uni-uploader__img {
 	display: block;
-	width: 210rpx;
-	height: 210rpx;
+	width: 170rpx;
+	height: 170rpx;
 }
 .uni-uploader__input-box {
 	position: relative;

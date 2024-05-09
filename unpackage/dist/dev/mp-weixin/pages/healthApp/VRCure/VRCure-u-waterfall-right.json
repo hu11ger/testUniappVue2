@@ -1,0 +1,15 @@
+{
+  "component": true,
+  "usingComponents": {
+    "VRCure-u-waterfall-left": "/pages/healthApp/VRCure/VRCure-u-waterfall-left",
+    "VRCure-u-waterfall-right": "/pages/healthApp/VRCure/VRCure-u-waterfall-right",
+    "uni-popup": "/uni_modules/uni-popup/components/uni-popup/uni-popup",
+    "uni-popup-dialog": "/uni_modules/uni-popup/components/uni-popup-dialog/uni-popup-dialog",
+    "u-tabbar": "/uview-ui/components/u-tabbar/u-tabbar",
+    "u-navbar": "/uview-ui/components/u-navbar/u-navbar",
+    "u-tabs-swiper": "/uview-ui/components/u-tabs-swiper/u-tabs-swiper",
+    "u-button": "/uview-ui/components/u-button/u-button",
+    "u-waterfall": "/uview-ui/components/u-waterfall/u-waterfall",
+    "u-lazy-load": "/uview-ui/components/u-lazy-load/u-lazy-load"
+  }
+}

@@ -261,7 +261,7 @@ export default {
 			{
 				iconPath: "../../../static/image/navBar/vrCare.png",
 				selectedIconPath: "../../../static/image/navBar/vrCare-active.png",
-				text: 'VRCure', pagePath: 'pages/healthApp/healthRating/healthRating',
+				text: 'VRCure', pagePath: 'pages/healthApp/VRCure/VRCure',
 				// count: 23,
 				// isDot: false,
 				customIcon: false,

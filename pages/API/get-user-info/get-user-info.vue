@@ -51,7 +51,7 @@
 		},
 		methods: {
 			...mapActions(['getPhoneNumber']),
-			// 获取用户信息 API 在小程序可直接使用，在 5+App 里面需要先登录才能调用
+			// 获取用户信息 API 在小程序可直接使用，在H5+App 里面需要先登录才能调用
 			getUserInfo() {
 				this.btnLoading = true;
 				if (this.isUniverifyLogin) {

@@ -1495,9 +1495,15 @@
 				"text": ""
 			},
 			{
-				"pagePath": "pages/healthApp/healthRating/healthRating",
+				"pagePath": "pages/healthApp/VRCure/VRCure",
 				"text": ""
 			}
+			//健康追踪
+			// {
+			// 	"pagePath": "pages/healthApp/healthRating/healthRating",
+			// 	"text": ""
+			// }
+			// pages/healthApp/VRCure/VRCure
 			// "pages/healthApp/home/home"
 			// "pages/healthApp/healthRating/healthRating"
 			// "pages/healthApp/SelfRatingSelect/SelfRatingSelect"

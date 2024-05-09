@@ -71,7 +71,7 @@
 				:back-icon-name="backIconName" :back-text="backText">
 			</u-navbar>
 		</template>
-
+		
 	</view>
 </template>
 
