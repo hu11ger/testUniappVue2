@@ -39,7 +39,8 @@
 								<view class="u-config-item">
 									<view class="u-item-title">图片示例</view>
 								</view>
-								<view class="uni-flex uni-row" style="width:100%;height:max-content;margin:10rpx 0;justify-content: center;">
+								<view class="uni-flex uni-row"
+									style="width:100%;height:max-content;margin:10rpx 0;justify-content: center;">
 									<image src="../../../static/image/vrPic/tangibleSample.png"
 										style="width:350px;height:134px;"></image>
 								</view>
@@ -71,10 +72,20 @@
 										</view>
 									</view>
 								</view>
-								<view class="uni-btn-v">
+								<view class="uni-btn-v" v-if="!hasUserInfo">
 									<u-button @click="inputDialogToggle" data-name="3333" :loading="btnLoading"
 										:plain="btnPlain" :shape="btnShape" :size="btnSize" ripple=true
-										:hairLine="hairLine" v-if="!hasUserInfo" :type="btnType">请先登录认证~</u-button>
+										:hairLine="hairLine" :type="btnType">请先登录认证~</u-button>
+								</view>
+
+								<view class="uni-btn-v uni-common-mt" v-else>
+									<!-- <button type="primary" @click="sendRequest" :loading="loading">发起请求（Callback）</button> -->
+									<u-button @click="uploadImages()" data-name="3333" :loading="meshyLoading"
+										:plain="btnPlain" :shape="btnShape" :size="btnSize" ripple=true
+										:hairLine="hairLine" :type="btnType">开始定制~</u-button>
+									<!-- <u-button @click="getResult" data-name="3333" :loading="meshyLoading"
+										:plain="btnPlain" :shape="btnShape" :size="btnSize" ripple=true
+										:hairLine="hairLine" :type="{ normal }">查询定制进度~</u-button> -->
 								</view>
 
 							</view>
@@ -89,7 +100,8 @@
 								<view class="u-config-item">
 									<view class="u-item-title">图片示例</view>
 								</view>
-								<view class="uni-flex uni-row" style="width:100%;height:max-content;margin:10rpx 0;justify-content: center;">
+								<view class="uni-flex uni-row"
+									style="width:100%;height:max-content;margin:10rpx 0;justify-content: center;">
 									<image src="../../../static/image/vrPic/envSample.png"
 										style="width:350px;height:134px;"></image>
 								</view>
@@ -222,6 +234,25 @@ export default {
 
 	data() {
 		return {
+			//接入meshy相关
+			downloadedFilePaths: [], // 存放下载文件路径的数组，本地临时路径
+			resultIDs: [], // 存放上传成功的结果ID的数组
+			meshyLoading: false,
+			baseUrl: 'https://api.meshy.ai/v1/image-to-3d',
+			meshyAPI: 'msy_ar8y9bKmstdLwmebSabtqBqnxbiZvsYLyIcX',
+			inputHeader: {
+				'Authorization': "Bearer msy_ar8y9bKmstdLwmebSabtqBqnxbiZvsYLyIcX",
+				'Content - Type': 'application/json'
+			},
+			inputArg: {
+				image_url: 'https://mp-4873eed2-c888-469f-becd-e538e287ac05.cdn.bspapp.com/bear.png',
+				enable_pbr: true,
+			},
+			fbxURL: '',
+			fbxLocalPath: '',
+			resultID: '',
+			preUploadImgUrls: [],
+
 			//底部按钮的样式
 			hairLine: true,
 			btnType: 'primary',
@@ -350,6 +381,278 @@ export default {
 	},
 	computed: {},
 	methods: {
+		//以下是meshy接入相关的方法
+		uploadModelsSequentially() {
+			// 确保所有文件都已下载
+			if (this.downloadedFilePaths.length !== this.preUploadImgUrls.length) {
+				console.log('Not all models have been downloaded yet.');
+				return;
+			}
+			uni.showLoading({
+				title: '最后上传模型文件至云服务器中~'
+			})
+			let index = 0; // 初始化索引
+			const uploadNextModel = () => {
+				// 检查是否所有文件都已上传
+				if (index < this.downloadedFilePaths.length) {
+					const filePath = this.downloadedFilePaths[index];
+					const imgUrl = this.preUploadImgUrls[index]; // 获取对应的图片URL
+					// 从图片URL中提取文件名，构造cloudPath
+					const urlParts = imgUrl.split('/');
+					const fileName = urlParts[urlParts.length - 1].split('.')[0];
+					const cloudPath = `pic_${index + 1}.fbx`; // 构造cloudPath
+
+					this.uploadModelFBX(filePath, cloudPath); // 上传模型
+
+					// 准备上传下一个模型
+					index++;
+					setTimeout(uploadNextModel, 1000); // 等待1秒后上传下一个模型
+				} else {
+					uni.hideLoading()
+					uni.showToast({
+						title: '所有所有MESHY结束！！',
+						icon: 'success',
+						duration: 3000,
+					});
+				}
+			};
+			// 从第一个文件开始上传
+			uploadNextModel();
+		},
+		uploadModelFBX(filePath, cloudPath) {
+			uniCloud.uploadFile({
+				filePath: filePath,
+				cloudPath: cloudPath,
+				onUploadProgress: (progressEvent) => {
+					const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+					console.log(`Upload progress: ${percentCompleted}%`);
+				},
+				success: (res) => {
+					console.log('Upload success:', res);
+					uni.showToast({
+						title: '上传模型成功',
+						icon: 'success',
+						duration: 1000,
+					});
+				},
+				fail: (err) => {
+					console.error('Upload fail:', err);
+					uni.showModal({
+						content: err.errMsg,
+						showCancel: false,
+					});
+				},
+				complete() {
+					// 上传完成后的逻辑
+				},
+			});
+		},
+		getResult() {
+			this.loading = true
+			uni.request({
+				// url:this.baseUrl+this.resultID
+				url: this.baseUrl + '/018e8e76-9fb0-7f66-8e94-ee2b52be85d8',
+				method: 'GET',
+				header: {
+					'Authorization': "Bearer msy_ar8y9bKmstdLwmebSabtqBqnxbiZvsYLyIcX",
+					// 'Content-type': 'application/json'
+				},
+			}).then(res => {
+				console.log('request success', res[1].data);
+				uni.showToast({
+					title: '查询成功',
+					icon: 'success',
+					mask: true,
+					duration: 1000
+				});
+				this.res = '查询结果 : ' + res[1].data;
+				this.loading = false;
+				this.fbxURL = res[1].data.model_urls.fbx
+				//下载之后，上传模型
+				this.downloadModel()
+			})
+		},
+		sendRequest(mode) {
+			this.loading = true;
+			switch (mode) {
+				case 'promise':
+					this._requestPromise();
+					break;
+				case 'await':
+					this._requestAwait();
+					break;
+				default:
+					this._request();
+					break;
+			}
+		},
+		_requestPromise() {
+			uni.request({
+				url: this.baseUrl,
+				method: 'POST',
+				header: {
+					'Authorization': "Bearer msy_ar8y9bKmstdLwmebSabtqBqnxbiZvsYLyIcX",
+					'Content-type': 'application/json'
+				},
+				data: {
+					image_url: 'https://mp-4873eed2-c888-469f-becd-e538e287ac05.cdn.bspapp.com/bear.png',
+					enable_pbr: true,
+				}
+			}).then(res => {
+				console.log('request success', res[1].data);
+				this.resultID = res[1].data.result
+				uni.showToast({
+					title: '请求成功',
+					icon: 'success',
+					mask: true,
+					duration: 1000
+				});
+				this.res = '请求结果 : ' + res[1].data;
+				this.loading = false;
+				// result: "018e6c7f-7352-759b-8302-9dc94dab864b"
+				// 018e8e76-9fb0-7f66-8e94-ee2b52be85d8
+
+			}).catch(err => {
+				console.log('request fail', err);
+				uni.showModal({
+					content: err.errMsg,
+					showCancel: false
+				});
+				this.loading = false;
+			});
+			// #endif
+		},
+		uploadImage(imgUrl) {
+			// 返回一个Promise来处理上传逻辑
+			return new Promise((resolve, reject) => {
+				uni.request({
+					url: this.baseUrl,
+					method: 'POST',
+					header: {
+						'Authorization': "Bearer msy_ar8y9bKmstdLwmebSabtqBqnxbiZvsYLyIcX",
+						'Content-type': 'application/json'
+					},
+					data: {
+						image_url: imgUrl,
+						enable_pbr: true,
+					}
+				}).then(res => {
+					console.log('request success', res);
+					if (res.data && res.data.result) {
+						resolve(res.data.result); // 解决Promise，返回结果ID
+						uni.showToast({
+							title: '请求成功',
+							icon: 'success',
+							mask: true,
+							duration: 1000
+						});
+					} else {
+						reject(new Error('没有收到预期的响应数据')); // 拒绝Promise，上传失败
+					}
+				}).catch(err => {
+					console.error('request fail', err);
+					reject(err); // 拒绝Promise，上传失败
+					uni.showModal({
+						content: err.errMsg,
+						showCancel: false
+					});
+				});
+			});
+		},
+		uploadImages() {
+			this.meshyLoading = true; // 开始加载
+			uni.showLoading({
+				title: '定制中~'
+			})
+			this.resultIDs = []; // 重置结果ID数组
+
+			// 遍历preUploadImgUrls数组
+			this.preUploadImgUrls.forEach((imgUrl, index) => {
+				this.uploadImage(imgUrl).then(resultID => {
+					this.resultIDs.push(resultID); // 保存结果ID
+
+					// 检查是否所有图片都已上传完成
+					if (index === this.preUploadImgUrls.length - 1) {
+						this.meshyLoading = false; // 完成加载
+						uni.hideLoading()
+						// 这里可以进行下一步操作，比如查询网络请求
+						// ...
+
+					}
+				}).catch(err => {
+					console.error('上传失败:', err);
+					this.meshyLoading = false; // 上传失败时停止加载
+					uni.hideLoading()
+				});
+			});
+		},
+		getResultAndDownloadModel() {
+			uni.showLoading({
+				title: '查询定制并下载中~'
+			})
+			const checkAndDownload = (resultId, index) => {
+				uni.request({
+					url: `${this.baseUrl}/${resultId}`,
+					method: 'GET',
+					header: {
+						'Authorization': "Bearer msy_ar8y9bKmstdLwmebSabtqBqnxbiZvsYLyIcX",
+					},
+				}).then(res => {
+					console.log('request success', res);
+					if (res[1].data && res[1].data.progress !== undefined) {
+						if (res[1].data.progress === 100) {
+							// 下载模型
+							this.downloadModel(res[1].data, index);
+
+						} else {
+							// 如果进度不是100，10秒后再次检查
+							setTimeout(() => {
+								checkAndDownload(resultId, index);
+							}, 10000);
+						}
+					} else {
+						console.error('返回的数据中没有progress字段');
+					}
+				}).catch(err => {
+					console.error('request fail', err);
+				});
+			};
+
+			// 从resultIDs数组中依次处理每个结果ID
+			this.resultIDs.forEach((resultId, index) => {
+				checkAndDownload(resultId, index);
+			});
+		},
+		downloadModel(resultData, index) {
+			uni.showLoading({
+				title: '下载中'
+			});
+			uni.downloadFile({
+				url: resultData.model_urls.fbx,
+				success: (res) => {
+					uni.showToast({
+						title: '下载AI生成模型成功',
+						icon: 'success',
+						duration: 1000
+					});
+					console.log('下载AI生成模型成功', res);
+					// 将下载的文件路径按照原始图片URL的顺序保存
+					this.downloadedFilePaths[index] = res.tempFilePath;
+					// 检查是否所有文件都已下载完成
+					if (this.downloadedFilePaths.length === this.preUploadImgUrls.length) {
+						// 所有文件下载完成，开始上传
+						this.uploadModelsSequentially();
+					}
+				},
+				fail: (err) => {
+					console.error('下载AI生成模型失败', err);
+				}
+			});
+			uni.hideLoading();
+		},
+
+
+
 		//输入对话框相关的方法，收集用户的手机号当作唯一id
 		inputDialogToggle() {
 			this.$refs.inputDialog.open()
@@ -407,7 +710,7 @@ export default {
 					this.imageList3 = this.imageList3.concat(res.tempFilePaths);
 					var filePath = res.tempFilePaths[0]
 					var cloudPath =
-						`${this.userPhoneNum}/normalPic/pic_${this.normalPicsIndex++}.jpg` //获取名字
+						`${this.userPhoneNum}/normal/pic_${this.normalPicsIndex++}.jpg` //获取名字
 
 					console.log(cloudPath)
 					//进行上传操作
@@ -424,6 +727,8 @@ export default {
 						},
 						success: (res) => {
 							console.log(res.fileID)
+							this.preUploadImgUrls.push(res.fileID)
+
 							uni.showToast({
 								title: '上传成功',
 								icon: 'success',
@@ -514,7 +819,7 @@ export default {
 					var filePath = res.tempFilePaths[0]
 					// var cloudPath = res.tempFiles[0].path.substring(11) //获取随机名字
 					var cloudPath =
-						`${this.userPhoneNum}/envPic/pic_${this.envPicsIndex++}.jpg` //获取名字
+						`${this.userPhoneNum}/env/pic_${this.envPicsIndex++}.jpg` //获取名字
 					console.log(cloudPath)
 					//进行上传操作
 					uniCloud.uploadFile({
@@ -621,7 +926,7 @@ export default {
 					// var cloudPath = res.tempFiles[0].path.substring(11) //获取随机名字
 
 					var cloudPath =
-						`${this.userPhoneNum}/tangiblePic/pic_${this.tangiblePicsIndex++}.jpg` //获取名字
+						`${this.userPhoneNum}/tangible/pic_${this.tangiblePicsIndex++}.jpg` //获取名字
 
 					console.log(cloudPath)
 					//进行上传操作

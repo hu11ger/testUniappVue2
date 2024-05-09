@@ -39,27 +39,6 @@
 				fbxURL: '',
 				fbxLocalPath: '',
 				resultID: '',
-				// responseExg: {
-				// 	"id": "018a210d-8ba4-705c-b111-1f1776f7f578",
-				// 	"model_urls": {
-				// 		"glb": "https://assets.meshy.ai/***/tasks/018a210d-8ba4-705c-b111-1f1776f7f578/output/model.glb?Expires=***",
-				// 		"fbx": "https://assets.meshy.ai/***/tasks/018a210d-8ba4-705c-b111-1f1776f7f578/output/model.fbx?Expires=***",
-				// 		"usdz": "https://assets.meshy.ai/***/tasks/018a210d-8ba4-705c-b111-1f1776f7f578/output/model.usdz?Expires=***"
-				// 	},
-				// 	"thumbnail_url": "https://assets.meshy.ai/***/tasks/018a210d-8ba4-705c-b111-1f1776f7f578/output/preview.png?Expires=***",
-				// 	"progress": 1,
-				// 	"started_at": 1692771667037,
-				// 	"created_at": 1692771650657,
-				// 	"expires_at": 1692771679037,
-				// 	"finished_at": 1692771669037,
-				// 	"status": "SUCCEEDED",
-				// 	"texture_urls": [{
-				// 		"base_color": "https://assets.meshy.ai/***/tasks/018a210d-8ba4-705c-b111-1f1776f7f578/output/texture_0.png?Expires=***",
-				// 		"metallic": "https://assets.meshy.ai/***/tasks/018a210d-8ba4-705c-b111-1f1776f7f578/output/texture_0_metallic.png?Expires=XXX",
-				// 		"normal": "https://assets.meshy.ai/***/tasks/018a210d-8ba4-705c-b111-1f1776f7f578/output/texture_0_roughness.png?Expires=XXX",
-				// 		"roughness": "https://assets.meshy.ai/***/tasks/018a210d-8ba4-705c-b111-1f1776f7f578/output/texture_0_normal.png?Expires=XXX"
-				// 	}]
-				// },
 			}
 		},
 		methods: {
