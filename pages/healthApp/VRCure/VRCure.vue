@@ -515,7 +515,7 @@ export default {
 						console.log('All images uploaded, resultIDs:', this.resultIDs);
 
 						// 这里可以进行下一步操作，比如查询网络请求
-						console.log("resultIDS",this.resultIDs)
+						console.log("resultIDS", this.resultIDs)
 						this.getResultAndDownloadModel();
 
 					}
@@ -531,59 +531,89 @@ export default {
 				title: `查询定制并下载中~`
 
 			})
-			const checkAndDownload = (resultId, index) => {
-				uni.request({
-					url: `${this.baseUrl}/${resultId}`,
-					method: 'GET',
-					header: {
-						'Authorization': "Bearer msy_ar8y9bKmstdLwmebSabtqBqnxbiZvsYLyIcX",
-					},
-				}).then(res => {
-					console.log('request success', res[1]);
-					if (res[1].data && res[1].data.progress !== undefined) {
-						if (res[1].data.progress === 100) {
-							// 下载模型
-							this.downloadModel(res[1].data, index);
-
-						} else {
-							// 如果进度不是100，10秒后再次检查
-							setTimeout(() => {
-								checkAndDownload(resultId, index);
-							}, 10000);
-						}
-					} else {
-						console.error('返回的数据中没有progress字段');
-					}
-				}).catch(err => {
-					console.error('request fail', err);
-				});
-			};
-
-			// 从resultIDs数组中依次处理每个结果ID
+			// 用来存储每个resultId的进度
+			let progresses = [];
+			// 用来存储每个模型的下载URL
+			let modelUrls = [];
+			// 首先检查所有结果ID的进度
 			this.resultIDs.forEach((resultId, index) => {
-				checkAndDownload(resultId, index);
+				const checkProgress = () => {
+					uni.request({
+						url: `${this.baseUrl}/${resultId}`,
+						method: 'GET',
+						header: {
+							'Authorization': "Bearer msy_ar8y9bKmstdLwmebSabtqBqnxbiZvsYLyIcX",
+						},
+					}).then(res => {
+						if (res[1].data) {
+							progresses[index] = res[1].data.progress;
+							if (res[1].data.progress === 100) {
+								// 如果当前进度为100，检查是否所有进度都为100
+								modelUrls[index] = res[1].data.model_urls.fbx; // 保存模型URL
+								if (progresses.every(progress => progress === 100)) {
+									// 所有进度都为100，开始下载
+									this.downloadModels(modelUrls);
+								}
+							} else {
+								// 如果当前进度不为100，再次检查
+								setTimeout(checkProgress, 10000);
+							}
+						} else {
+							console.error('返回的数据中没有progress字段');
+						}
+					}).catch(err => {
+						console.error('request fail', err);
+					});
+				};
+				checkProgress();
 			});
+
+		},
+		// 修改downloadModels方法以接收modelUrls数组
+		downloadModels(modelUrls) {
+			console.log("modelUrls", modelUrls)
+			// 检查modelUrls数组是否与resultIDs数组长度相同
+			if (modelUrls.length === this.resultIDs.length) {
+				// 遍历modelUrls数组并下载每个模型
+				modelUrls.forEach((modelUrl, index) => {
+					this.downloadModel(modelUrl, index);
+				});
+			} else {
+				console.error('Model URLs array is not complete.');
+			}
 		},
 
-		downloadModel(resultData, index) {
+		// 检查是否所有文件都已下载完成
+		areAllFilesDownloaded() {
+			console.log("downloadedFilePaths", this.downloadedFilePaths)
+			return this.downloadedFilePaths.length === this.preUploadImgUrls.length &&
+				this.downloadedFilePaths.every(path => typeof path === 'string' && path !== undefined && path);
+		},
+		downloadModel(modelUrl, index) {
 			uni.showLoading({
 				title: '下载中'
 			});
 			uni.downloadFile({
-				url: resultData.model_urls.fbx,
+				url: modelUrl,
 				success: (res) => {
 					uni.showToast({
 						title: '下载AI生成模型成功',
 						icon: 'success',
 						duration: 1000
 					});
-					console.log('下载AI生成模型成功', res);
+					// console.log('下载AI生成模型成功', res);
 					// 将下载的文件路径按照原始图片URL的顺序保存
 					this.downloadedFilePaths[index] = res.tempFilePath;
 					// 检查是否所有文件都已下载完成
-					if (this.downloadedFilePaths.length === this.preUploadImgUrls.length) {
+					if (this.areAllFilesDownloaded()) {
 						// 所有文件下载完成，开始上传
 						this.uploadModelsSequentially();
+					} else {
+						uni.showToast({
+							title: '仍有文件未完成下载~请耐心等待~',
+							icon: 'success',
+							duration: 1000
+						});
 					}
 				},
 				fail: (err) => {
