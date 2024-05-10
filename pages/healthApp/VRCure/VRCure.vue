@@ -508,7 +508,7 @@ export default {
 					console.log('Uploaded image with resultID:', resultID);
 
 					// 检查是否所有图片都已上传完成
-					if (index === this.preUploadImgUrls.length - 1) {
+					if (this.resultIDs.length === this.preUploadImgUrls.length) {
 						// 所有图片上传完成后的处理逻辑
 						uni.hideLoading();
 						this.meshyLoading = false;
@@ -527,9 +527,15 @@ export default {
 			});
 		},
 		getResultAndDownloadModel() {
+			// 确保preUploadImgUrls数组已定义并包含图片URL
+			if (!this.resultIDs || !this.preUploadImgUrls.length === this.resultIDs.length) {
+				console.error('resultids不完整');
+				uni.hideLoading();
+				this.meshyLoading = false;
+				return;
+			}
 			uni.showLoading({
 				title: `查询定制并下载中~`
-
 			})
 			// 用来存储每个resultId的进度
 			let progresses = [];
@@ -538,6 +544,9 @@ export default {
 			// 首先检查所有结果ID的进度
 			this.resultIDs.forEach((resultId, index) => {
 				const checkProgress = () => {
+					uni.showLoading({
+						title: `查询定制并下载中~`
+					})
 					uni.request({
 						url: `${this.baseUrl}/${resultId}`,
 						method: 'GET',
@@ -585,9 +594,27 @@ export default {
 
 		// 检查是否所有文件都已下载完成
 		areAllFilesDownloaded() {
-			console.log("downloadedFilePaths", this.downloadedFilePaths)
-			return this.downloadedFilePaths.length === this.preUploadImgUrls.length &&
-				this.downloadedFilePaths.every(path => typeof path === 'string' && path !== undefined && path);
+			console.log("downloadedFilePaths", this.downloadedFilePaths);
+			// 检查数组长度是否与预期相符
+			if (this.downloadedFilePaths.length !== this.preUploadImgUrls.length) {
+				return false;
+			}
+			// 使用for循环而不是forEach，以确保检查数组中的每个索引
+			for (let i = 0; i < this.downloadedFilePaths.length; i++) {
+				// 使用in运算符检查当前索引是否存在空位
+				if (!(i in this.downloadedFilePaths)) {
+					console.error("Array contains holes at index", i);
+					return false;
+				}
+				// 确保当前索引处的元素不是undefined，不是null，并且是字符串类型
+				const path = this.downloadedFilePaths[i];
+				if (typeof path !== 'string' || path === undefined || path === null) {
+					console.error("Invalid path at index", i, ":", path);
+					return false;
+				}
+			}
+			// 如果所有检查都通过，则返回true
+			return true;
 		},
 		downloadModel(modelUrl, index) {
 			uni.showLoading({
