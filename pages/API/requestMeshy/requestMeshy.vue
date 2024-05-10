@@ -33,7 +33,7 @@
 					'Content - Type': 'application/json'
 				},
 				inputArg: {
-					image_url: 'https://mp-4873eed2-c888-469f-becd-e538e287ac05.cdn.bspapp.com/bear.png',
+					image_url: 'https://mp-4873eed2-c888-469f-becd-e538e287ac05.cdn.bspapp.com/18148991553/tangible/pic_1.jpg',
 					enable_pbr: true,
 				},
 				fbxURL: '',
