@@ -54,7 +54,7 @@
 										<view class="uni-uploader">
 											<view class="uni-uploader-head">
 												<view class="uni-uploader-title">点击可预览上传的的个人记忆</view>
-												<view class="uni-uploader-info">{{ imageList.length }}/9</view>
+												<!-- <view class="uni-uploader-info">{{ imageList.length }}/9</view> -->
 											</view>
 											<view class="uni-uploader-body">
 												<view class="uni-uploader__files">
@@ -72,7 +72,7 @@
 										</view>
 									</view>
 								</view>
-								<view class="uni-btn-v" v-if="!hasUserInfo">
+								<view class="uni-btn-v" v-if="swiperCurrent == 0 && !hasUserInfo">
 									<u-button @click="inputDialogToggle" data-name="3333" :loading="btnLoading"
 										:plain="btnPlain" :shape="btnShape" :size="btnSize" ripple=true
 										:hairLine="hairLine" :type="btnType">请先登录认证~</u-button>
@@ -82,7 +82,7 @@
 									<!-- <button type="primary" @click="sendRequest" :loading="loading">发起请求（Callback）</button> -->
 									<u-button @click="uploadImages" data-name="3333" :loading="meshyLoading"
 										:plain="btnPlain" :shape="btnShape" :size="btnSize" ripple=true
-										:hairLine="hairLine" :type="btnType">开始定制~</u-button>
+										:hairLine="hairLine" :type="btnType">开始定制Meshy~</u-button>
 									<!-- <u-button @click="getResult" data-name="3333" :loading="meshyLoading"
 										:plain="btnPlain" :shape="btnShape" :size="btnSize" ripple=true
 										:hairLine="hairLine" :type="{ normal }">查询定制进度~</u-button> -->
@@ -115,7 +115,8 @@
 										<view class="uni-uploader">
 											<view class="uni-uploader-head">
 												<view class="uni-uploader-title">点击可预览上传的的个人记忆</view>
-												<view class="uni-uploader-info">{{ imageList2.length }}/9</view>
+												<!-- <view class="uni-uploader-info">{{ imageList2.length }}/9</view> -->
+												<!-- <view class="uni-uploader-info">当前版本仅支持上传一张照片~</view> -->
 											</view>
 											<view class="uni-uploader-body">
 												<view class="uni-uploader__files">
@@ -133,10 +134,18 @@
 										</view>
 									</view>
 								</view>
-								<view class="uni-btn-v">
+								<view class="uni-btn-v" v-if="swiperCurrent == 1 && !hasUserInfo">
 									<u-button @click="inputDialogToggle" data-name="3333" :loading="btnLoading"
 										:plain="btnPlain" :shape="btnShape" :size="btnSize" ripple=true
-										:hairLine="hairLine" v-if="!hasUserInfo" :type="btnType">请先登录认证~</u-button>
+										:hairLine="hairLine" :type="btnType">请先登录认证~</u-button>
+								</view>
+
+								<!-- 定制景色 -->
+								<view class="uni-btn-v uni-common-mt" v-else>
+									<!-- <button type="primary" @click="sendRequest" :loading="loading">发起请求（Callback）</button> -->
+									<u-button @click="imgCompreRequest" data-name="3333" :plain="btnPlain"
+										:shape="btnShape" :size="btnSize" ripple=true :hairLine="hairLine"
+										:type="btnType">开始定制环境~</u-button>
 								</view>
 
 							</view>
@@ -161,7 +170,7 @@
 										<view class="uni-uploader">
 											<view class="uni-uploader-head">
 												<view class="uni-uploader-title">点击可预览上传的的个人记忆</view>
-												<view class="uni-uploader-info">{{ imageList3.length }}/9</view>
+												<!-- <view class="uni-uploader-info">{{ imageList3.length }}/9</view> -->
 											</view>
 											<view class="uni-uploader-body">
 												<view class="uni-uploader__files">
@@ -200,1266 +209,1543 @@
 </template>
 
 <script>
-var sourceType = [
-	['camera'],
-	['album'],
-	['camera', 'album']
-]
-var sizeType = [
-	['compressed'],
-	['original'],
-	['compressed', 'original']
-]
-export default {
+	var sourceType = [
+		['camera'],
+		['album'],
+		['camera', 'album']
+	]
+	var sizeType = [
+		['compressed'],
+		['original'],
+		['compressed', 'original']
+	]
+	export default {
 
-	onLoad() { },
-	mounted() {
-		//显示搜索框
-		this.showAction = false;
-		this.useSlot = true;
-		this.rightSlot = false;
-		this.search = true;
-		this.slotRight = false;
-	},
-	onUnload() {
-		this.imageList = [],
-			this.imageList2 = [],
-			this.imageList3 = [],
-			this.sourceTypeIndex = 2,
-			this.sourceType = ['拍照', '相册', '拍照或相册'],
-			this.sizeTypeIndex = 2,
-			this.sizeType = ['压缩', '原图', '压缩或原图'],
-			this.countIndex = 8;
-	},
-
-	data() {
-		return {
-			//接入meshy相关
-			downloadedFilePaths: [], // 存放下载文件路径的数组，本地临时路径
-			resultIDs: [], // 存放上传成功的结果ID的数组
-			meshyLoading: false,
-			meshyProgress: 0,
-			baseUrl: 'https://api.meshy.ai/v1/image-to-3d',
-			meshyAPI: 'msy_ar8y9bKmstdLwmebSabtqBqnxbiZvsYLyIcX',
-			inputHeader: {
-				'Authorization': "Bearer msy_ar8y9bKmstdLwmebSabtqBqnxbiZvsYLyIcX",
-				'Content - Type': 'application/json'
-			},
-			inputArg: {
-				image_url: 'https://mp-4873eed2-c888-469f-becd-e538e287ac05.cdn.bspapp.com/bear.png',
-				enable_pbr: true,
-			},
-			fbxURL: '',
-			fbxLocalPath: '',
-			resultID: '',
-			preUploadImgUrls: [],
-
-			//底部按钮的样式
-			hairLine: true,
-			btnType: 'primary',
-			btnSize: 'default',
-			btnShape: 'circle',
-			btnPlain: false,
-			btnLoading: false,
-			btnDisabled: false,
-
-			//登录认证功能,获取用户手机号，暂时是mock版本
-			hasUserInfo: false,
-			userInfo: {},
-			btnLoading: false,
-			userPhoneNum: '',
-
-			//图片上传功能
-			userTelNum: 'your_userTelNum', // 替换为实际的用户名
-			tangiblePicsIndex: 1, // 上传文件的索引
-			envPicsIndex: 1, // 上传文件的索引
-			normalPicsIndex: 1, // 上传文件的索引
-
-
-			imageSrc: '',
-			title: 'choose/previewImage',
-			imageList: [],
-			imageList2: [],
-			imageList3: [],
-			sourceTypeIndex: 2,
-			sourceType: ['拍照', '相册', '拍照或相册'],
-			sizeTypeIndex: 2,
-			sizeType: ['压缩', '原图', '压缩或原图'],
-			countIndex: 8,
-			count: [1, 2, 3, 4, 5, 6, 7, 8, 9],
-
-			//底部导航栏
-			bottomTabCurrent: 3,
-			show: true,
-			bgColor: '#ffffff',
-			borderTop: true,
-			list: [{
-				iconPath: "../../../static/image/navBar/ques.png",
-				selectedIconPath: "../../../static/image/navBar/ques-active.png",
-				text: 'SelfRate',
-				pagePath: "pages/healthApp/SelfRatingSelect/SelfRatingSelect",
-				// count: 2,
-				// isDot: true,
-				customIcon: false,
-			},
-			{
-				iconPath: "../../../static/image/navBar/bodyData.png",
-				selectedIconPath: "../../../static/image/navBar/bodyData-active.png",
-				text: 'Insights',
-				pagePath: "pages/healthApp/healthDataInsights/healthDataInsights",
-				customIcon: false,
-			},
-			{
-				iconPath: "../../../static/image/navBar/home.png",
-				selectedIconPath: "../../../static/image/navBar/home-active.png",
-				pagePath: 'pages/healthApp/home/home',
-				text: 'Daily',
-				midButton: true,
-				customIcon: false,
-			},
-			{
-				iconPath: "../../../static/image/navBar/healthBehave.png",
-				selectedIconPath: "../../../static/image/navBar/healthBehave-active.png",
-				text: 'SelfCare',
-				pagePath: 'pages/healthApp/SelfCareCourse/SelfCareCourse',
-				customIcon: false,
-			},
-			{
-				iconPath: "../../../static/image/navBar/vrCare.png",
-				selectedIconPath: "../../../static/image/navBar/vrCare-active.png",
-				text: 'VRCure',
-				pagePath: 'pages/healthApp/VRCure/VRCure',
-				// count: 23,
-				// isDot: false,
-				customIcon: false,
-			},
-			],
-			midButton: true,
-			inactiveColor: '#9C9EB9',
-			activeColor: '#FE8787',
-
-
-			tabList: [{
-				name: '物品'
-			},
-			{
-				name: '景色'
-			},
-			{
-				name: '记忆'
-			},
-			],
-			current: 0,
-			swiperCurrent: 0,
-			tabsHeight: 0,
-			dx: 0,
-			loadStatus: ['loadmore', 'loadmore', 'loadmore', 'loadmore'],
-
-
-			title: 'VR游戏疗愈定制',
-			backText: '',
-			backIconName: '',
-			right: false,
-			showAction: false,
-			rightSlot: false,
-			useSlot: false,
-			background: {
-				// 'background-image': 'linear-gradient(45deg, rgb(28, 187, 180), rgb(141, 198, 63))',
-				'background-image': 'rgba(0,0,0,0)'
-			},
-			isBack: true,
-			search: false,
-			custom: false,
-			isFixed: true,
-			keyword: '',
-			//  MP
-			slotRight: false,
-			// 
-			//  MP
-			slotRight: true
-			// 
-		}
-	},
-	computed: {},
-	methods: {
-		//以下是meshy接入相关的方法
-		uploadModelsSequentially() {
-			// 确保所有文件都已下载
-			if (this.downloadedFilePaths.length !== this.preUploadImgUrls.length) {
-				console.log('Not all models have been downloaded yet.');
-				return;
+		onLoad() {},
+		mounted() {
+			//显示搜索框
+			this.showAction = false;
+			this.useSlot = true;
+			this.rightSlot = false;
+			this.search = true;
+			this.slotRight = false;
+			this.getBaiduAccessToken()
+		},
+		onUnload() {
+			if (this.pollingIntervalId) {
+				clearInterval(this.pollingIntervalId);
 			}
-			uni.showLoading({
-				title: '最后上传模型文件至云服务器中~'
-			})
-			let index = 0; // 初始化索引
-			const uploadNextModel = () => {
-				// 检查是否所有文件都已上传
-				if (index < this.downloadedFilePaths.length) {
-					const filePath = this.downloadedFilePaths[index];
-					const imgUrl = this.preUploadImgUrls[index]; // 获取对应的图片URL
-					// 从图片URL中提取文件名，构造cloudPath
-					const urlParts = imgUrl.split('/');
-					const fileName = urlParts[urlParts.length - 1].split('.')[0];
-
-					const cloudPath = `${this.userPhoneNum}/tangible/pic_${index + 1}.fbx`; // 构造cloudPath
-
-					this.uploadModelFBX(filePath, cloudPath); // 上传模型
-
-					// 准备上传下一个模型
-					index++;
-					setTimeout(uploadNextModel, 1000); // 等待1秒后上传下一个模型
-				} else {
-					uni.hideLoading()
-					uni.showToast({
-						title: '恭喜您！物品记忆已定制结束！！',
-						icon: 'success',
-						duration: 3000,
-					});
-				}
-			};
-			// 从第一个文件开始上传
-			uploadNextModel();
+			this.imageList = [],
+				this.imageList2 = [],
+				this.imageList3 = [],
+				this.sourceTypeIndex = 2,
+				this.sourceType = ['拍照', '相册', '拍照或相册'],
+				this.sizeTypeIndex = 2,
+				this.sizeType = ['压缩', '原图', '压缩或原图'],
+				this.countIndex = 8;
 		},
 
-		uploadModelFBX(filePath, cloudPath) {
-			uniCloud.uploadFile({
-				filePath: filePath,
-				cloudPath: cloudPath,
-				cloudPathAsRealPath: true,
-				onUploadProgress: (progressEvent) => {
-					const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-					console.log(`Upload progress: ${percentCompleted}%`);
-				},
-				success: (res) => {
-					console.log('Upload success:', res);
-					uni.showToast({
-						title: '上传模型成功',
-						icon: 'success',
-						duration: 1000,
-					});
-				},
-				fail: (err) => {
-					console.error('Upload fail:', err);
-					uni.showModal({
-						content: err.errMsg,
-						showCancel: false,
-					});
-				},
-				complete() {
-					// 上传完成后的逻辑
-				},
-			});
-		},
+		data() {
+			return {
+				//接入图像理解API相关
+				base64ImgEncoded: "",
+				pollingIntervalId: null, // 用于存储定时器的ID
+				ImgCompreAPIKEY: "Am0kzNDkleiXcGiorgF9K4HV",
+				ImgCompreSECRETKEY: "A30mN86hABgifAv1Si77bXnTGq0yJe86",
+				preUploadImgEnvs: [],
+				envsTaskIDs: [],
+				comprehensionTexts: [],
+				preUploadImgEnv: "",
+				envTaskID: "",
+				comprehensiveText: "",
+				ImgCompreBaseURL: "https://aip.baidubce.com/rest/2.0/image-classify/v1/image-understanding/request?access_token=",
+				ImgCompreToken: "",
 
-		uploadImage(imgUrl) {
-			return new Promise((resolve, reject) => {
+				//接入meshy相关
+				downloadedFilePaths: [], // 存放下载文件路径的数组，本地临时路径
+				resultIDs: [], // 存放上传成功的结果ID的数组
+				meshyLoading: false,
+				meshyProgress: 0,
+				baseUrl: 'https://api.meshy.ai/v1/image-to-3d',
+				meshyAPI: 'msy_ar8y9bKmstdLwmebSabtqBqnxbiZvsYLyIcX',
+				inputHeader: {
+					'Authorization': "Bearer msy_ar8y9bKmstdLwmebSabtqBqnxbiZvsYLyIcX",
+					'Content - Type': 'application/json'
+				},
+				inputArg: {
+					image_url: 'https://mp-4873eed2-c888-469f-becd-e538e287ac05.cdn.bspapp.com/bear.png',
+					enable_pbr: true,
+				},
+				fbxURL: '',
+				fbxLocalPath: '',
+				resultID: '',
+				preUploadImgUrls: [],
+
+				//底部按钮的样式
+				hairLine: true,
+				btnType: 'primary',
+				btnSize: 'default',
+				btnShape: 'circle',
+				btnPlain: false,
+				btnLoading: false,
+				btnDisabled: false,
+
+				//登录认证功能,获取用户手机号，暂时是mock版本
+				hasUserInfo: false,
+				userInfo: {},
+				btnLoading: false,
+				userPhoneNum: '',
+
+				//图片上传功能
+				userTelNum: 'your_userTelNum', // 替换为实际的用户名
+				tangiblePicsIndex: 1, // 上传文件的索引
+				envPicsIndex: 1, // 上传文件的索引
+				normalPicsIndex: 1, // 上传文件的索引
+
+
+				imageSrc: '',
+				title: 'choose/previewImage',
+				imageList: [],
+				imageList2: [],
+				imageList3: [],
+				sourceTypeIndex: 2,
+				sourceType: ['拍照', '相册', '拍照或相册'],
+				sizeTypeIndex: 2,
+				sizeType: ['压缩', '原图', '压缩或原图'],
+				countIndex: 8,
+				count: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+
+				//底部导航栏
+				bottomTabCurrent: 3,
+				show: true,
+				bgColor: '#ffffff',
+				borderTop: true,
+				list: [{
+						iconPath: "../../../static/image/navBar/ques.png",
+						selectedIconPath: "../../../static/image/navBar/ques-active.png",
+						text: 'SelfRate',
+						pagePath: "pages/healthApp/SelfRatingSelect/SelfRatingSelect",
+						// count: 2,
+						// isDot: true,
+						customIcon: false,
+					},
+					{
+						iconPath: "../../../static/image/navBar/bodyData.png",
+						selectedIconPath: "../../../static/image/navBar/bodyData-active.png",
+						text: 'Insights',
+						pagePath: "pages/healthApp/healthDataInsights/healthDataInsights",
+						customIcon: false,
+					},
+					{
+						iconPath: "../../../static/image/navBar/home.png",
+						selectedIconPath: "../../../static/image/navBar/home-active.png",
+						pagePath: 'pages/healthApp/home/home',
+						text: 'Daily',
+						midButton: true,
+						customIcon: false,
+					},
+					{
+						iconPath: "../../../static/image/navBar/healthBehave.png",
+						selectedIconPath: "../../../static/image/navBar/healthBehave-active.png",
+						text: 'SelfCare',
+						pagePath: 'pages/healthApp/SelfCareCourse/SelfCareCourse',
+						customIcon: false,
+					},
+					{
+						iconPath: "../../../static/image/navBar/vrCare.png",
+						selectedIconPath: "../../../static/image/navBar/vrCare-active.png",
+						text: 'VRCure',
+						pagePath: 'pages/healthApp/VRCure/VRCure',
+						// count: 23,
+						// isDot: false,
+						customIcon: false,
+					},
+				],
+				midButton: true,
+				inactiveColor: '#9C9EB9',
+				activeColor: '#FE8787',
+
+
+				tabList: [{
+						name: '物品'
+					},
+					{
+						name: '景色'
+					},
+					{
+						name: '记忆'
+					},
+				],
+				current: 0,
+				swiperCurrent: 0,
+				tabsHeight: 0,
+				dx: 0,
+				loadStatus: ['loadmore', 'loadmore', 'loadmore', 'loadmore'],
+
+
+				title: 'VR游戏疗愈定制',
+				backText: '',
+				backIconName: '',
+				right: false,
+				showAction: false,
+				rightSlot: false,
+				useSlot: false,
+				background: {
+					// 'background-image': 'linear-gradient(45deg, rgb(28, 187, 180), rgb(141, 198, 63))',
+					'background-image': 'rgba(0,0,0,0)'
+				},
+				isBack: true,
+				search: false,
+				custom: false,
+				isFixed: true,
+				keyword: '',
+				//  MP
+				slotRight: false,
+				// 
+				//  MP
+				slotRight: true
+				// 
+			}
+		},
+		computed: {},
+		methods: {
+			getBaiduAccessToken() {
+				// const url = "https://aip.baidubce.com/oauth/2.0/token";
+				const url = 'https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=' + this
+					.ImgCompreAPIKEY + '&client_secret=' + this.ImgCompreSECRETKEY
+				const params = {
+					grant_type: "client_credentials",
+					client_id: this.ImgCompreAPIKEY,
+					client_secret: this.ImgCompreSECRETKEY
+				};
+				// https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=' + AK + '&client_secret=' + SK
 				uni.request({
-					url: this.baseUrl, // 确保这是完整的URL
+					url: url,
 					method: 'POST',
 					header: {
-						'Authorization': "Bearer " + this.meshyAPI, // 确保API key是正确的
+						'Content-Type': 'application/json'
+					},
+				}).then(res => {
+					console.log(res)
+					if (res[1].statusCode === 200) {
+						// uni.showToast({
+						// 	title: '获取百度token成功',
+						// 	icon: 'success',
+						// 	duration: 1000
+						// });
+						this.ImgCompreToken = res[1].data.access_token;
+						console.log("ImgCompreToken", this.ImgCompreToken)
+						// 处理成功获取到的accessToken
+					} else {
+						// this.error = res.data.error || 'Unknown error';
+						// 处理错误情况
+					}
+				}).catch(err => {
+					console.error('Error fetching access token:', err);
+					// this.error = err.message || 'Network error';
+				});
+			},
+			imgCompreRequest() {
+				// if (this.preUploadImgEnv == "") {
+				if (this.base64ImgEncoded == "") {
+					uni.showToast({
+						title: '请先上传图片~',
+						icon: 'none',
+						duration: 1000
+					});
+					return false
+				}
+				uni.showLoading({
+					title: '发起图像理解~'
+				})
+				uni.request({
+					url: this.ImgCompreBaseURL + this.ImgCompreToken, // 确保这是完整的URL
+					method: 'POST',
+					header: {
+						// 'Authorization': "Bearer " + this.meshyAPI, // 确保API key是正确的
 						'Content-Type': 'application/json' // 修正了header中的拼写错误
 					},
 					data: {
-						image_url: imgUrl, // 确保这是正确的图片URL
-						enable_pbr: true,
+						image: this.base64ImgEncoded,
+						// url: this.preUploadImgEnv, // 确保这是正确的图片URL
+						output_CHN: false,
+						question: "生成描述性的提示词，我将使用这些提示词生成新的图像。生成的提示词主要由主题描述关键词和画面设计描述词组成，要求输出英文，字符数不超过280。",
 					}
 				}).then(res => {
-					// console.log("uploadImage",res)
-					if (res[1].statusCode == 202) {
-						resolve(res[1].data.result); // 解决Promise，返回结果ID
+					if (res[1].statusCode == 200) {
+						// resolve(res[1].data.result); // 解决Promise，返回结果ID
 						uni.showToast({
-							title: '请求成功',
+							title: '开始进行图像理解~',
 							icon: 'success',
 							duration: 1000
 						});
+						uni.hideLoading()
+						this.envTaskID = res[1].data.result.task_id
+						console.log("envTaskID", this.envTaskID)
+
+						if (this.envTaskID != "") {
+							this.imgCompreGetResult()
+						}
 					} else {
-						reject(new Error('没有收到预期的响应数据')); // 拒绝Promise，上传失败
+						// reject(new Error('没有收到预期的响应数据')); // 拒绝Promise，上传失败
+						uni.showToast({
+							title: '请重新点击定制按钮~',
+							icon: 'none',
+							duration: 1000
+						});
 					}
 				}).catch(err => {
 					console.error('request fail', err);
-					reject(err); // 拒绝Promise，上传失败
+					// reject(err); // 拒绝Promise，上传失败
 					uni.showModal({
-						content: err.errMsg || '上传失败',
+						content: err.errMsg || 'error_msg',
 						showCancel: false
 					});
 				});
-			});
-		},
-		uploadImages() {
-			this.meshyLoading = true; // 开始加载
-			uni.showLoading({
-				title: '定制中~'
-			});
-			this.resultIDs = []; // 重置结果ID数组
-
-			// 确保preUploadImgUrls数组已定义并包含图片URL
-			if (!this.preUploadImgUrls || this.preUploadImgUrls.length === 0) {
-				console.error('No image URLs found to upload.');
-				uni.hideLoading();
-				this.meshyLoading = false;
-				return;
-			}
-
-			this.preUploadImgUrls.forEach((imgUrl, index) => {
-				this.uploadImage(imgUrl).then(resultID => {
-					this.resultIDs.push(resultID); // 保存结果ID
-					console.log('Uploaded image with resultID:', resultID);
-
-					// 检查是否所有图片都已上传完成
-					if (this.resultIDs.length === this.preUploadImgUrls.length) {
-						// 所有图片上传完成后的处理逻辑
-						uni.hideLoading();
-						this.meshyLoading = false;
-						console.log('All images uploaded, resultIDs:', this.resultIDs);
-
-						// 这里可以进行下一步操作，比如查询网络请求
-						console.log("resultIDS", this.resultIDs)
-						this.getResultAndDownloadModel();
-
+			},
+			uploadTextToServer() {
+				let filePath = wx.env.USER_DATA_PATH + '/hello.txt'
+				console.log('存储路径及文件名称', filePath)
+				const fs = wx.getFileSystemManager()
+				fs.writeFile({
+					filePath: filePath,
+					data: JSON.stringify(this.comprehensiveText),
+					encoding: 'utf8',
+					success(res) {
+						console.log(res)
+					},
+					fail(res) {
+						console.error(res)
 					}
-				}).catch(err => {
-					console.error('Upload failed at index:', index, 'error:', err);
-					this.meshyLoading = false;
-					uni.hideLoading();
-				});
-			});
-		},
-		getResultAndDownloadModel() {
-			// 确保preUploadImgUrls数组已定义并包含图片URL
-			if (!this.resultIDs || !this.preUploadImgUrls.length === this.resultIDs.length) {
-				console.error('resultids不完整');
-				uni.hideLoading();
-				this.meshyLoading = false;
-				return;
-			}
-			uni.showLoading({
-				title: `查询定制并下载中~`
-			})
-			// 用来存储每个resultId的进度
-			let progresses = [];
-			// 用来存储每个模型的下载URL
-			let modelUrls = [];
-			// 首先检查所有结果ID的进度
-			this.resultIDs.forEach((resultId, index) => {
-				const checkProgress = () => {
-					uni.showLoading({
-						title: `查询定制并下载中~`
-					})
-					uni.request({
-						url: `${this.baseUrl}/${resultId}`,
-						method: 'GET',
-						header: {
-							'Authorization': "Bearer msy_ar8y9bKmstdLwmebSabtqBqnxbiZvsYLyIcX",
+				})
+				setTimeout(() => {
+					const cloudPath = `${this.userPhoneNum}/env/img_compre.txt`; // 这是云端保存的路径和文件名
+					uniCloud.uploadFile({
+						filePath: filePath, // 使用Blob对象作为filePath参数
+						cloudPath: cloudPath,
+						cloudPathAsRealPath: true,
+						onUploadProgress: (progressEvent) => {
+							const percentCompleted = Math.round((progressEvent.loaded * 100) /
+								progressEvent.total);
+							console.log(`Upload progress: ${percentCompleted}%`);
 						},
+						success: (res) => {
+							console.log('Upload success:', res);
+							uni.showToast({
+								title: '上传文本成功',
+								icon: 'success',
+								duration: 1000,
+							});
+						},
+						fail: (err) => {
+							console.error('Upload fail:', err);
+							uni.showModal({
+								content: err.errMsg || '上传失败',
+								showCancel: false,
+							});
+						},
+						complete: () => {
+							// 上传完成后的逻辑
+						},
+					});
+
+				}, 500);
+
+
+			},
+			imgCompreGetResult() {
+				uni.showLoading({
+					title: '定制虚拟环境中~'
+				});
+				const checkResult = () => {
+					uni.request({
+						url: "https://aip.baidubce.com/rest/2.0/image-classify/v1/image-understanding/get-result?access_token=" +
+							this.ImgCompreToken, // 确保这是完整的URL
+						method: 'POST',
+						header: {
+							'Content-Type': 'application/json' // 修正了header中的拼写错误
+						},
+						data: {
+							task_id: this.envTaskID,
+						}
 					}).then(res => {
-						if (res[1].data) {
-							progresses[index] = res[1].data.progress;
-							if (res[1].data.progress === 100) {
-								// 如果当前进度为100，检查是否所有进度都为100
-								modelUrls[index] = res[1].data.model_urls.fbx; // 保存模型URL
-								if (progresses.every(progress => progress === 100)) {
-									// 所有进度都为100，开始下载
-									this.downloadModels(modelUrls);
-								}
+						if (res[1].data.result.ret_msg == "success") {
+							uni.hideLoading();
+							this.comprehensiveText = res[1].data.result.description.slice(20);
+							console.log("comprehensiveText", this.comprehensiveText);
+							// 检查this.comprehensiveText的字符数
+							console.log("this.comprehensiveText.length", this.comprehensiveText.length)
+							if (this.comprehensiveText.length > 380) {
+								// 如果字符数大于380，则清空this.comprehensiveText并提示失败
+								this.comprehensiveText = '';
+								uni.showToast({
+									title: '文本长度超过限制，请尝试上传其他图片~',
+									icon: 'none',
+									duration: 1000
+								});
+								//清空已上传的
+								this.imageList2 = []
+								this.preUploadImgEnv = ""
+								this.envTaskID = ""
 							} else {
-								// 如果当前进度不为100，再次检查
-								setTimeout(checkProgress, 10000);
+								// 如果字符数小于380，则提示成功
+								uni.showToast({
+									title: '虚拟环境定制成功~',
+									icon: 'success',
+									duration: 1000
+								});
+								//上传txt文件至服务器
+								this.uploadTextToServer()
+								// 可以在这里执行成功后的后续操作
 							}
+							clearInterval(this.pollingIntervalId); // 清除定时器
 						} else {
-							console.error('返回的数据中没有progress字段');
+
 						}
 					}).catch(err => {
 						console.error('request fail', err);
+						uni.showModal({
+							content: err.errMsg || '获取图像理解结果失败',
+							showCancel: false
+						});
+						clearInterval(this.pollingIntervalId); // 如果请求失败，也清除定时器
 					});
 				};
-				checkProgress();
-			});
 
-		},
-		// 修改downloadModels方法以接收modelUrls数组
-		downloadModels(modelUrls) {
-			console.log("modelUrls", modelUrls)
-			// 检查modelUrls数组是否与resultIDs数组长度相同
-			if (modelUrls.length === this.resultIDs.length) {
-				// 遍历modelUrls数组并下载每个模型
-				modelUrls.forEach((modelUrl, index) => {
-					this.downloadModel(modelUrl, index);
-				});
-			} else {
-				console.error('Model URLs array is not complete.');
-			}
-		},
+				// 设置定时器，每1秒调用一次checkResult函数
+				this.pollingIntervalId = setInterval(checkResult, 1000);
+			},
 
-		// 检查是否所有文件都已下载完成
-		areAllFilesDownloaded() {
-			console.log("downloadedFilePaths", this.downloadedFilePaths);
-			// 检查数组长度是否与预期相符
-			if (this.downloadedFilePaths.length !== this.preUploadImgUrls.length) {
-				return false;
-			}
-			// 使用for循环而不是forEach，以确保检查数组中的每个索引
-			for (let i = 0; i < this.downloadedFilePaths.length; i++) {
-				// 使用in运算符检查当前索引是否存在空位
-				if (!(i in this.downloadedFilePaths)) {
-					console.error("Array contains holes at index", i);
-					return false;
+
+			//以下是meshy接入相关的方法
+			uploadModelsSequentially() {
+				// 确保所有文件都已下载
+				if (this.downloadedFilePaths.length !== this.preUploadImgUrls.length) {
+					console.log('Not all models have been downloaded yet.');
+					return;
 				}
-				// 确保当前索引处的元素不是undefined，不是null，并且是字符串类型
-				const path = this.downloadedFilePaths[i];
-				if (typeof path !== 'string' || path === undefined || path === null) {
-					console.error("Invalid path at index", i, ":", path);
-					return false;
-				}
-			}
-			// 如果所有检查都通过，则返回true
-			return true;
-		},
-		downloadModel(modelUrl, index) {
-			uni.showLoading({
-				title: '下载中'
-			});
-			uni.downloadFile({
-				url: modelUrl,
-				success: (res) => {
-					uni.showToast({
-						title: '下载AI生成模型成功',
-						icon: 'success',
-						duration: 1000
-					});
-					// console.log('下载AI生成模型成功', res);
-					// 将下载的文件路径按照原始图片URL的顺序保存
-					this.downloadedFilePaths[index] = res.tempFilePath;
-					// 检查是否所有文件都已下载完成
-					if (this.areAllFilesDownloaded()) {
-						// 所有文件下载完成，开始上传
-						this.uploadModelsSequentially();
+				uni.showLoading({
+					title: '上传模型文件至云服务器中~'
+				})
+				let index = 0; // 初始化索引
+				const uploadNextModel = () => {
+					// 检查是否所有文件都已上传
+					if (index < this.downloadedFilePaths.length) {
+						const filePath = this.downloadedFilePaths[index];
+						const imgUrl = this.preUploadImgUrls[index]; // 获取对应的图片URL
+						// 从图片URL中提取文件名，构造cloudPath
+						const urlParts = imgUrl.split('/');
+						const fileName = urlParts[urlParts.length - 1].split('.')[0];
+
+						const cloudPath = `${this.userPhoneNum}/tangible/pic_${index + 1}.fbx`; // 构造cloudPath
+
+						this.uploadModelFBX(filePath, cloudPath); // 上传模型
+
+						// 准备上传下一个模型
+						index++;
+						setTimeout(uploadNextModel, 1000); // 等待1秒后上传下一个模型
 					} else {
+						uni.hideLoading()
 						uni.showToast({
-							title: '仍有文件未完成下载~请耐心等待~',
+							title: '恭喜您！物品记忆已定制结束！！',
+							icon: 'success',
+							duration: 3000,
+						});
+					}
+				};
+				// 从第一个文件开始上传
+				uploadNextModel();
+			},
+
+			uploadModelFBX(filePath, cloudPath) {
+				uniCloud.uploadFile({
+					filePath: filePath,
+					cloudPath: cloudPath,
+					cloudPathAsRealPath: true,
+					onUploadProgress: (progressEvent) => {
+						const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent
+							.total);
+						console.log(`Upload progress: ${percentCompleted}%`);
+					},
+					success: (res) => {
+						console.log('Upload success:', res);
+						uni.showToast({
+							title: '上传模型成功',
+							icon: 'success',
+							duration: 1000,
+						});
+					},
+					fail: (err) => {
+						console.error('Upload fail:', err);
+						uni.showModal({
+							content: err.errMsg,
+							showCancel: false,
+						});
+					},
+					complete() {
+						// 上传完成后的逻辑
+					},
+				});
+			},
+
+			uploadImage(imgUrl) {
+				return new Promise((resolve, reject) => {
+					uni.request({
+						url: this.baseUrl, // 确保这是完整的URL
+						method: 'POST',
+						header: {
+							'Authorization': "Bearer " + this.meshyAPI, // 确保API key是正确的
+							'Content-Type': 'application/json' // 修正了header中的拼写错误
+						},
+						data: {
+							image_url: imgUrl, // 确保这是正确的图片URL
+							enable_pbr: true,
+						}
+					}).then(res => {
+						// console.log("uploadImage",res)
+						if (res[1].statusCode == 202) {
+							resolve(res[1].data.result); // 解决Promise，返回结果ID
+
+							uni.showToast({
+								title: '开始请求Meshy处理~',
+								icon: 'success',
+								duration: 1000
+							});
+						} else {
+							reject(new Error('没有收到预期的响应数据')); // 拒绝Promise，上传失败
+						}
+					}).catch(err => {
+						console.error('request fail', err);
+						reject(err); // 拒绝Promise，上传失败
+						uni.showModal({
+							content: err.errMsg || '上传失败',
+							showCancel: false
+						});
+					});
+				});
+			},
+			uploadImages() {
+				this.meshyLoading = true; // 开始加载
+				uni.showLoading({
+					title: '定制中~'
+				});
+				this.resultIDs = []; // 重置结果ID数组
+
+				// 确保preUploadImgUrls数组已定义并包含图片URL
+				if (!this.preUploadImgUrls || this.preUploadImgUrls.length === 0) {
+					console.error('No image URLs found to upload.');
+					uni.hideLoading();
+					this.meshyLoading = false;
+					return;
+				}
+
+				this.preUploadImgUrls.forEach((imgUrl, index) => {
+					this.uploadImage(imgUrl).then(resultID => {
+						this.resultIDs.push(resultID); // 保存结果ID
+						console.log('Uploaded image with resultID:', resultID);
+
+						// 检查是否所有图片都已上传完成
+						if (this.resultIDs.length === this.preUploadImgUrls.length) {
+							// 所有图片上传完成后的处理逻辑
+							uni.hideLoading();
+							this.meshyLoading = false;
+							console.log('All images uploaded, resultIDs:', this.resultIDs);
+
+							// 这里可以进行下一步操作，比如查询网络请求
+							console.log("resultIDS", this.resultIDs)
+							this.getResultAndDownloadModel();
+
+						}
+					}).catch(err => {
+						console.error('Upload failed at index:', index, 'error:', err);
+						this.meshyLoading = false;
+						uni.hideLoading();
+					});
+				});
+			},
+			getResultAndDownloadModel() {
+				// 确保preUploadImgUrls数组已定义并包含图片URL
+				if (!this.resultIDs || !this.preUploadImgUrls.length === this.resultIDs.length) {
+					console.error('resultids不完整');
+					uni.hideLoading();
+					this.meshyLoading = false;
+					return;
+				}
+				uni.showLoading({
+					title: `查询定制并下载中~`
+				})
+				// 用来存储每个resultId的进度
+				let progresses = [];
+				// 用来存储每个模型的下载URL
+				let modelUrls = [];
+				// 首先检查所有结果ID的进度
+				this.resultIDs.forEach((resultId, index) => {
+					const checkProgress = () => {
+						uni.showLoading({
+							title: `查询定制并下载中~`
+						})
+						uni.request({
+							url: `${this.baseUrl}/${resultId}`,
+							method: 'GET',
+							header: {
+								'Authorization': "Bearer msy_ar8y9bKmstdLwmebSabtqBqnxbiZvsYLyIcX",
+							},
+						}).then(res => {
+							if (res[1].data) {
+								progresses[index] = res[1].data.progress;
+								if (res[1].data.progress === 100) {
+									// 如果当前进度为100，检查是否所有进度都为100
+									modelUrls[index] = res[1].data.model_urls.fbx; // 保存模型URL
+									if (progresses.every(progress => progress === 100)) {
+										// 所有进度都为100，开始下载
+										this.downloadModels(modelUrls);
+									}
+								} else {
+									// 如果当前进度不为100，再次检查
+									setTimeout(checkProgress, 10000);
+								}
+							} else {
+								console.error('返回的数据中没有progress字段');
+							}
+						}).catch(err => {
+							console.error('request fail', err);
+						});
+					};
+					checkProgress();
+				});
+
+			},
+			// 修改downloadModels方法以接收modelUrls数组
+			downloadModels(modelUrls) {
+				console.log("modelUrls", modelUrls)
+				// 检查modelUrls数组是否与resultIDs数组长度相同
+				if (modelUrls.length === this.resultIDs.length) {
+					// 遍历modelUrls数组并下载每个模型
+					modelUrls.forEach((modelUrl, index) => {
+						this.downloadModel(modelUrl, index);
+					});
+				} else {
+					console.error('Model URLs array is not complete.');
+				}
+			},
+
+			// 检查是否所有文件都已下载完成
+			areAllFilesDownloaded() {
+				console.log("downloadedFilePaths", this.downloadedFilePaths);
+				// 检查数组长度是否与预期相符
+				if (this.downloadedFilePaths.length !== this.preUploadImgUrls.length) {
+					return false;
+				}
+				// 使用for循环而不是forEach，以确保检查数组中的每个索引
+				for (let i = 0; i < this.downloadedFilePaths.length; i++) {
+					// 使用in运算符检查当前索引是否存在空位
+					if (!(i in this.downloadedFilePaths)) {
+						console.error("Array contains holes at index", i);
+						return false;
+					}
+					// 确保当前索引处的元素不是undefined，不是null，并且是字符串类型
+					const path = this.downloadedFilePaths[i];
+					if (typeof path !== 'string' || path === undefined || path === null) {
+						console.error("Invalid path at index", i, ":", path);
+						return false;
+					}
+				}
+				// 如果所有检查都通过，则返回true
+				return true;
+			},
+			downloadModel(modelUrl, index) {
+				uni.showLoading({
+					title: '下载中'
+				});
+				uni.downloadFile({
+					url: modelUrl,
+					success: (res) => {
+						uni.showToast({
+							title: '下载AI生成模型成功',
 							icon: 'success',
 							duration: 1000
 						});
+						// console.log('下载AI生成模型成功', res);
+						// 将下载的文件路径按照原始图片URL的顺序保存
+						this.downloadedFilePaths[index] = res.tempFilePath;
+						// 检查是否所有文件都已下载完成
+						if (this.areAllFilesDownloaded()) {
+							// 所有文件下载完成，开始上传
+							this.uploadModelsSequentially();
+						} else {
+							uni.showToast({
+								title: '仍有文件未完成下载~请耐心等待~',
+								icon: 'success',
+								duration: 1000
+							});
+						}
+					},
+					fail: (err) => {
+						console.error('下载AI生成模型失败', err);
 					}
-				},
-				fail: (err) => {
-					console.error('下载AI生成模型失败', err);
-				}
-			});
-			uni.hideLoading();
-		},
+				});
+				uni.hideLoading();
+			},
 
-		//输入对话框相关的方法，收集用户的手机号当作唯一id
-		inputDialogToggle() {
-			this.$refs.inputDialog.open()
-		},
-		dialogInputConfirm(val) {
-			uni.hideLoading()
-			console.log(val)
-			this.userPhoneNum = val
-			// 关闭窗口后，恢复默认内容
-			this.$refs.inputDialog.close()
-			uni.showToast({
-				title: '登录认证成功！',
-				icon: 'success',
-				duration: 1000
-			})
-			this.hasUserInfo = true
-			console.log("userPhoneNum", this.userPhoneNum)
-		},
-
-		sourceTypeChange: function (e) {
-			this.sourceTypeIndex = parseInt(e.detail.value)
-		},
-		sizeTypeChange: function (e) {
-			this.sizeTypeIndex = parseInt(e.detail.value)
-		},
-		countChange: function (e) {
-			this.countIndex = e.detail.value;
-		},
-		chooseImage3: async function () {
-			// unicloudUpLoadImage()
-			//  APP-PLUS
-			// TODO 选择相机或相册时 需要弹出actionsheet，目前无法获得是相机还是相册，在失败回调中处理
-			if (this.sourceTypeIndex !== 2) {
-				let status = await this.checkPermission();
-				if (status !== 1) {
-					return;
-				}
-			}
-			// 
-
-			if (this.imageList3.length === 9) {
+			//输入对话框相关的方法，收集用户的手机号当作唯一id
+			inputDialogToggle() {
+				this.$refs.inputDialog.open()
+			},
+			dialogInputConfirm(val) {
+				uni.hideLoading()
+				console.log(val)
+				this.userPhoneNum = val
+				// 关闭窗口后，恢复默认内容
+				this.$refs.inputDialog.close()
 				uni.showToast({
-					title: '已经到达上传上限啦~',
+					title: '登录认证成功！',
 					icon: 'success',
 					duration: 1000
 				})
-				return;
-			}
-			uni.chooseImage({
-				sourceType: sourceType[this.sourceTypeIndex],
-				sizeType: sizeType[this.sizeTypeIndex],
-				count: this.imageList3.length + this.count[this.countIndex] > 9 ? 9 - this.imageList3
-					.length : this.count[this.countIndex],
-				success: (res) => {
-					this.imageList3 = this.imageList3.concat(res.tempFilePaths);
-					var filePath = res.tempFilePaths[0]
-					var cloudPath =
-						`${this.userPhoneNum}/normal/pic_${this.normalPicsIndex++}.jpg` //获取名字
+				this.hasUserInfo = true
+				console.log("userPhoneNum", this.userPhoneNum)
+			},
 
-					console.log(cloudPath)
-					//进行上传操作
-					uniCloud.uploadFile({
-						filePath: filePath,
-						cloudPath: cloudPath,
-						cloudPathAsRealPath: true,
-
-						onUploadProgress: function (progressEvent) {
-							console.log(progressEvent);
-							var percentCompleted = Math.round(
-								(progressEvent.loaded * 100) / progressEvent.total
-							);
-						},
-						success: (res) => {
-							console.log(res.fileID)
-							// this.preUploadImgUrls.push(res.fileID)
-
-							uni.showToast({
-								title: '上传成功',
-								icon: 'success',
-								duration: 1000
-							})
-						},
-						fail: (err) => {
-							console.log('uploadImage fail', err);
-							uni.showModal({
-								content: err.errMsg,
-								showCancel: false
-							});
-						},
-						complete() { }
-					})
-				},
-				fail: (err) => {
-					console.log("err: ", err);
-					//  APP-PLUS
-					if (err['code'] && err.code !== 0 && this.sourceTypeIndex === 2) {
-						this.checkPermission(err.code);
-					}
-					// 
-					//  MP
-					if (err.errMsg.indexOf('cancel') !== '-1') {
+			sourceTypeChange: function(e) {
+				this.sourceTypeIndex = parseInt(e.detail.value)
+			},
+			sizeTypeChange: function(e) {
+				this.sizeTypeIndex = parseInt(e.detail.value)
+			},
+			countChange: function(e) {
+				this.countIndex = e.detail.value;
+			},
+			chooseImage3: async function() {
+				if (!this.hasUserInfo) {
+					uni.showToast({
+						title: '请先登录认证~谢谢~',
+						icon: 'none',
+						duration: 1000
+					});
+					return false
+				}
+				// unicloudUpLoadImage()
+				//  APP-PLUS
+				// TODO 选择相机或相册时 需要弹出actionsheet，目前无法获得是相机还是相册，在失败回调中处理
+				if (this.sourceTypeIndex !== 2) {
+					let status = await this.checkPermission();
+					if (status !== 1) {
 						return;
 					}
-					uni.getSetting({
-						success: (res) => {
-							let authStatus = false;
-							switch (this.sourceTypeIndex) {
-								case 0:
-									authStatus = res.authSetting['scope.camera'];
-									break;
-								case 1:
-									authStatus = res.authSetting['scope.album'];
-									break;
-								case 2:
-									authStatus = res.authSetting['scope.album'] && res
-										.authSetting['scope.camera'];
-									break;
-								default:
-									break;
-							}
-							if (!authStatus) {
-								uni.showModal({
-									title: '授权失败',
-									content: 'Hello uni-app需要从您的相机或相册获取图片，请在设置界面打开相关权限',
-									success: (res) => {
-										if (res.confirm) {
-											uni.openSetting()
-										}
-									}
-								})
-							}
-						}
-					})
-					// 
 				}
-			})
-		}, chooseImage2: async function () {
-			// unicloudUpLoadImage()
-			//  APP-PLUS
-			// TODO 选择相机或相册时 需要弹出actionsheet，目前无法获得是相机还是相册，在失败回调中处理
-			if (this.sourceTypeIndex !== 2) {
-				let status = await this.checkPermission();
-				if (status !== 1) {
+				// 
+
+				if (this.imageList3.length === 9) {
+					uni.showToast({
+						title: '已经到达上传上限啦~',
+						icon: 'none',
+						duration: 1000
+					})
 					return;
 				}
-			}
-			// 
+				uni.chooseImage({
+					sourceType: sourceType[this.sourceTypeIndex],
+					sizeType: sizeType[this.sizeTypeIndex],
+					count: this.imageList3.length + this.count[this.countIndex] > 9 ? 9 - this.imageList3
+						.length : this.count[this.countIndex],
+					success: (res) => {
+						this.imageList3 = this.imageList3.concat(res.tempFilePaths);
+						var filePath = res.tempFilePaths[0]
+						var cloudPath =
+							`${this.userPhoneNum}/normal/pic_${this.normalPicsIndex++}.jpg` //获取名字
 
-			if (this.imageList2.length === 9) {
-				uni.showToast({
-					title: '已经到达上传上限啦~',
-					icon: 'success',
-					duration: 1000
-				})
-				return;
-			}
-			uni.chooseImage({
-				sourceType: sourceType[this.sourceTypeIndex],
-				sizeType: sizeType[this.sizeTypeIndex],
-				count: this.imageList2.length + this.count[this.countIndex] > 9 ? 9 - this.imageList2
-					.length : this.count[this.countIndex],
-				success: (res) => {
-					this.imageList2 = this.imageList2.concat(res.tempFilePaths);
-					var filePath = res.tempFilePaths[0]
-					// var cloudPath = res.tempFiles[0].path.substring(11) //获取随机名字
-					var cloudPath =
-						`${this.userPhoneNum}/env/pic_${this.envPicsIndex++}.jpg` //获取名字
-					console.log(cloudPath)
-					//进行上传操作
-					uniCloud.uploadFile({
-						filePath: filePath,
-						cloudPath: cloudPath,
-						cloudPathAsRealPath: true,
+						console.log(cloudPath)
+						//进行上传操作
+						uniCloud.uploadFile({
+							filePath: filePath,
+							cloudPath: cloudPath,
+							cloudPathAsRealPath: true,
 
-						onUploadProgress: function (progressEvent) {
-							console.log(progressEvent);
-							var percentCompleted = Math.round(
-								(progressEvent.loaded * 100) / progressEvent.total
-							);
-						},
-						success: (res) => {
-							console.log(res.fileID)
-							// this.preUploadImgUrls.push(res.fileID)
-							uni.showToast({
-								title: '上传成功',
-								icon: 'success',
-								duration: 1000
-							})
-						},
-						fail: (err) => {
-							console.log('uploadImage fail', err);
-							uni.showModal({
-								content: err.errMsg,
-								showCancel: false
-							});
-						},
-						complete() { }
-					})
-				},
-				fail: (err) => {
-					console.log("err: ", err);
-					//  APP-PLUS
-					if (err['code'] && err.code !== 0 && this.sourceTypeIndex === 2) {
-						this.checkPermission(err.code);
+							onUploadProgress: function(progressEvent) {
+								console.log(progressEvent);
+								var percentCompleted = Math.round(
+									(progressEvent.loaded * 100) / progressEvent.total
+								);
+							},
+							success: (res) => {
+								console.log(res.fileID)
+								// this.preUploadImgUrls.push(res.fileID)
+
+								uni.showToast({
+									title: '上传成功',
+									icon: 'success',
+									duration: 1000
+								})
+							},
+							fail: (err) => {
+								console.log('uploadImage fail', err);
+								uni.showModal({
+									content: err.errMsg,
+									showCancel: false
+								});
+							},
+							complete() {}
+						})
+					},
+					fail: (err) => {
+						console.log("err: ", err);
+						//  APP-PLUS
+						if (err['code'] && err.code !== 0 && this.sourceTypeIndex === 2) {
+							this.checkPermission(err.code);
+						}
+						// 
+						//  MP
+						if (err.errMsg.indexOf('cancel') !== '-1') {
+							return;
+						}
+						uni.getSetting({
+							success: (res) => {
+								let authStatus = false;
+								switch (this.sourceTypeIndex) {
+									case 0:
+										authStatus = res.authSetting['scope.camera'];
+										break;
+									case 1:
+										authStatus = res.authSetting['scope.album'];
+										break;
+									case 2:
+										authStatus = res.authSetting['scope.album'] && res
+											.authSetting['scope.camera'];
+										break;
+									default:
+										break;
+								}
+								if (!authStatus) {
+									uni.showModal({
+										title: '授权失败',
+										content: 'Hello uni-app需要从您的相机或相册获取图片，请在设置界面打开相关权限',
+										success: (res) => {
+											if (res.confirm) {
+												uni.openSetting()
+											}
+										}
+									})
+								}
+							}
+						})
+						// 
 					}
-					// 
-					//  MP
-					if (err.errMsg.indexOf('cancel') !== '-1') {
+				})
+
+
+			},
+			convertImageToBase64(localImgFilePath) {
+				uni.getFileSystemManager().readFile({
+					filePath: localImgFilePath, //选择图片返回的相对路径
+					encoding: 'base64', //编码格式
+					success: res => { //成功的回调
+						console.log(res, '返回结果');
+						let base64 = 'data:image/jpeg;base64,' + res.data //不加上这串字符，在页面无法显示的哦
+						this.base64ImgEncoded = base64
+					},
+					fail: (e) => {
+						console.log("图片转换失败");
+					}
+				})
+			},
+
+			// 上传景色照片，开启定制流程
+			chooseImage2: async function() {
+				if (!this.hasUserInfo) {
+					uni.showToast({
+						title: '请先登录认证~谢谢~',
+						icon: 'none',
+						duration: 1000
+					});
+					return false
+				}
+				// unicloudUpLoadImage()
+				//  APP-PLUS
+				// TODO 选择相机或相册时 需要弹出actionsheet，目前无法获得是相机还是相册，在失败回调中处理
+				if (this.sourceTypeIndex !== 2) {
+					let status = await this.checkPermission();
+					if (status !== 1) {
 						return;
 					}
-					uni.getSetting({
-						success: (res) => {
-							let authStatus = false;
-							switch (this.sourceTypeIndex) {
-								case 0:
-									authStatus = res.authSetting['scope.camera'];
-									break;
-								case 1:
-									authStatus = res.authSetting['scope.album'];
-									break;
-								case 2:
-									authStatus = res.authSetting['scope.album'] && res
-										.authSetting['scope.camera'];
-									break;
-								default:
-									break;
-							}
-							if (!authStatus) {
-								uni.showModal({
-									title: '授权失败',
-									content: 'Hello uni-app需要从您的相机或相册获取图片，请在设置界面打开相关权限',
-									success: (res) => {
-										if (res.confirm) {
-											uni.openSetting()
-										}
-									}
-								})
-							}
-						}
-					})
-					// 
 				}
-			})
-		}, chooseImage: async function () {
-			// unicloudUpLoadImage()
-			//  APP-PLUS
-			// TODO 选择相机或相册时 需要弹出actionsheet，目前无法获得是相机还是相册，在失败回调中处理
-			if (this.sourceTypeIndex !== 2) {
-				let status = await this.checkPermission();
-				if (status !== 1) {
+
+				if (this.imageList2.length === 9) {
+					uni.showToast({
+						title: '已经到达上传上限啦~',
+						icon: 'success',
+						duration: 1000
+					})
 					return;
 				}
-			}
-			// 
+				uni.chooseImage({
+					sourceType: sourceType[this.sourceTypeIndex],
+					sizeType: sizeType[this.sizeTypeIndex],
+					count: this.imageList2.length + this.count[this.countIndex] > 9 ? 9 - this.imageList2
+						.length : this.count[this.countIndex],
+					success: (res) => {
+						console.log(res)
+						this.imageList2 = this.imageList2.concat(res.tempFilePaths);
+						var filePath = res.tempFilePaths[0]
+						this.convertImageToBase64(filePath)
+						// var cloudPath = res.tempFiles[0].path.substring(11) //获取随机名字
+						var cloudPath =
+							`${this.userPhoneNum}/env/pic_${this.envPicsIndex++}.jpg` //获取名字
+						console.log(cloudPath)
+						//进行上传操作
+						uniCloud.uploadFile({
+							filePath: filePath,
+							cloudPath: cloudPath,
+							cloudPathAsRealPath: true,
 
-			if (this.imageList.length === 9) {
-				uni.showToast({
-					title: '已经到达上传上限啦~',
-					icon: 'success',
-					duration: 1000
-				})
-				return;
-			}
-			uni.chooseImage({
-				sourceType: sourceType[this.sourceTypeIndex],
-				sizeType: sizeType[this.sizeTypeIndex],
-				count: this.imageList.length + this.count[this.countIndex] > 9 ? 9 - this.imageList
-					.length : this.count[this.countIndex],
-				success: (res) => {
-					this.imageList = this.imageList.concat(res.tempFilePaths);
-					var filePath = res.tempFilePaths[0]
-					// var cloudPath = res.tempFiles[0].path.substring(11) //获取随机名字
-
-					var cloudPath =
-						`${this.userPhoneNum}/tangible/pic_${this.tangiblePicsIndex++}.jpg` //获取名字
-
-					console.log(cloudPath)
-					//进行上传操作
-					uniCloud.uploadFile({
-						filePath: filePath,
-						cloudPath: cloudPath,
-						cloudPathAsRealPath: true,
-
-						onUploadProgress: function (progressEvent) {
-							console.log(progressEvent);
-							var percentCompleted = Math.round(
-								(progressEvent.loaded * 100) / progressEvent.total
-							);
-						},
-						success: (res) => {
-							console.log(res.fileID)
-							this.preUploadImgUrls.push(res.fileID)
-							uni.showToast({
-								title: '上传成功',
-								icon: 'success',
-								duration: 1000
-							})
-						},
-						fail: (err) => {
-							console.log('uploadImage fail', err);
-							uni.showModal({
-								content: err.errMsg,
-								showCancel: false
-							});
-						},
-						complete() { }
-					})
-				},
-				fail: (err) => {
-					console.log("err: ", err);
-					//  APP-PLUS
-					if (err['code'] && err.code !== 0 && this.sourceTypeIndex === 2) {
-						this.checkPermission(err.code);
+							onUploadProgress: function(progressEvent) {
+								console.log(progressEvent);
+								var percentCompleted = Math.round(
+									(progressEvent.loaded * 100) / progressEvent.total
+								);
+							},
+							success: (res) => {
+								console.log(res.fileID)
+								// this.preUploadImgEnvs.push(res.fileID) //保存本地上传记录
+								this.preUploadImgEnv = res.fileID
+								// this.preUploadImgUrls.push(res.fileID)
+								uni.showToast({
+									title: '上传成功',
+									icon: 'success',
+									duration: 1000
+								})
+							},
+							fail: (err) => {
+								console.log('uploadImage fail', err);
+								uni.showModal({
+									content: err.errMsg,
+									showCancel: false
+								});
+							},
+							complete() {}
+						})
+					},
+					fail: (err) => {
+						console.log("err: ", err);
+						//  APP-PLUS
+						if (err['code'] && err.code !== 0 && this.sourceTypeIndex === 2) {
+							this.checkPermission(err.code);
+						}
+						// 
+						//  MP
+						if (err.errMsg.indexOf('cancel') !== '-1') {
+							return;
+						}
+						uni.getSetting({
+							success: (res) => {
+								let authStatus = false;
+								switch (this.sourceTypeIndex) {
+									case 0:
+										authStatus = res.authSetting['scope.camera'];
+										break;
+									case 1:
+										authStatus = res.authSetting['scope.album'];
+										break;
+									case 2:
+										authStatus = res.authSetting['scope.album'] && res
+											.authSetting['scope.camera'];
+										break;
+									default:
+										break;
+								}
+								if (!authStatus) {
+									uni.showModal({
+										title: '授权失败',
+										content: 'Hello uni-app需要从您的相机或相册获取图片，请在设置界面打开相关权限',
+										success: (res) => {
+											if (res.confirm) {
+												uni.openSetting()
+											}
+										}
+									})
+								}
+							}
+						})
+						// 
 					}
-					// 
-					//  MP
-					if (err.errMsg.indexOf('cancel') !== '-1') {
+				})
+			},
+			chooseImage: async function() {
+				if (!this.hasUserInfo) {
+					uni.showToast({
+						title: '请先登录认证~谢谢~',
+						icon: 'none',
+						duration: 1000
+					});
+					return false
+				}
+				// unicloudUpLoadImage()
+				//  APP-PLUS
+				// TODO 选择相机或相册时 需要弹出actionsheet，目前无法获得是相机还是相册，在失败回调中处理
+				if (this.sourceTypeIndex !== 2) {
+					let status = await this.checkPermission();
+					if (status !== 1) {
 						return;
 					}
-					uni.getSetting({
-						success: (res) => {
-							let authStatus = false;
-							switch (this.sourceTypeIndex) {
-								case 0:
-									authStatus = res.authSetting['scope.camera'];
-									break;
-								case 1:
-									authStatus = res.authSetting['scope.album'];
-									break;
-								case 2:
-									authStatus = res.authSetting['scope.album'] && res
-										.authSetting['scope.camera'];
-									break;
-								default:
-									break;
-							}
-							if (!authStatus) {
-								uni.showModal({
-									title: '授权失败',
-									content: 'Hello uni-app需要从您的相机或相册获取图片，请在设置界面打开相关权限',
-									success: (res) => {
-										if (res.confirm) {
-											uni.openSetting()
-										}
-									}
+				}
+				// 
+
+				if (this.imageList.length === 9) {
+					uni.showToast({
+						title: '已经到达上传上限啦~',
+						icon: 'success',
+						duration: 1000
+					})
+					return;
+				}
+				uni.chooseImage({
+					sourceType: sourceType[this.sourceTypeIndex],
+					sizeType: sizeType[this.sizeTypeIndex],
+					count: this.imageList.length + this.count[this.countIndex] > 9 ? 9 - this.imageList
+						.length : this.count[this.countIndex],
+					success: (res) => {
+						this.imageList = this.imageList.concat(res.tempFilePaths);
+						var filePath = res.tempFilePaths[0]
+						// var cloudPath = res.tempFiles[0].path.substring(11) //获取随机名字
+
+						var cloudPath =
+							`${this.userPhoneNum}/tangible/pic_${this.tangiblePicsIndex++}.jpg` //获取名字
+
+						console.log(cloudPath)
+						//进行上传操作
+						uniCloud.uploadFile({
+							filePath: filePath,
+							cloudPath: cloudPath,
+							cloudPathAsRealPath: true,
+
+							onUploadProgress: function(progressEvent) {
+								console.log(progressEvent);
+								var percentCompleted = Math.round(
+									(progressEvent.loaded * 100) / progressEvent.total
+								);
+							},
+							success: (res) => {
+								console.log(res.fileID)
+								this.preUploadImgUrls.push(res.fileID)
+								uni.showToast({
+									title: '上传成功',
+									icon: 'success',
+									duration: 1000
 								})
+							},
+							fail: (err) => {
+								console.log('uploadImage fail', err);
+								uni.showModal({
+									content: err.errMsg,
+									showCancel: false
+								});
+							},
+							complete() {}
+						})
+					},
+					fail: (err) => {
+						console.log("err: ", err);
+						//  APP-PLUS
+						if (err['code'] && err.code !== 0 && this.sourceTypeIndex === 2) {
+							this.checkPermission(err.code);
+						}
+						// 
+						//  MP
+						if (err.errMsg.indexOf('cancel') !== '-1') {
+							return;
+						}
+						uni.getSetting({
+							success: (res) => {
+								let authStatus = false;
+								switch (this.sourceTypeIndex) {
+									case 0:
+										authStatus = res.authSetting['scope.camera'];
+										break;
+									case 1:
+										authStatus = res.authSetting['scope.album'];
+										break;
+									case 2:
+										authStatus = res.authSetting['scope.album'] && res
+											.authSetting['scope.camera'];
+										break;
+									default:
+										break;
+								}
+								if (!authStatus) {
+									uni.showModal({
+										title: '授权失败',
+										content: 'Hello uni-app需要从您的相机或相册获取图片，请在设置界面打开相关权限',
+										success: (res) => {
+											if (res.confirm) {
+												uni.openSetting()
+											}
+										}
+									})
+								}
+							}
+						})
+						// 
+					}
+				})
+			},
+
+			previewImage: function(e) {
+				// unicloudUpLoadImage()
+				var current = e.target.dataset.src
+				uni.previewImage({
+					current: current,
+					urls: this.imageList
+				})
+			},
+			previewImage2: function(e) {
+				// unicloudUpLoadImage()
+				var current = e.target.dataset.src
+				uni.previewImage({
+					current: current,
+					urls: this.imageList2
+				})
+			},
+			previewImage3: function(e) {
+				// unicloudUpLoadImage()
+				var current = e.target.dataset.src
+				uni.previewImage({
+					current: current,
+					urls: this.imageList3
+				})
+			},
+			async checkPermission(code) {
+				let type = code ? code - 1 : this.sourceTypeIndex;
+				let status = permision.isIOS ? await permision.requestIOS(sourceType[type][0]) :
+					await permision.requestAndroid(type === 0 ? 'android.permission.CAMERA' :
+						'android.permission.READ_EXTERNAL_STORAGE');
+
+				if (status === null || status === 1) {
+					status = 1;
+				} else {
+					uni.showModal({
+						content: "没有开启权限",
+						confirmText: "设置",
+						success: function(res) {
+							if (res.confirm) {
+								permision.gotoAppSetting();
 							}
 						}
 					})
-					// 
 				}
-			})
-		},
 
-		previewImage: function (e) {
-			// unicloudUpLoadImage()
-			var current = e.target.dataset.src
-			uni.previewImage({
-				current: current,
-				urls: this.imageList
-			})
-		}, previewImage2: function (e) {
-			// unicloudUpLoadImage()
-			var current = e.target.dataset.src
-			uni.previewImage({
-				current: current,
-				urls: this.imageList2
-			})
-		}, previewImage3: function (e) {
-			// unicloudUpLoadImage()
-			var current = e.target.dataset.src
-			uni.previewImage({
-				current: current,
-				urls: this.imageList3
-			})
-		},
-		async checkPermission(code) {
-			let type = code ? code - 1 : this.sourceTypeIndex;
-			let status = permision.isIOS ? await permision.requestIOS(sourceType[type][0]) :
-				await permision.requestAndroid(type === 0 ? 'android.permission.CAMERA' :
-					'android.permission.READ_EXTERNAL_STORAGE');
+				return status;
+			},
 
-			if (status === null || status === 1) {
-				status = 1;
-			} else {
-				uni.showModal({
-					content: "没有开启权限",
-					confirmText: "设置",
-					success: function (res) {
-						if (res.confirm) {
-							permision.gotoAppSetting();
-						}
-					}
+
+			//切换底部导航栏
+			ChangBar(e) {
+				uni.switchTab({
+					url: '/' + this.list[e].pagePath
 				})
-			}
-
-			return status;
-		},
-
-
-		//切换底部导航栏
-		ChangBar(e) {
-			uni.switchTab({
-				url: '/' + this.list[e].pagePath
-			})
-		},
-		remove(id) {
-			this.$refs.uWaterfall.remove(id);
-		},
-		clear() {
-			this.$refs.uWaterfall.clear();
-		},
-		// reachBottom() {
-		// 	// 此tab为空数据
-		// 	if (this.current != 2) {
-		// 		this.loadStatus.splice(this.current, 1, "loading")
-		// 		setTimeout(() => {
-		// 			this.getOrderList(this.current);
-		// 		}, 1200);
-		// 	}
-		// },
-		// 页面数据
-		// getOrderList(idx) {
-		// 	for (let i = 0; i < 5; i++) {
-		// 		let index = this.$u.random(0, this.dataList.length - 1);
-		// 		let data = JSON.parse(JSON.stringify(this.dataList[index]));
-		// 		data.id = this.$u.guid();
-		// 		this.orderList[idx].push(data);
-		// 	}
-		// 	this.loadStatus.splice(this.current, 1, "loadmore")
-		// },
-		// tab栏切换
-		change(index) {
-			this.swiperCurrent = index;
-			// this.getOrderList(index);
-		},
-		transition({
-			detail: {
-				dx
-			}
-		}) {
-			this.$refs.tabs.setDx(dx);
-		},
-		animationfinish({
-			detail: {
-				current
-			}
-		}) {
-			this.$refs.tabs.setFinishCurrent(current);
-			this.swiperCurrent = current;
-			this.current = current;
-		},
-		titleChange(index) {
-			this.useSlot = false;
-			this.title = index == 0 ? '新闻' : index == 1 ? '新闻列表' : '雨打梨花深闭门，忘了青春，误了青春';
-		},
-		leftChange(index) {
-			if (index == 0) {
-				this.backText = '';
-				this.backIconName = 'arrow-leftward';
-			} else {
-				this.backText = '返回';
-				this.backIconName = 'arrow-left';
-			}
-		},
-		searchChange(index) { },
-		backChange(index) {
-			this.isBack = !!index;
-		},
-		bgColorChange(index) {
-			this.background = {};
-			if (index == 0) {
-				this.background = {
-					'background-image': 'linear-gradient(45deg, rgb(28, 187, 180), rgb(141, 198, 63))'
+			},
+			remove(id) {
+				this.$refs.uWaterfall.remove(id);
+			},
+			clear() {
+				this.$refs.uWaterfall.clear();
+			},
+			// reachBottom() {
+			// 	// 此tab为空数据
+			// 	if (this.current != 2) {
+			// 		this.loadStatus.splice(this.current, 1, "loading")
+			// 		setTimeout(() => {
+			// 			this.getOrderList(this.current);
+			// 		}, 1200);
+			// 	}
+			// },
+			// 页面数据
+			// getOrderList(idx) {
+			// 	for (let i = 0; i < 5; i++) {
+			// 		let index = this.$u.random(0, this.dataList.length - 1);
+			// 		let data = JSON.parse(JSON.stringify(this.dataList[index]));
+			// 		data.id = this.$u.guid();
+			// 		this.orderList[idx].push(data);
+			// 	}
+			// 	this.loadStatus.splice(this.current, 1, "loadmore")
+			// },
+			// tab栏切换
+			change(index) {
+				this.swiperCurrent = index;
+				// this.getOrderList(index);
+			},
+			transition({
+				detail: {
+					dx
 				}
-			} else {
-				let color = index == 1 ? '#39CCCC' : index == 2 ? '#B471CC' : '#001f3f';
-				this.background = {
-					background: color
+			}) {
+				this.$refs.tabs.setDx(dx);
+			},
+			animationfinish({
+				detail: {
+					current
 				}
-			}
-
-		},
-		rightChange(index) {
-			if (index == 0) {
-				this.slotRight = true;
+			}) {
+				this.$refs.tabs.setFinishCurrent(current);
+				this.swiperCurrent = current;
+				this.current = current;
+			},
+			titleChange(index) {
 				this.useSlot = false;
-			} else {
-				this.slotRight = false;
-			}
-		},
-		customChange(index) {
-			this.search = false;
-			this.rightSlot = false;
-			if (index == 0) {
-				this.custom = true;
-				this.title = null;
-				this.isBack = false;
-				this.useSlot = true;
-			} else {
-				this.useSlot = false;
-				this.title = '新闻';
-				this.isBack = true;
-			}
-		},
+				this.title = index == 0 ? '新闻' : index == 1 ? '新闻列表' : '雨打梨花深闭门，忘了青春，误了青春';
+			},
+			leftChange(index) {
+				if (index == 0) {
+					this.backText = '';
+					this.backIconName = 'arrow-leftward';
+				} else {
+					this.backText = '返回';
+					this.backIconName = 'arrow-left';
+				}
+			},
+			searchChange(index) {},
+			backChange(index) {
+				this.isBack = !!index;
+			},
+			bgColorChange(index) {
+				this.background = {};
+				if (index == 0) {
+					this.background = {
+						'background-image': 'linear-gradient(45deg, rgb(28, 187, 180), rgb(141, 198, 63))'
+					}
+				} else {
+					let color = index == 1 ? '#39CCCC' : index == 2 ? '#B471CC' : '#001f3f';
+					this.background = {
+						background: color
+					}
+				}
+
+			},
+			rightChange(index) {
+				if (index == 0) {
+					this.slotRight = true;
+					this.useSlot = false;
+				} else {
+					this.slotRight = false;
+				}
+			},
+			customChange(index) {
+				this.search = false;
+				this.rightSlot = false;
+				if (index == 0) {
+					this.custom = true;
+					this.title = null;
+					this.isBack = false;
+					this.useSlot = true;
+				} else {
+					this.useSlot = false;
+					this.title = '新闻';
+					this.isBack = true;
+				}
+			},
+		}
 	}
-}
 </script>
 
 <style>
-/* #ifndef H5 */
-page {
-	height: 100%;
-	background-color: #f2f2f2;
-}
+	/* #ifndef H5 */
+	page {
+		height: 100%;
+		background-color: #f2f2f2;
+	}
 
-/*  */
+	/*  */
 </style>
 
 <style lang="scss" scoped>
-.cell-pd {
-	padding: 22rpx 30rpx;
-}
+	.cell-pd {
+		padding: 22rpx 30rpx;
+	}
 
-.list-pd {
-	margin-top: 20rpx;
-}
+	.list-pd {
+		margin-top: 20rpx;
+	}
 
-.demo-warter {
-	border-radius: 8px;
-	margin: 5px 5px 10px 5px;
-	background-color: #ffffff;
-	padding: 8px;
-	position: relative;
-	box-shadow: 0px 10px 32px rgba(110, 113, 145, 0.12);
-}
+	.demo-warter {
+		border-radius: 8px;
+		margin: 5px 5px 10px 5px;
+		background-color: #ffffff;
+		padding: 8px;
+		position: relative;
+		box-shadow: 0px 10px 32px rgba(110, 113, 145, 0.12);
+	}
 
-.u-close {
-	position: absolute;
-	top: 32rpx;
-	right: 32rpx;
-}
+	.u-close {
+		position: absolute;
+		top: 32rpx;
+		right: 32rpx;
+	}
 
-.demo-image {
-	width: 100%;
-	border-radius: 4px;
-}
+	.demo-image {
+		width: 100%;
+		border-radius: 4px;
+	}
 
-.demo-title {
-	font-size: 32rpx;
-	font-weight: 600;
-	margin-top: 5px;
-	color: $u-main-color;
-}
+	.demo-title {
+		font-size: 32rpx;
+		font-weight: 600;
+		margin-top: 5px;
+		color: $u-main-color;
+	}
 
-.demo-tag {
-	display: flex;
-	margin-top: 5px;
-}
-
-.demo-tag-owner {
-	background-color: $u-type-error;
-	color: #FFFFFF;
-	display: flex;
-	align-items: center;
-	padding: 4rpx 14rpx;
-	border-radius: 50rpx;
-	font-size: 20rpx;
-	line-height: 1;
-}
-
-.demo-tag-text {
-	border: 1px solid $u-type-primary;
-	color: $u-type-primary;
-	margin-left: 10px;
-	border-radius: 50rpx;
-	line-height: 1;
-	padding: 4rpx 14rpx;
-	display: flex;
-	align-items: center;
-	border-radius: 50rpx;
-	font-size: 20rpx;
-}
-
-.demo-price {
-	font-size: 28rpx;
-	color: grey;
-	margin-top: 5px;
-}
-
-.demo-shop {
-	font-size: 28rpx;
-	color: #68B9C0;
-	margin-top: 5px;
-}
-
-.order {
-	width: 710rpx;
-	background-color: #ffffff;
-	margin: 20rpx auto;
-	border-radius: 20rpx;
-	box-sizing: border-box;
-	padding: 20rpx;
-	font-size: 28rpx;
-
-	.top {
+	.demo-tag {
 		display: flex;
-		justify-content: space-between;
+		margin-top: 5px;
+	}
 
-		.left {
+	.demo-tag-owner {
+		background-color: $u-type-error;
+		color: #FFFFFF;
+		display: flex;
+		align-items: center;
+		padding: 4rpx 14rpx;
+		border-radius: 50rpx;
+		font-size: 20rpx;
+		line-height: 1;
+	}
+
+	.demo-tag-text {
+		border: 1px solid $u-type-primary;
+		color: $u-type-primary;
+		margin-left: 10px;
+		border-radius: 50rpx;
+		line-height: 1;
+		padding: 4rpx 14rpx;
+		display: flex;
+		align-items: center;
+		border-radius: 50rpx;
+		font-size: 20rpx;
+	}
+
+	.demo-price {
+		font-size: 28rpx;
+		color: grey;
+		margin-top: 5px;
+	}
+
+	.demo-shop {
+		font-size: 28rpx;
+		color: #68B9C0;
+		margin-top: 5px;
+	}
+
+	.order {
+		width: 710rpx;
+		background-color: #ffffff;
+		margin: 20rpx auto;
+		border-radius: 20rpx;
+		box-sizing: border-box;
+		padding: 20rpx;
+		font-size: 28rpx;
+
+		.top {
 			display: flex;
+			justify-content: space-between;
+
+			.left {
+				display: flex;
+				align-items: center;
+
+				.store {
+					margin: 0 10rpx;
+					font-size: 32rpx;
+					font-weight: bold;
+				}
+			}
+
+			.right {
+				color: $u-type-warning-dark;
+			}
+		}
+
+		.item {
+			display: flex;
+			margin: 20rpx 0 0;
+
+			.left {
+				margin-right: 20rpx;
+
+				image {
+					width: 200rpx;
+					height: 200rpx;
+					border-radius: 10rpx;
+				}
+			}
+
+			.content {
+				.title {
+					font-size: 28rpx;
+					line-height: 50rpx;
+				}
+
+				.type {
+					margin: 10rpx 0;
+					font-size: 24rpx;
+					color: $u-tips-color;
+				}
+
+				.delivery-time {
+					color: #e5d001;
+					font-size: 24rpx;
+				}
+			}
+
+			.right {
+				margin-left: 10rpx;
+				padding-top: 20rpx;
+				text-align: right;
+
+				.decimal {
+					font-size: 24rpx;
+					margin-top: 4rpx;
+				}
+
+				.number {
+					color: $u-tips-color;
+					font-size: 24rpx;
+				}
+			}
+		}
+
+		.total {
+			margin-top: 20rpx;
+			text-align: right;
+			font-size: 24rpx;
+
+			.total-price {
+				font-size: 32rpx;
+			}
+		}
+
+		.bottom {
+			display: flex;
+			margin-top: 40rpx;
+			padding: 0 10rpx;
+			justify-content: space-between;
 			align-items: center;
 
-			.store {
-				margin: 0 10rpx;
-				font-size: 32rpx;
-				font-weight: bold;
-			}
-		}
-
-		.right {
-			color: $u-type-warning-dark;
-		}
-	}
-
-	.item {
-		display: flex;
-		margin: 20rpx 0 0;
-
-		.left {
-			margin-right: 20rpx;
-
-			image {
-				width: 200rpx;
-				height: 200rpx;
-				border-radius: 10rpx;
-			}
-		}
-
-		.content {
-			.title {
-				font-size: 28rpx;
-				line-height: 50rpx;
+			.btn {
+				line-height: 52rpx;
+				width: 160rpx;
+				border-radius: 26rpx;
+				border: 2rpx solid $u-border-color;
+				font-size: 26rpx;
+				text-align: center;
+				color: $u-type-info-dark;
 			}
 
-			.type {
-				margin: 10rpx 0;
-				font-size: 24rpx;
-				color: $u-tips-color;
-			}
-
-			.delivery-time {
-				color: #e5d001;
-				font-size: 24rpx;
-			}
-		}
-
-		.right {
-			margin-left: 10rpx;
-			padding-top: 20rpx;
-			text-align: right;
-
-			.decimal {
-				font-size: 24rpx;
-				margin-top: 4rpx;
-			}
-
-			.number {
-				color: $u-tips-color;
-				font-size: 24rpx;
+			.evaluate {
+				color: $u-type-warning-dark;
+				border-color: $u-type-warning-dark;
 			}
 		}
 	}
 
-	.total {
-		margin-top: 20rpx;
-		text-align: right;
-		font-size: 24rpx;
+	.centre {
+		text-align: center;
+		margin: 200rpx auto;
+		font-size: 32rpx;
 
-		.total-price {
-			font-size: 32rpx;
+		image {
+			width: 164rpx;
+			height: 164rpx;
+			border-radius: 50%;
+			margin-bottom: 20rpx;
 		}
-	}
 
-	.bottom {
-		display: flex;
-		margin-top: 40rpx;
-		padding: 0 10rpx;
-		justify-content: space-between;
-		align-items: center;
+		.tips {
+			font-size: 24rpx;
+			color: #999999;
+			margin-top: 20rpx;
+		}
 
 		.btn {
-			line-height: 52rpx;
-			width: 160rpx;
-			border-radius: 26rpx;
-			border: 2rpx solid $u-border-color;
+			margin: 80rpx auto;
+			width: 200rpx;
+			border-radius: 32rpx;
+			line-height: 64rpx;
+			color: #ffffff;
 			font-size: 26rpx;
-			text-align: center;
-			color: $u-type-info-dark;
-		}
-
-		.evaluate {
-			color: $u-type-warning-dark;
-			border-color: $u-type-warning-dark;
+			background: linear-gradient(270deg, rgba(249, 116, 90, 1) 0%, rgba(255, 158, 1, 1) 100%);
 		}
 	}
-}
 
-.centre {
-	text-align: center;
-	margin: 200rpx auto;
-	font-size: 32rpx;
-
-	image {
-		width: 164rpx;
-		height: 164rpx;
-		border-radius: 50%;
-		margin-bottom: 20rpx;
+	.wrap {
+		display: flex;
+		flex-direction: column;
+		height: calc(100vh - var(--window-top));
+		width: 100%;
 	}
 
-	.tips {
-		font-size: 24rpx;
-		color: #999999;
-		margin-top: 20rpx;
+	.swiper-box {
+		flex: 1;
 	}
 
-	.btn {
-		margin: 80rpx auto;
-		width: 200rpx;
-		border-radius: 32rpx;
-		line-height: 64rpx;
+	.swiper-item {
+		height: 100%;
+	}
+
+	.bg {
+		top: 0;
+		left: 0;
+		position: fixed;
+		z-index: -1;
+		width: 100vw;
+		height: 100vh;
+		background-image: linear-gradient((140deg, rgb(255, 255, 255) 9.160126000642776%, rgb(253.93750101327896, 231.45345389842987, 217.96302258968353) 57.31121301651001%));
+	}
+
+	.u-demo {
+		//height: 200vh;
+		height: calc(100% - 44px);
+		height: calc(100% - 44px - constant(safe-area-inset-top));
+		height: calc(100% - 44px - env(safe-area-inset-top));
+	}
+
+	.wrap {
+		// padding: 24rpx;
+	}
+
+	.navbar-right {
+		margin-right: 24rpx;
+		display: flex;
+	}
+
+	.search-wrap {
+		margin: 0 20rpx;
+		flex: 1;
+	}
+
+	.right-item {
+		margin: 0 12rpx;
+		position: relative;
 		color: #ffffff;
-		font-size: 26rpx;
-		background: linear-gradient(270deg, rgba(249, 116, 90, 1) 0%, rgba(255, 158, 1, 1) 100%);
+		display: flex;
 	}
-}
 
-.wrap {
-	display: flex;
-	flex-direction: column;
-	height: calc(100vh - var(--window-top));
-	width: 100%;
-}
+	.message-box {}
 
-.swiper-box {
-	flex: 1;
-}
+	.slot-wrap {
+		display: flex;
+		align-items: center;
+		flex: 1;
+	}
 
-.swiper-item {
-	height: 100%;
-}
+	.map-wrap {
+		display: flex;
+		align-items: center;
+		padding: 4px 6px;
+		background-color: rgba(240, 240, 240, 0.35);
+		color: #fff;
+		font-size: 22rpx;
+		border-radius: 100rpx;
+		margin-left: 30rpx;
+	}
 
-.bg {
-	top: 0;
-	left: 0;
-	position: fixed;
-	z-index: -1;
-	width: 100vw;
-	height: 100vh;
-	background-image: linear-gradient((140deg, rgb(255, 255, 255) 9.160126000642776%, rgb(253.93750101327896, 231.45345389842987, 217.96302258968353) 57.31121301651001%));
-}
-
-.u-demo {
-	//height: 200vh;
-	height: calc(100% - 44px);
-	height: calc(100% - 44px - constant(safe-area-inset-top));
-	height: calc(100% - 44px - env(safe-area-inset-top));
-}
-
-.wrap {
-	// padding: 24rpx;
-}
-
-.navbar-right {
-	margin-right: 24rpx;
-	display: flex;
-}
-
-.search-wrap {
-	margin: 0 20rpx;
-	flex: 1;
-}
-
-.right-item {
-	margin: 0 12rpx;
-	position: relative;
-	color: #ffffff;
-	display: flex;
-}
-
-.message-box {}
-
-.slot-wrap {
-	display: flex;
-	align-items: center;
-	flex: 1;
-}
-
-.map-wrap {
-	display: flex;
-	align-items: center;
-	padding: 4px 6px;
-	background-color: rgba(240, 240, 240, 0.35);
-	color: #fff;
-	font-size: 22rpx;
-	border-radius: 100rpx;
-	margin-left: 30rpx;
-}
-
-.map-wrap-text {
-	padding: 0 6rpx;
-}
+	.map-wrap-text {
+		padding: 0 6rpx;
+	}
 </style>

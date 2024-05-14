@@ -1,0 +1,7 @@
+{
+  "name": "String2Text",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

@@ -577,7 +577,7 @@ export default {
 				let res = {
 					// categories: ["2018", "2019", "2020", "2021", "2022", "2023"],
 					series: [{
-						name: "成交量A",
+						name: "心率",
 						data: [35, 25, 37, 20, 35, 25, 37, 20, 35, 25, 37, 4, 20],
 						color: '#f78786',
 						setShadow: [0, 10, 20, '#FFB2B2']
