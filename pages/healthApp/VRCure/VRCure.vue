@@ -532,7 +532,7 @@
 						success: (res) => {
 							console.log('Upload success:', res);
 							uni.showToast({
-								title: '上传文本成功',
+								title: '上传定制环境成功',
 								icon: 'success',
 								duration: 1000,
 							});
@@ -575,8 +575,8 @@
 							console.log("comprehensiveText", this.comprehensiveText);
 							// 检查this.comprehensiveText的字符数
 							console.log("this.comprehensiveText.length", this.comprehensiveText.length)
-							if (this.comprehensiveText.length > 380) {
-								// 如果字符数大于380，则清空this.comprehensiveText并提示失败
+							if (this.comprehensiveText.length > 600) {
+								// 如果字符数大于600，则清空this.comprehensiveText并提示失败
 								this.comprehensiveText = '';
 								uni.showToast({
 									title: '文本长度超过限制，请尝试上传其他图片~',
@@ -588,7 +588,7 @@
 								this.preUploadImgEnv = ""
 								this.envTaskID = ""
 							} else {
-								// 如果字符数小于380，则提示成功
+								// 如果字符数小于600，则提示成功
 								uni.showToast({
 									title: '虚拟环境定制成功~',
 									icon: 'success',
@@ -802,6 +802,7 @@
 									}
 								} else {
 									// 如果当前进度不为100，再次检查
+									console.log("生成进度", res[1].data.progress)
 									setTimeout(checkProgress, 10000);
 								}
 							} else {
